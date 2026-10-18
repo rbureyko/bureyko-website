@@ -8,6 +8,10 @@ import { SITE, SERVICES, pages } from "./src/content.mjs";
 
 const PREVIEW = process.argv.includes("--preview");
 const OUT = PREVIEW ? "preview" : "dist";
+// BASE_PATH is set while the site lives at rbureyko.github.io/bureyko-website; empty once the domain points here.
+const BASE = (process.env.BASE_PATH || "").replace(/\/$/, "");
+// CUSTOM_DOMAIN=1 writes the CNAME file that tells GitHub to serve www.bureykomortgages.ca.
+const CUSTOM_DOMAIN = process.env.CUSTOM_DOMAIN === "1";
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
 
 // ---------- helpers ----------
@@ -26,10 +30,10 @@ function makeHelpers(route) {
     if (/^(https?:|tel:|sms:|mailto:|#)/.test(target)) return target;
     const [p, hash = ""] = target.split("#");
     const h = hash ? "#" + hash : "";
-    if (!PREVIEW) return (p || "/") + h;
+    if (!PREVIEW) return BASE + (p || "/") + h;
     return (up + fileFor(p || "/")) + h;
   };
-  const a = (file) => (PREVIEW ? up : "/") + "assets/" + file;
+  const a = (file) => (PREVIEW ? up : BASE + "/") + "assets/" + file;
   return { u, a };
 }
 
@@ -198,5 +202,5 @@ write(
     .join("\n")}\n</urlset>\n`
 );
 write("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${SITE.url}/sitemap.xml\n`);
-if (!PREVIEW) write("CNAME", SITE.url.replace(/^https?:\/\//, "") + "\n");
+if (!PREVIEW && CUSTOM_DOMAIN) write("CNAME", SITE.url.replace(/^https?:\/\//, "") + "\n");
 console.log(`Built ${built.length} pages into ${OUT}/ (${allPosts.length} blog posts${PREVIEW ? ", drafts included" : ""}).`);
