@@ -807,7 +807,7 @@ ${pageHero(u, { trail: [["Privacy"]], h1: "Privacy information.", lead: "How thi
 <h2>Share information through the right channel</h2>
 <p>General inquiries should be limited to your question and contact information. Use the secure application, or ask us for the right process, before sending identity documents, banking information, a SIN, or other sensitive financial records.</p>
 <h2>Website data</h2>
-<p>This website is hosted on GitHub Pages. Like most web hosts, it may log technical information such as IP addresses to deliver and secure the site. Our fonts are served from this website, not from a third party. We do not currently use analytics or advertising cookies. If that changes, we'll update this page.</p>
+<p>This website is hosted on Squarespace. Squarespace may process technical information and use cookies or similar technologies to deliver and secure the site; see <a href="https://www.squarespace.com/privacy">Squarespace's privacy policy</a>. Our fonts are provided by Google Fonts, which receives basic technical information such as your IP address when the page loads. The analytics and cookie settings enabled on this website determine what else is collected. If we add other tools, we'll update this page.</p>
 <h2>External links</h2>
 <p>Google reviews, government education resources, and other linked sites have their own privacy practices. Their operators control the information collected when you visit them.</p>
 <h2>Questions or requests</h2>
