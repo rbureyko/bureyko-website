@@ -86,7 +86,7 @@ p{margin:0}
 .hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(32px,5vw,64px);align-items:center}
 .hero-copy{display:grid;gap:24px;justify-items:start;min-width:0}
 .hero-note{font-size:.95rem;color:var(--blue)}
-.people{background:var(--mist);border:1px solid var(--line);border-radius:160px 160px 10px 10px;padding:34px 24px 24px;max-width:100%}
+.people{background:var(--paper);border:1px solid var(--line);border-radius:160px 160px 10px 10px;padding:34px 24px 24px;max-width:100%}
 .people-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .person{margin:0;min-width:0}
 .portrait{aspect-ratio:26/30;max-width:100%;background:var(--paper);border:1px solid var(--line);border-radius:110px 110px 4px 4px;overflow:hidden}
@@ -165,7 +165,7 @@ a.card:hover{background:var(--mist)}
 
 /* Bio */
 .bio{display:grid;grid-template-columns:240px 1fr;gap:clamp(24px,4vw,48px);align-items:start}
-.bio .portrait{border-radius:120px 120px 6px 6px;background:var(--mist)}
+.bio .portrait{border-radius:120px 120px 6px 6px;background:var(--paper)}
 @media (max-width:700px){.bio{grid-template-columns:1fr}.bio .portrait{max-width:240px}}
 
 /* Reviews strip */
