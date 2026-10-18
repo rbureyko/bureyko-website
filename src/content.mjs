@@ -9,6 +9,7 @@ export const SITE = {
   robin: { name: "Robin Bureyko", phone: "403-540-0629", tel: "+14035400629" },
   applyUrl: "https://velocity.newton.ca/sso/public.php?sc=17dj8b6xmn74w",
   reviewsUrl: "https://share.google/j3kKjlHhIyBQU943E",
+  appUrl: "https://maapp.ca/app/robin-bureyko/download",
   guideForm: "https://form.jotform.com/262367662550259",
   renewalForm: "https://form.jotform.com/260465756960063",
   photos: {
@@ -42,6 +43,8 @@ const icon = (k) =>
 const ART_GUIDE = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="40" y="16" width="314" height="488" rx="16" fill="#fff" stroke="#306AB4" stroke-width="9"/><path d="M58 20h20v480H58c-10 0-18-8-18-18V38c0-10 8-18 18-18Z" fill="#306AB4"/><path d="M120 75h130" stroke="#F38F26" stroke-width="14"/><path d="M126 188 205 125l80 63M145 172v104h126V172" stroke="#306AB4" stroke-width="9"/><path d="M120 345h175M120 380h175M120 414h115" stroke="#9AB6D9" stroke-width="9"/></svg>`;
 const ART_CAL = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="22" y="92" width="356" height="386" rx="18" fill="#fff" stroke="#306AB4" stroke-width="8"/><path d="M22 194h356M115 50v90m170-90v90" stroke="#306AB4" stroke-width="8"/><path d="m122 324 52 52 112-118" stroke="#F38F26" stroke-width="22"/><path d="M80 430h240" stroke="#9AB6D9" stroke-width="7"/></svg>`;
 const ART_HOUSE = `<svg viewBox="0 0 540 470" fill="none" aria-hidden="true"><circle cx="430" cy="118" r="64" fill="#FFEBD1"/><path d="m168 92 12-5 12 5m40-26 12-5 12 5" stroke="#9AB6D9" stroke-width="2" stroke-linecap="round"/><path d="M12 236v118h98V236l-49-36-49 36Zm418-14v132h96V222l-48-38-48 38Z" fill="#E4EEFB" stroke="#B7CDEB" stroke-width="1.5"/><path d="M0 354h540" stroke="#D6E4F5" stroke-width="1.5"/><path d="m110 238 150-124 170 124H110Z" fill="#306AB4"/><path d="M138 220v134h244V220L260 132 138 220Z" fill="#fff" stroke="#306AB4" stroke-width="2.5"/><path d="m106 240 154-128 174 128" stroke="#193C66" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M322 152V96h28v76" fill="#fff" stroke="#306AB4" stroke-width="2.5"/><path d="M316 96h40" stroke="#193C66" stroke-width="4" stroke-linecap="round"/><path d="M166 244h56v64h-56zm132 0h56v64h-56z" fill="#EDF5FF" stroke="#306AB4" stroke-width="2.5"/><path d="M194 244v64m-28-32h56m104-32v64m-28-32h56" stroke="#306AB4" stroke-width="2"/><path d="M236 354v-98h52v98" fill="#F38F26" stroke="#306AB4" stroke-width="2.5"/><rect x="246" y="266" width="32" height="42" rx="3" fill="#FFF5E9" stroke="#306AB4" stroke-width="1.5"/><circle cx="278" cy="326" r="3" fill="#193C66"/><path d="M228 354h68v12h-68zm-10 12h88v12h-88z" fill="#fff" stroke="#306AB4" stroke-width="2"/><path d="M240 378c-2 28 4 46 22 70m42-70c16 24 22 42 24 70" stroke="#BFD4EE" stroke-width="2.5" stroke-linecap="round"/><path d="M70 354v-58m-22 36c-28-18-16-70 16-54 8-44 48-44 48-6 34-4 34 46 2 60H48Z" fill="#D2E3F8" stroke="#9AB6D9" stroke-width="2"/><path d="M458 354v-64m-22 46c-28-12-28-50-6-62-14-40 26-56 42-22 40-14 56 42 26 62 16 20-16 38-36 22h-26Z" fill="#D2E3F8" stroke="#9AB6D9" stroke-width="2"/><path d="M20 356h160m180 0h160M60 408h90m240 0h100" stroke="#306AB4" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+
+const ART_PHONE = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="96" y="20" width="208" height="490" rx="30" fill="#fff" stroke="#306AB4" stroke-width="9"/><path d="M170 50h60" stroke="#9AB6D9" stroke-width="9" stroke-linecap="round"/><path d="M130 110h70" stroke="#F38F26" stroke-width="12"/><path d="M130 165h140M130 200h105" stroke="#9AB6D9" stroke-width="8"/><path d="M130 330V290m35 40v-65m35 65v-45m35 45v-85m35 85v-60" stroke="#306AB4" stroke-width="12" stroke-linecap="round"/><path d="M130 400h140" stroke="#9AB6D9" stroke-width="8"/><circle cx="200" cy="470" r="14" stroke="#306AB4" stroke-width="7"/></svg>`;
 
 // ---------- services (each becomes its own page) ----------
 export const SERVICES = [
@@ -218,6 +221,18 @@ export const SERVICES = [
 ];
 
 // ---------- shared sections ----------
+const appSection = () => `<section class="band band-mist">
+  <div class="wrap">
+    <article class="card res res-4" style="max-width:860px">
+      ${ART_PHONE}
+      <span class="eyebrow">Our mortgage app</span>
+      <h2>Current rates and calculators, in your pocket.</h2>
+      <p class="lead">Download the app and create an account to start exploring your mortgage options today.</p>
+      <a class="btn btn-orange" href="${SITE.appUrl}" target="_blank" rel="noopener">Download the app ↗</a>
+    </article>
+  </div>
+</section>`;
+
 const servicesGrid = (u) => `<div class="services">
 ${SERVICES.map(
   (s) => `  <a class="service" href="${u("/" + s.slug)}">
@@ -397,6 +412,7 @@ export function pages({ posts }) {
       <p>Two quick forms you can fill out on your own time.</p>
     </div>
     ${resourceCards(u)}
+    <p style="margin-top:28px;text-align:center">Want current rates and calculators? <a class="text-link" href="${SITE.appUrl}" target="_blank" rel="noopener">Download our mortgage app ↗</a></p>
   </div>
 </section>
 ${posts.length ? `
@@ -619,6 +635,7 @@ ${pageHero(u, {
 <section class="band">
   <div class="wrap">${resourceCards(u)}</div>
 </section>
+${appSection()}
 ${posts.length ? `<section class="band"><div class="wrap"><div class="sec-head"><span class="eyebrow">From the blog</span><h2>Recent articles.</h2><p><a class="text-link" href="${u("/blog/")}">See all articles</a></p></div>${postCards(u, posts.slice(0, 3), fmtDate)}</div></section>` : ""}
 ${contactBand({ title: "Let's find your next step.", text: "A clear conversation is a good place to start." })}`,
   });

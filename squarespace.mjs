@@ -124,6 +124,7 @@ const footer = `<footer class="footer">
           <a href="/mortgage-renewal-checkup">Mortgage Renewal Checkup</a>
           <a href="/partnerships">Realtor partnerships</a>
           <a href="/blog">Blog</a>
+          <a href="${SITE.appUrl}" target="_blank" rel="noopener">Rates &amp; calculators app ↗</a>
           <a href="${SITE.reviewsUrl}" target="_blank" rel="noopener">Google reviews ↗</a>
         </div>
       </div>

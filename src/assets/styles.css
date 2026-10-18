@@ -160,6 +160,7 @@ a.card{text-decoration:none;transition:background-color .15s}
 a.card:hover{background:var(--mist)}
 .res{grid-template-columns:96px 1fr;column-gap:26px;align-items:center}
 .res > svg{width:96px;height:auto;grid-row:span 3}
+.res-4 > svg{grid-row:span 4}
 .res .stack{gap:12px}
 @media (max-width:480px){.res{grid-template-columns:1fr}.res > svg{width:72px}}
 
