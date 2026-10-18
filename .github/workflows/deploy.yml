@@ -22,8 +22,8 @@ jobs:
       - run: npm ci
       - run: node build.mjs
         env:
-          BASE_PATH: /bureyko-website
-          CUSTOM_DOMAIN: "0"
+          BASE_PATH: ""
+          CUSTOM_DOMAIN: "1"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
