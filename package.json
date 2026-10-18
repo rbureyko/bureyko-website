@@ -1,0 +1,17 @@
+{
+  "name": "bureyko-website",
+  "version": "1.0.0",
+  "description": "Bureyko Mortgage Partners website",
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "node build.mjs --preview"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@fontsource/fira-sans": "^5.0.19",
+    "marked": "^12.0.2"
+  },
+  "private": true,
+  "type": "module"
+}
