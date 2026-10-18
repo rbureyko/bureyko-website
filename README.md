@@ -38,3 +38,7 @@ npm install
 npm run build     # live version, written to dist/
 npm run preview   # review version with drafts, written to preview/ (open preview/index.html)
 ```
+
+## Blog cover images
+
+After adding a post, run `node covers.mjs` to make its cover image (it skips posts that already have one), then commit the new file in `src/assets/blog/`.

@@ -3,8 +3,8 @@
 //   node build.mjs --preview  preview build (relative .html links, drafts shown)
 import fs from "node:fs";
 import path from "node:path";
-import { marked } from "marked";
 import { SITE, SERVICES, pages } from "./src/content.mjs";
+import { loadPosts } from "./src/blog.mjs";
 
 const PREVIEW = process.argv.includes("--preview");
 const OUT = PREVIEW ? "preview" : "dist";
@@ -38,34 +38,7 @@ function makeHelpers(route) {
 }
 
 // ---------- blog posts ----------
-function parsePost(file) {
-  const raw = fs.readFileSync(file, "utf8");
-  const m = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-  if (!m) throw new Error("Missing front matter in " + file);
-  const data = {};
-  for (const line of m[1].split("\n")) {
-    const i = line.indexOf(":");
-    if (i > 0) data[line.slice(0, i).trim()] = line.slice(i + 1).trim().replace(/^["']|["']$/g, "");
-  }
-  const slug = path.basename(file, ".md");
-  return {
-    slug,
-    route: "/blog/" + slug,
-    title: data.title,
-    description: data.description || "",
-    date: data.date,
-    category: data.category || "",
-    author: data.author || "Sherri & Robin Bureyko",
-    draft: data.draft === "true",
-    html: marked.parse(m[2]),
-  };
-}
-const allPosts = fs
-  .readdirSync(path.join(ROOT, "src/posts"))
-  .filter((f) => f.endsWith(".md"))
-  .map((f) => parsePost(path.join(ROOT, "src/posts", f)))
-  .filter((p) => PREVIEW || !p.draft)
-  .sort((x, y) => (x.date < y.date ? 1 : -1));
+const allPosts = loadPosts({ includeDrafts: PREVIEW });
 
 export const fmtDate = (iso) =>
   new Date(iso + "T12:00:00").toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" });
@@ -79,9 +52,10 @@ const NAV = [
   ["Blog", "/blog/"],
 ];
 
-function layout({ route, title, description, body, jsonld = "", noindex = false }, h) {
+function layout({ route, title, exactTitle, description, body, jsonld = "", noindex = false, ogType = "website", ogImage, keywords }, h) {
   const { u, a } = h;
-  const fullTitle = route === "/" ? title : `${title} | ${SITE.name}`;
+  const fullTitle = exactTitle || (route === "/" ? title : `${title} | ${SITE.name}`);
+  const image = SITE.url + "/assets/" + (ogImage || "og-image.png");
   const canonical = SITE.url + (route === "/" ? "/" : route);
   const navLinks = NAV.map(
     ([label, href]) =>
@@ -95,12 +69,17 @@ function layout({ route, title, description, body, jsonld = "", noindex = false 
 <title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
 ${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" href="${canonical}">`}
-<meta property="og:type" content="website">
+<meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="${esc(SITE.name)}">
 <meta property="og:title" content="${esc(fullTitle)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${canonical}">
-<meta property="og:image" content="${SITE.url}/assets/og-image.png">
+<meta property="og:image" content="${image}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(fullTitle)}">
+<meta name="twitter:description" content="${esc(description)}">
+<meta name="twitter:image" content="${image}">
+${keywords && keywords.length ? `<meta name="keywords" content="${esc(keywords.join(", "))}">` : ""}
 <meta name="theme-color" content="#306AB4">
 <link rel="icon" href="${a("bureyko-square.svg")}" type="image/svg+xml">
 <link rel="preload" href="${a("fonts/fira-sans-latin-400-normal.woff2")}" as="font" type="font/woff2" crossorigin>
@@ -190,7 +169,9 @@ const built = [];
 for (const page of pages(ctx)) {
   const h = makeHelpers(page.route);
   const body = page.body(h);
-  write(fileFor(page.route), layout({ ...page, body }, h));
+  const html = layout({ ...page, body }, h);
+  if (html.includes("{{")) throw new Error(`Unfilled {{TOKEN}} on ${page.route}. Add its value to src/posts/links.json.`);
+  write(fileFor(page.route), html);
   if (!page.noindex) built.push(page.route);
 }
 

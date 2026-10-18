@@ -1,0 +1,12 @@
+{
+  "_about": "Blog topic groups, in the order they appear on /blog. Add a new hub here to give it a label; a post with an unlisted hub still shows, under a label made from its slug.",
+  "hubs": [
+    { "slug": "first-time-buyers", "label": "Buying your first home" },
+    { "slug": "renewal", "label": "Renewing your mortgage" },
+    { "slug": "refinance-equity", "label": "Refinancing and home equity" },
+    { "slug": "self-employed", "label": "Self-employed" },
+    { "slug": "mortgage-basics", "label": "Mortgage basics" },
+    { "slug": "investors", "label": "Investing in property" },
+    { "slug": "life-changes", "label": "Life changes" }
+  ]
+}

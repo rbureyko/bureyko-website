@@ -169,16 +169,7 @@ fs.writeFileSync(
 </div>\n`
 );
 
-// Blog articles as plain text to paste into Squarespace blog posts
-for (const f of fs.readdirSync(path.join(ROOT, "src/posts")).filter((f) => f.endsWith(".md"))) {
-  const raw = fs.readFileSync(path.join(ROOT, "src/posts", f), "utf8");
-  const [, fm, md] = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-  const get = (k) => (fm.match(new RegExp("^" + k + ":\\s*(.*)$", "m")) || [])[1] || "";
-  fs.writeFileSync(
-    path.join(OUT, "blog-articles", f.replace(/\.md$/, ".txt")),
-    `TITLE: ${get("title")}\nCATEGORY: ${get("category")}\nEXCERPT: ${get("description")}\nPOST URL: ${f.replace(/\.md$/, "")}\n\n--- ARTICLE (paste into the post's text block; lines starting with ## are Heading 2) ---\n\n${md.trim()}\n`
-  );
-}
+// Blog articles: the live blog runs on the GitHub version of the site (see src/posts/), so none are exported here.
 
 // SEO table
 const csv = (s) => `"${String(s).replace(/"/g, '""')}"`;
@@ -186,4 +177,4 @@ fs.writeFileSync(
   path.join(OUT, "page-list-and-seo.csv"),
   ["Page,URL slug,Code file,SEO title,SEO description", ...seoRows.map((r) => r.map(csv).join(","))].join("\n") + "\n"
 );
-console.log(`Wrote ${order.length} page files to squarespace/pages/ plus footer, blog intro and ${fs.readdirSync(path.join(OUT, "blog-articles")).length} blog articles.`);
+console.log(`Wrote ${order.length} page files to squarespace/pages/ plus footer and blog intro.`);

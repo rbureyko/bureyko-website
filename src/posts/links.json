@@ -1,0 +1,10 @@
+{
+  "_about": "Values for the {{TOKENS}} used in the blog posts. The build fails if any {{TOKEN}} is left in a page.",
+  "LAUNCH_DATE": "2026-10-18",
+  "CONTACT_URL": "/contact",
+  "APPLY_URL": "https://velocity.newton.ca/sso/public.php?sc=17dj8b6xmn74w",
+  "HOMEBUYER_GUIDE_URL": "/first-time-home-buyer-guide",
+  "RENEWAL_CHECKUP_URL": "/mortgage-renewal-checkup",
+  "SERVICE_SELF_EMPLOYED_URL": "/self-employed-mortgages",
+  "SERVICE_REFINANCE_URL": "/refinance-home-equity"
+}

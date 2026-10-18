@@ -1,3 +1,4 @@
+import { renderPost, hubLabel, hubOrder } from "./blog.mjs";
 // All site wording and page structure lives here.
 // To change a phone number, link or sentence, edit it in this file and rebuild.
 
@@ -26,7 +27,7 @@ export const SITE = {
 const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>`;
 const ext = `target="_blank" rel="noopener"`;
 
-const ICON = {
+export const ICON = {
   buy: `<path d="M5 19 20 7l15 12M10 15v19h20V15"/><path d="M17 34v-9h6v9" stroke="#F38F26"/>`,
   renew: `<rect x="6" y="9" width="28" height="25" rx="3"/><path d="M6 16h28M14 5v7m12-7v7"/><path d="m15 25 4 4 7-8" stroke="#F38F26"/>`,
   refi: `<path d="M5 19 20 7l15 12M10 15v19h20V15"/><path d="M20 20v9m-4-4 4 4 4-4" stroke="#F38F26"/>`,
@@ -40,11 +41,11 @@ const icon = (k) =>
   `<svg class="ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
 
 // The two illustrations from the brand files
-const ART_GUIDE = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="40" y="16" width="314" height="488" rx="16" fill="#fff" stroke="#306AB4" stroke-width="9"/><path d="M58 20h20v480H58c-10 0-18-8-18-18V38c0-10 8-18 18-18Z" fill="#306AB4"/><path d="M120 75h130" stroke="#F38F26" stroke-width="14"/><path d="M126 188 205 125l80 63M145 172v104h126V172" stroke="#306AB4" stroke-width="9"/><path d="M120 345h175M120 380h175M120 414h115" stroke="#9AB6D9" stroke-width="9"/></svg>`;
-const ART_CAL = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="22" y="92" width="356" height="386" rx="18" fill="#fff" stroke="#306AB4" stroke-width="8"/><path d="M22 194h356M115 50v90m170-90v90" stroke="#306AB4" stroke-width="8"/><path d="m122 324 52 52 112-118" stroke="#F38F26" stroke-width="22"/><path d="M80 430h240" stroke="#9AB6D9" stroke-width="7"/></svg>`;
-const ART_HOUSE = `<svg viewBox="0 0 540 470" fill="none" aria-hidden="true"><circle cx="430" cy="118" r="64" fill="#FFEBD1"/><path d="m168 92 12-5 12 5m40-26 12-5 12 5" stroke="#9AB6D9" stroke-width="2" stroke-linecap="round"/><path d="M12 236v118h98V236l-49-36-49 36Zm418-14v132h96V222l-48-38-48 38Z" fill="#E4EEFB" stroke="#B7CDEB" stroke-width="1.5"/><path d="M0 354h540" stroke="#D6E4F5" stroke-width="1.5"/><path d="m110 238 150-124 170 124H110Z" fill="#306AB4"/><path d="M138 220v134h244V220L260 132 138 220Z" fill="#fff" stroke="#306AB4" stroke-width="2.5"/><path d="m106 240 154-128 174 128" stroke="#193C66" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M322 152V96h28v76" fill="#fff" stroke="#306AB4" stroke-width="2.5"/><path d="M316 96h40" stroke="#193C66" stroke-width="4" stroke-linecap="round"/><path d="M166 244h56v64h-56zm132 0h56v64h-56z" fill="#EDF5FF" stroke="#306AB4" stroke-width="2.5"/><path d="M194 244v64m-28-32h56m104-32v64m-28-32h56" stroke="#306AB4" stroke-width="2"/><path d="M236 354v-98h52v98" fill="#F38F26" stroke="#306AB4" stroke-width="2.5"/><rect x="246" y="266" width="32" height="42" rx="3" fill="#FFF5E9" stroke="#306AB4" stroke-width="1.5"/><circle cx="278" cy="326" r="3" fill="#193C66"/><path d="M228 354h68v12h-68zm-10 12h88v12h-88z" fill="#fff" stroke="#306AB4" stroke-width="2"/><path d="M240 378c-2 28 4 46 22 70m42-70c16 24 22 42 24 70" stroke="#BFD4EE" stroke-width="2.5" stroke-linecap="round"/><path d="M70 354v-58m-22 36c-28-18-16-70 16-54 8-44 48-44 48-6 34-4 34 46 2 60H48Z" fill="#D2E3F8" stroke="#9AB6D9" stroke-width="2"/><path d="M458 354v-64m-22 46c-28-12-28-50-6-62-14-40 26-56 42-22 40-14 56 42 26 62 16 20-16 38-36 22h-26Z" fill="#D2E3F8" stroke="#9AB6D9" stroke-width="2"/><path d="M20 356h160m180 0h160M60 408h90m240 0h100" stroke="#306AB4" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+export const ART_GUIDE = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="40" y="16" width="314" height="488" rx="16" fill="#fff" stroke="#306AB4" stroke-width="9"/><path d="M58 20h20v480H58c-10 0-18-8-18-18V38c0-10 8-18 18-18Z" fill="#306AB4"/><path d="M120 75h130" stroke="#F38F26" stroke-width="14"/><path d="M126 188 205 125l80 63M145 172v104h126V172" stroke="#306AB4" stroke-width="9"/><path d="M120 345h175M120 380h175M120 414h115" stroke="#9AB6D9" stroke-width="9"/></svg>`;
+export const ART_CAL = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="22" y="92" width="356" height="386" rx="18" fill="#fff" stroke="#306AB4" stroke-width="8"/><path d="M22 194h356M115 50v90m170-90v90" stroke="#306AB4" stroke-width="8"/><path d="m122 324 52 52 112-118" stroke="#F38F26" stroke-width="22"/><path d="M80 430h240" stroke="#9AB6D9" stroke-width="7"/></svg>`;
+export const ART_HOUSE = `<svg viewBox="0 0 540 470" fill="none" aria-hidden="true"><circle cx="430" cy="118" r="64" fill="#FFEBD1"/><path d="m168 92 12-5 12 5m40-26 12-5 12 5" stroke="#9AB6D9" stroke-width="2" stroke-linecap="round"/><path d="M12 236v118h98V236l-49-36-49 36Zm418-14v132h96V222l-48-38-48 38Z" fill="#E4EEFB" stroke="#B7CDEB" stroke-width="1.5"/><path d="M0 354h540" stroke="#D6E4F5" stroke-width="1.5"/><path d="m110 238 150-124 170 124H110Z" fill="#306AB4"/><path d="M138 220v134h244V220L260 132 138 220Z" fill="#fff" stroke="#306AB4" stroke-width="2.5"/><path d="m106 240 154-128 174 128" stroke="#193C66" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M322 152V96h28v76" fill="#fff" stroke="#306AB4" stroke-width="2.5"/><path d="M316 96h40" stroke="#193C66" stroke-width="4" stroke-linecap="round"/><path d="M166 244h56v64h-56zm132 0h56v64h-56z" fill="#EDF5FF" stroke="#306AB4" stroke-width="2.5"/><path d="M194 244v64m-28-32h56m104-32v64m-28-32h56" stroke="#306AB4" stroke-width="2"/><path d="M236 354v-98h52v98" fill="#F38F26" stroke="#306AB4" stroke-width="2.5"/><rect x="246" y="266" width="32" height="42" rx="3" fill="#FFF5E9" stroke="#306AB4" stroke-width="1.5"/><circle cx="278" cy="326" r="3" fill="#193C66"/><path d="M228 354h68v12h-68zm-10 12h88v12h-88z" fill="#fff" stroke="#306AB4" stroke-width="2"/><path d="M240 378c-2 28 4 46 22 70m42-70c16 24 22 42 24 70" stroke="#BFD4EE" stroke-width="2.5" stroke-linecap="round"/><path d="M70 354v-58m-22 36c-28-18-16-70 16-54 8-44 48-44 48-6 34-4 34 46 2 60H48Z" fill="#D2E3F8" stroke="#9AB6D9" stroke-width="2"/><path d="M458 354v-64m-22 46c-28-12-28-50-6-62-14-40 26-56 42-22 40-14 56 42 26 62 16 20-16 38-36 22h-26Z" fill="#D2E3F8" stroke="#9AB6D9" stroke-width="2"/><path d="M20 356h160m180 0h160M60 408h90m240 0h100" stroke="#306AB4" stroke-width="2.5" stroke-linecap="round"/></svg>`;
 
-const ART_PHONE = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="96" y="20" width="208" height="490" rx="30" fill="#fff" stroke="#306AB4" stroke-width="9"/><path d="M170 50h60" stroke="#9AB6D9" stroke-width="9" stroke-linecap="round"/><path d="M130 110h70" stroke="#F38F26" stroke-width="12"/><path d="M130 165h140M130 200h105" stroke="#9AB6D9" stroke-width="8"/><path d="M130 330V290m35 40v-65m35 65v-45m35 45v-85m35 85v-60" stroke="#306AB4" stroke-width="12" stroke-linecap="round"/><path d="M130 400h140" stroke="#9AB6D9" stroke-width="8"/><circle cx="200" cy="470" r="14" stroke="#306AB4" stroke-width="7"/></svg>`;
+export const ART_PHONE = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="96" y="20" width="208" height="490" rx="30" fill="#fff" stroke="#306AB4" stroke-width="9"/><path d="M170 50h60" stroke="#9AB6D9" stroke-width="9" stroke-linecap="round"/><path d="M130 110h70" stroke="#F38F26" stroke-width="12"/><path d="M130 165h140M130 200h105" stroke="#9AB6D9" stroke-width="8"/><path d="M130 330V290m35 40v-65m35 65v-45m35 45v-85m35 85v-60" stroke="#306AB4" stroke-width="12" stroke-linecap="round"/><path d="M130 400h140" stroke="#9AB6D9" stroke-width="8"/><circle cx="200" cy="470" r="14" stroke="#306AB4" stroke-width="7"/></svg>`;
 
 // ---------- services (each becomes its own page) ----------
 export const SERVICES = [
@@ -318,15 +319,18 @@ const portraits = (a) => `<div class="people" aria-label="Meet your mortgage par
   <p class="people-caption">Two perspectives. One steady path.</p>
 </div>`;
 
-const postCards = (u, posts, fmtDate) =>
+const postCards = (u, a, posts, fmtDate) =>
   posts.length
     ? `<div class="post-grid">${posts
         .map(
           (p) => `<a class="post-card" href="${u(p.route)}">
-  <div class="meta">${p.category ? `<span class="tag">${p.category}</span>` : ""}${p.draft ? '<span class="tag tag-draft">Draft</span>' : ""}<span>${fmtDate(p.date)}</span></div>
-  <h3>${p.title}</h3>
-  <p>${p.description}</p>
-  <span class="more">Read the article ${arrow}</span>
+  <img class="post-card-img" src="${a("blog/" + p.slug + ".png")}" alt="" width="1200" height="630" loading="lazy">
+  <div class="post-card-body">
+    <div class="meta"><span class="tag">${hubLabel(p.hub)}</span>${p.draft ? '<span class="tag tag-draft">Draft</span>' : ""}<span>${fmtDate(p.date)}</span></div>
+    <h3>${p.title}</h3>
+    <p>${p.description}</p>
+    <span class="more">Read the article ${arrow}</span>
+  </div>
 </a>`
         )
         .join("\n")}</div>`
@@ -423,7 +427,7 @@ ${posts.length ? `
       <h2>Mortgage insights.</h2>
       <p>Plain-language articles on buying, renewing, refinancing, and credit in Alberta. <a class="text-link" href="${u("/blog/")}">See all articles</a></p>
     </div>
-    ${postCards(u, posts.slice(0, 3), fmtDate)}
+    ${postCards(u, a, posts.slice(0, 3), fmtDate)}
   </div>
 </section>` : ""}
 ${reviewsStrip()}
@@ -625,7 +629,7 @@ ${contactBand({ eyebrow: "Let's connect", title: "Connect with Sherri &amp; Robi
     route: "/resources",
     title: "Mortgage Resources & Next Steps",
     description: "Start with our First-Time Homebuyer Guide or register for a Mortgage Renewal Checkup with Sherri and Robin Bureyko.",
-    body: ({ u }) => `
+    body: ({ u, a }) => `
 ${pageHero(u, {
   trail: [["Resources"]],
   eyebrow: "Resources",
@@ -636,7 +640,7 @@ ${pageHero(u, {
   <div class="wrap">${resourceCards(u)}</div>
 </section>
 ${appSection()}
-${posts.length ? `<section class="band"><div class="wrap"><div class="sec-head"><span class="eyebrow">From the blog</span><h2>Recent articles.</h2><p><a class="text-link" href="${u("/blog/")}">See all articles</a></p></div>${postCards(u, posts.slice(0, 3), fmtDate)}</div></section>` : ""}
+${posts.length ? `<section class="band"><div class="wrap"><div class="sec-head"><span class="eyebrow">From the blog</span><h2>Recent articles.</h2><p><a class="text-link" href="${u("/blog/")}">See all articles</a></p></div>${postCards(u, a, posts.slice(0, 3), fmtDate)}</div></section>` : ""}
 ${contactBand({ title: "Let's find your next step.", text: "A clear conversation is a good place to start." })}`,
   });
 
@@ -735,31 +739,50 @@ ${pageHero(u, {
 ${reviewsStrip()}`,
   });
 
-  // Blog index
+  // Blog index (grouped by topic hub)
+  const hubsInUse = [...new Set(posts.map((p) => p.hub))].sort((a, b) => hubOrder(a) - hubOrder(b) || a.localeCompare(b));
   list.push({
     route: "/blog/",
     title: "Mortgage Insights Blog",
-    description: "Clear mortgage information for Alberta homebuyers and homeowners. Articles on buying, renewals, refinancing, and credit from Sherri and Robin Bureyko.",
-    body: ({ u }) => `
+    description: "Plain-language mortgage guides for Calgary and Alberta, written by Sherri Bureyko. Buying, renewing, refinancing, credit and more.",
+    body: ({ u, a }) => `
 ${pageHero(u, {
   trail: [["Blog"]],
   eyebrow: "Mortgage insights",
   h1: "Clear answers to<br><em>common mortgage questions.</em>",
-  lead: "Plain-language articles on buying, renewing, refinancing, and credit in Alberta, from Sherri and Robin Bureyko.",
+  lead: "Plain-language mortgage guides for Calgary and Alberta, written by Sherri Bureyko.",
   art: ART_GUIDE,
 })}
-<section class="band">
-  <div class="wrap">${postCards(u, posts, fmtDate)}</div>
+${posts.length ? `<section class="band-tight" style="padding-bottom:0">
+  <div class="wrap">
+    <nav class="hub-nav" aria-label="Blog topics"><span>Jump to a topic:</span>${hubsInUse.map((h) => `<a href="#${h}">${hubLabel(h)}</a>`).join("")}</nav>
+  </div>
 </section>
+${hubsInUse
+  .map(
+    (h) => `<section class="band-tight" id="${h}">
+  <div class="wrap">
+    <h2 class="hub-title">${hubLabel(h)}</h2>
+    ${postCards(u, a, posts.filter((p) => p.hub === h), fmtDate)}
+  </div>
+</section>`
+  )
+  .join("\n")}` : `<section class="band"><div class="wrap">${postCards(u, a, [], fmtDate)}</div></section>`}
 ${contactBand({ title: "Have a question we haven't covered?", text: "Ask us directly. You don't need to have it all figured out." })}`,
   });
 
   // Blog posts
   for (const p of posts) {
+    const canonical = SITE.url + p.route;
+    const byline = ["By " + p.author, p.authorTitle, p.company].filter(Boolean).join(", ");
     list.push({
       route: p.route,
       title: p.title,
+      exactTitle: p.seoTitle,
       description: p.description,
+      keywords: p.keywords,
+      ogType: "article",
+      ogImage: "blog/" + p.slug + ".png",
       noindex: p.draft,
       jsonld: jsonLd({
         "@context": "https://schema.org",
@@ -767,30 +790,30 @@ ${contactBand({ title: "Have a question we haven't covered?", text: "Ask us dire
         headline: p.title,
         description: p.description,
         datePublished: p.date,
-        author: { "@type": "Organization", name: SITE.name },
-        publisher: { "@type": "Organization", name: SITE.name },
+        dateModified: p.date,
+        image: SITE.url + "/assets/blog/" + p.slug + ".png",
+        author: { "@type": "Person", name: p.author, jobTitle: p.authorTitle },
+        publisher: { "@type": "Organization", name: SITE.name, logo: { "@type": "ImageObject", url: SITE.url + "/assets/bureyko-square.svg" } },
+        mainEntityOfPage: canonical,
       }),
-      body: ({ u }) => `
-<section class="page-hero">
+      body: ({ u, a }) => `
+<section class="page-hero post-hero">
   <div class="wrap narrow">
     <div class="stack">
-      ${crumbs(u, [["Blog", "/blog/"], [p.title]])}
-      <div class="meta">${p.category ? `<span class="tag">${p.category}</span>` : ""}${p.draft ? '<span class="tag tag-draft">Draft: not published yet</span>' : ""}<span>${fmtDate(p.date)}</span><span>By ${p.author}</span></div>
-      <h1 style="font-size:clamp(2.1rem,4.4vw,3.2rem)">${p.title}</h1>
-      ${p.description ? `<p class="lead">${p.description}</p>` : ""}
+      ${crumbs(u, [["Blog", "/blog/"], [hubLabel(p.hub), "/blog/#" + p.hub]])}
+      <h1>${p.title}</h1>
+      <p class="byline">${byline}<span aria-hidden="true"> · </span><time datetime="${p.date}">${fmtDate(p.date)}</time></p>
+      <img class="post-cover" src="${a("blog/" + p.slug + ".png")}" alt="" width="1200" height="630">
     </div>
   </div>
 </section>
-<section class="band">
+<section class="band" style="padding-top:clamp(36px,5vw,56px)">
   <div class="wrap narrow">
-    <article class="prose">${p.html.replace(/href="(\/[^"]*)"/g, (m, x) => `href="${u(x)}"`)}</article>
-    <div class="panel" style="margin-top:56px">
-      <h3>Want to talk about your situation?</h3>
-      <p>Every file has its own details. Call, text, or email Sherri or Robin.</p>
-      <div class="actions"><a class="btn btn-orange btn-sm" href="${u("/contact")}">Contact us</a><a class="btn btn-line btn-sm" href="${u("/blog/")}">More articles</a></div>
-    </div>
+    <article class="prose">${renderPost(p.md, u)}</article>
+    ${p.lastReviewed ? `<p class="last-reviewed">Last reviewed: ${p.lastReviewed}</p>` : ""}
   </div>
-</section>`,
+</section>
+${contactBand({ title: "Let's talk about your situation.", text: "Call, text, or email Sherri or Robin. You don't need to have it all figured out." })}`,
     });
   }
 
