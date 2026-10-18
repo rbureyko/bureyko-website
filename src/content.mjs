@@ -608,7 +608,7 @@ ${contactBand({ eyebrow: "Let's connect", title: "Connect with Sherri &amp; Robi
   list.push({
     route: "/resources",
     title: "Mortgage Resources & Next Steps",
-    description: "Start with our First-Time Homebuyer Guide, register for a Mortgage Renewal Checkup, or explore official Canadian mortgage education resources.",
+    description: "Start with our First-Time Homebuyer Guide or register for a Mortgage Renewal Checkup with Sherri and Robin Bureyko.",
     body: ({ u }) => `
 ${pageHero(u, {
   trail: [["Resources"]],
@@ -618,21 +618,6 @@ ${pageHero(u, {
 })}
 <section class="band">
   <div class="wrap">${resourceCards(u)}</div>
-</section>
-<section class="band band-mist">
-  <div class="wrap split">
-    <div class="stack">
-      <span class="eyebrow">Keep learning</span>
-      <h2>Official mortgage information.</h2>
-      <p>The Financial Consumer Agency of Canada offers mortgage information and calculators to help you understand the basics.</p>
-      <a class="btn btn-line" href="https://www.canada.ca/en/financial-consumer-agency/services/mortgages.html" ${ext}>Visit the FCAC mortgage pages ↗</a>
-    </div>
-    <div class="panel">
-      <h3>Make it personal.</h3>
-      <p>General information is useful. A conversation about your income, credit, goals, and timing turns it into a next step for you.</p>
-      <a class="text-link" href="${u("/contact")}">Talk to Sherri &amp; Robin</a>
-    </div>
-  </div>
 </section>
 ${posts.length ? `<section class="band"><div class="wrap"><div class="sec-head"><span class="eyebrow">From the blog</span><h2>Recent articles.</h2><p><a class="text-link" href="${u("/blog/")}">See all articles</a></p></div>${postCards(u, posts.slice(0, 3), fmtDate)}</div></section>` : ""}
 ${contactBand({ title: "Let's find your next step.", text: "A clear conversation is a good place to start." })}`,
@@ -811,7 +796,7 @@ ${pageHero(u, { trail: [["Privacy"]], h1: "Privacy information.", lead: "How thi
 <h2>Website data</h2>
 <p>This website is hosted on Squarespace. Squarespace may process technical information and use cookies or similar technologies to deliver and secure the site; see <a href="https://www.squarespace.com/privacy">Squarespace's privacy policy</a>. Our fonts are provided by Google Fonts, which receives basic technical information such as your IP address when the page loads. The analytics and cookie settings enabled on this website determine what else is collected. If we add other tools, we'll update this page.</p>
 <h2>External links</h2>
-<p>Google reviews, government education resources, and other linked sites have their own privacy practices. Their operators control the information collected when you visit them.</p>
+<p>Google reviews and other linked sites have their own privacy practices. Their operators control the information collected when you visit them.</p>
 <h2>Questions or requests</h2>
 <p>To ask about information you have shared with us, contact Robin at <a href="mailto:${SITE.email}">${SITE.email}</a> or call <a href="tel:${SITE.robin.tel}">${SITE.robin.phone}</a>. We can direct you to the relevant brokerage or service process where applicable.</p>
 </div></div></section>`,
@@ -832,7 +817,7 @@ ${pageHero(u, { trail: [["Website disclaimer"]], h1: "Website disclaimer.", lead
 <h2>Professional advice</h2>
 <p>Our role is mortgage guidance. Legal, tax, and investment decisions should be discussed with the appropriate professional. In a separation or divorce, get independent legal advice about agreements, ownership, and property division.</p>
 <h2>External services</h2>
-<p>Our forms are hosted by Jotform and our secure application by Velocity. Google reviews and government education resources are run by their own providers, who control their availability, content, and terms.</p>
+<p>Our forms are hosted by Jotform and our secure application by Velocity. Google reviews are run by Google, who control their availability, content, and terms.</p>
 <h2>Brokerage relationship</h2>
 <p>${SITE.brokerageStatement}</p>
 <h2>Ask a question</h2>
