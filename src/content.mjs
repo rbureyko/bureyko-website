@@ -245,7 +245,7 @@ const resourceCards = (u) => `<div class="cards-2">
 </div>`;
 
 const reviewsStrip = () => `<div class="wrap"><div class="reviews">
-  <p>Hear from the people we've helped on our Google Business Profile.</p>
+  <p>Google reviews</p>
   <a class="btn btn-line" href="${SITE.reviewsUrl}" ${ext}>Read our Google reviews ↗</a>
 </div></div>`;
 
@@ -582,8 +582,10 @@ ${pageHero(u, {
       <p>We're active in our community and enjoy meeting the people helping our neighbours buy and sell homes. Let's talk about what would make your work easier.</p>
     </div>
     <div class="cards">
-      <div class="card"><h3>Open house feature sheets</h3><p>Mortgage information sheets prepared for your actual listing, giving visitors another useful way to think about the home.</p></div>
-      <div class="card"><h3>Buyer education resources</h3><p>First-time buyer guides, mortgage education materials, and resources to support your client conversations.</p></div>
+      <div class="card"><h3>Open house support</h3><p>Mortgage information sheets prepared for your listing, and we're happy to attend your open houses with you to answer visitors' financing questions on the spot.</p></div>
+      <div class="card"><h3>Referrals &amp; lifetime lead tracking</h3><p>Every client you refer is tracked back to you for life. When they come back for a renewal, a refinance, or their next purchase, we let you know, so the relationship stays yours.</p></div>
+      <div class="card"><h3>Realtor &amp; client education</h3><p>We host free mortgage seminars for buyers in the community, and we're glad to come to your team meetings to share market and lending updates with you and your agents.</p></div>
+      <div class="card"><h3>Buyer guides you can share</h3><p>Our First-Time Homebuyer Guide and other plain-language materials, ready to pass along to your clients.</p></div>
       <div class="card"><h3>Scenario &amp; readiness conversations</h3><p>A place to talk through financing questions and identify what needs attention before a client moves forward.</p></div>
       <div class="card"><h3>Clear file communication</h3><p>A careful review of the mortgage details, with updates that help everyone understand the next steps.</p></div>
     </div>
