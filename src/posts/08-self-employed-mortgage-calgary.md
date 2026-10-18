@@ -64,7 +64,7 @@ Lenders look at this in different ways, which is exactly why it helps to work wi
 
 This is where shopping around really matters. Banks, credit unions, and other lenders all look at self-employed income a little differently. A lender that isn't a fit for one business owner might be a great fit for another.
 
-A mortgage broker can compare options across lenders and help match you with ones that understand your type of income. Many self-employed Calgarians find it helpful to work with a local broker, like our team at Bureyko Mortgage Partners, who takes the time to understand how their business works.
+A mortgage broker can compare options across lenders and help match you with ones that understand your type of income. Many self-employed Calgarians find it helpful to work with local mortgage associates, like our team at Bureyko Mortgage Partners, who takes the time to understand how their business works.
 
 ## Let's look at your situation
 

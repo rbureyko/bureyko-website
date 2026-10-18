@@ -28,24 +28,24 @@ const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 const ext = `target="_blank" rel="noopener"`;
 
 export const ICON = {
-  buy: `<path d="M5 19 20 7l15 12M10 15v19h20V15"/><path d="M17 34v-9h6v9" stroke="#F38F26"/>`,
-  renew: `<rect x="6" y="9" width="28" height="25" rx="3"/><path d="M6 16h28M14 5v7m12-7v7"/><path d="m15 25 4 4 7-8" stroke="#F38F26"/>`,
-  refi: `<path d="M5 19 20 7l15 12M10 15v19h20V15"/><path d="M20 20v9m-4-4 4 4 4-4" stroke="#F38F26"/>`,
-  self: `<rect x="6" y="13" width="28" height="20" rx="3"/><path d="M15 13V9a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4M6 21h28"/><path d="M18 21v3h4v-3" stroke="#F38F26"/>`,
-  rental: `<path d="M3 21 13 13l10 8M6 19v14h14V19"/><path d="M21 15l8-6 8 6v18h-9"/><path d="M11 33v-6h4v6" stroke="#F38F26"/>`,
-  second: `<rect x="8" y="6" width="24" height="28" rx="3"/><path d="M14 14h12M14 20h12"/><path d="M14 27h6" stroke="#F38F26"/>`,
-  divorce: `<path d="M8 33V20m24 13V20"/><path d="M4 22 20 9l16 13"/><path d="M14 33c0-4 2.7-6 6-6s6 2 6 6" stroke="#F38F26"/>`,
-  reno: `<path d="M5 19 20 7l15 12M10 15v19h20V15"/><path d="m16 30 9-9m-2-2 4 4" stroke="#F38F26"/>`,
+  buy: `<path d="M5 19 20 7l15 12M10 15v19h20V15"/><path d="M17 34v-9h6v9" stroke="#F1A34B"/>`,
+  renew: `<rect x="6" y="9" width="28" height="25" rx="3"/><path d="M6 16h28M14 5v7m12-7v7"/><path d="m15 25 4 4 7-8" stroke="#F1A34B"/>`,
+  refi: `<path d="M5 19 20 7l15 12M10 15v19h20V15"/><path d="M20 20v9m-4-4 4 4 4-4" stroke="#F1A34B"/>`,
+  self: `<rect x="6" y="13" width="28" height="20" rx="3"/><path d="M15 13V9a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4M6 21h28"/><path d="M18 21v3h4v-3" stroke="#F1A34B"/>`,
+  rental: `<path d="M3 21 13 13l10 8M6 19v14h14V19"/><path d="M21 15l8-6 8 6v18h-9"/><path d="M11 33v-6h4v6" stroke="#F1A34B"/>`,
+  second: `<rect x="8" y="6" width="24" height="28" rx="3"/><path d="M14 14h12M14 20h12"/><path d="M14 27h6" stroke="#F1A34B"/>`,
+  divorce: `<path d="M8 33V20m24 13V20"/><path d="M4 22 20 9l16 13"/><path d="M14 33c0-4 2.7-6 6-6s6 2 6 6" stroke="#F1A34B"/>`,
+  reno: `<path d="M5 19 20 7l15 12M10 15v19h20V15"/><path d="m16 30 9-9m-2-2 4 4" stroke="#F1A34B"/>`,
 };
 const icon = (k) =>
   `<svg class="ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
 
 // The two illustrations from the brand files
-export const ART_GUIDE = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="40" y="16" width="314" height="488" rx="16" fill="#fff" stroke="#306AB4" stroke-width="9"/><path d="M58 20h20v480H58c-10 0-18-8-18-18V38c0-10 8-18 18-18Z" fill="#306AB4"/><path d="M120 75h130" stroke="#F38F26" stroke-width="14"/><path d="M126 188 205 125l80 63M145 172v104h126V172" stroke="#306AB4" stroke-width="9"/><path d="M120 345h175M120 380h175M120 414h115" stroke="#9AB6D9" stroke-width="9"/></svg>`;
-export const ART_CAL = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="22" y="92" width="356" height="386" rx="18" fill="#fff" stroke="#306AB4" stroke-width="8"/><path d="M22 194h356M115 50v90m170-90v90" stroke="#306AB4" stroke-width="8"/><path d="m122 324 52 52 112-118" stroke="#F38F26" stroke-width="22"/><path d="M80 430h240" stroke="#9AB6D9" stroke-width="7"/></svg>`;
-export const ART_HOUSE = `<svg viewBox="0 0 540 470" fill="none" aria-hidden="true"><circle cx="430" cy="118" r="64" fill="#FFEBD1"/><path d="m168 92 12-5 12 5m40-26 12-5 12 5" stroke="#9AB6D9" stroke-width="2" stroke-linecap="round"/><path d="M12 236v118h98V236l-49-36-49 36Zm418-14v132h96V222l-48-38-48 38Z" fill="#E4EEFB" stroke="#B7CDEB" stroke-width="1.5"/><path d="M0 354h540" stroke="#D6E4F5" stroke-width="1.5"/><path d="m110 238 150-124 170 124H110Z" fill="#306AB4"/><path d="M138 220v134h244V220L260 132 138 220Z" fill="#fff" stroke="#306AB4" stroke-width="2.5"/><path d="m106 240 154-128 174 128" stroke="#193C66" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M322 152V96h28v76" fill="#fff" stroke="#306AB4" stroke-width="2.5"/><path d="M316 96h40" stroke="#193C66" stroke-width="4" stroke-linecap="round"/><path d="M166 244h56v64h-56zm132 0h56v64h-56z" fill="#EDF5FF" stroke="#306AB4" stroke-width="2.5"/><path d="M194 244v64m-28-32h56m104-32v64m-28-32h56" stroke="#306AB4" stroke-width="2"/><path d="M236 354v-98h52v98" fill="#F38F26" stroke="#306AB4" stroke-width="2.5"/><rect x="246" y="266" width="32" height="42" rx="3" fill="#FFF5E9" stroke="#306AB4" stroke-width="1.5"/><circle cx="278" cy="326" r="3" fill="#193C66"/><path d="M228 354h68v12h-68zm-10 12h88v12h-88z" fill="#fff" stroke="#306AB4" stroke-width="2"/><path d="M240 378c-2 28 4 46 22 70m42-70c16 24 22 42 24 70" stroke="#BFD4EE" stroke-width="2.5" stroke-linecap="round"/><path d="M70 354v-58m-22 36c-28-18-16-70 16-54 8-44 48-44 48-6 34-4 34 46 2 60H48Z" fill="#D2E3F8" stroke="#9AB6D9" stroke-width="2"/><path d="M458 354v-64m-22 46c-28-12-28-50-6-62-14-40 26-56 42-22 40-14 56 42 26 62 16 20-16 38-36 22h-26Z" fill="#D2E3F8" stroke="#9AB6D9" stroke-width="2"/><path d="M20 356h160m180 0h160M60 408h90m240 0h100" stroke="#306AB4" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+export const ART_GUIDE = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="40" y="16" width="314" height="488" rx="16" fill="#fff" stroke="#306AB4" stroke-width="9"/><path d="M58 20h20v480H58c-10 0-18-8-18-18V38c0-10 8-18 18-18Z" fill="#306AB4"/><path d="M120 75h130" stroke="#F1A34B" stroke-width="14"/><path d="M126 188 205 125l80 63M145 172v104h126V172" stroke="#306AB4" stroke-width="9"/><path d="M120 345h175M120 380h175M120 414h115" stroke="#9FC0D2" stroke-width="9"/></svg>`;
+export const ART_CAL = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="22" y="92" width="356" height="386" rx="18" fill="#fff" stroke="#306AB4" stroke-width="8"/><path d="M22 194h356M115 50v90m170-90v90" stroke="#306AB4" stroke-width="8"/><path d="m122 324 52 52 112-118" stroke="#F1A34B" stroke-width="22"/><path d="M80 430h240" stroke="#9FC0D2" stroke-width="7"/></svg>`;
+export const ART_HOUSE = `<svg viewBox="0 0 540 470" fill="none" aria-hidden="true"><circle cx="430" cy="118" r="64" fill="#FFEBD1"/><path d="m168 92 12-5 12 5m40-26 12-5 12 5" stroke="#9FC0D2" stroke-width="2" stroke-linecap="round"/><path d="M12 236v118h98V236l-49-36-49 36Zm418-14v132h96V222l-48-38-48 38Z" fill="#E4EEFB" stroke="#B7CDEB" stroke-width="1.5"/><path d="M0 354h540" stroke="#D6E4F5" stroke-width="1.5"/><path d="m110 238 150-124 170 124H110Z" fill="#306AB4"/><path d="M138 220v134h244V220L260 132 138 220Z" fill="#fff" stroke="#306AB4" stroke-width="2.5"/><path d="m106 240 154-128 174 128" stroke="#193C66" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M322 152V96h28v76" fill="#fff" stroke="#306AB4" stroke-width="2.5"/><path d="M316 96h40" stroke="#193C66" stroke-width="4" stroke-linecap="round"/><path d="M166 244h56v64h-56zm132 0h56v64h-56z" fill="#EDF5FF" stroke="#306AB4" stroke-width="2.5"/><path d="M194 244v64m-28-32h56m104-32v64m-28-32h56" stroke="#306AB4" stroke-width="2"/><path d="M236 354v-98h52v98" fill="#F1A34B" stroke="#306AB4" stroke-width="2.5"/><rect x="246" y="266" width="32" height="42" rx="3" fill="#FFF5E9" stroke="#306AB4" stroke-width="1.5"/><circle cx="278" cy="326" r="3" fill="#193C66"/><path d="M228 354h68v12h-68zm-10 12h88v12h-88z" fill="#fff" stroke="#306AB4" stroke-width="2"/><path d="M240 378c-2 28 4 46 22 70m42-70c16 24 22 42 24 70" stroke="#BFD4EE" stroke-width="2.5" stroke-linecap="round"/><path d="M70 354v-58m-22 36c-28-18-16-70 16-54 8-44 48-44 48-6 34-4 34 46 2 60H48Z" fill="#D2E3F8" stroke="#9FC0D2" stroke-width="2"/><path d="M458 354v-64m-22 46c-28-12-28-50-6-62-14-40 26-56 42-22 40-14 56 42 26 62 16 20-16 38-36 22h-26Z" fill="#D2E3F8" stroke="#9FC0D2" stroke-width="2"/><path d="M20 356h160m180 0h160M60 408h90m240 0h100" stroke="#306AB4" stroke-width="2.5" stroke-linecap="round"/></svg>`;
 
-export const ART_PHONE = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="96" y="20" width="208" height="490" rx="30" fill="#fff" stroke="#306AB4" stroke-width="9"/><path d="M170 50h60" stroke="#9AB6D9" stroke-width="9" stroke-linecap="round"/><path d="M130 110h70" stroke="#F38F26" stroke-width="12"/><path d="M130 165h140M130 200h105" stroke="#9AB6D9" stroke-width="8"/><path d="M130 330V290m35 40v-65m35 65v-45m35 45v-85m35 85v-60" stroke="#306AB4" stroke-width="12" stroke-linecap="round"/><path d="M130 400h140" stroke="#9AB6D9" stroke-width="8"/><circle cx="200" cy="470" r="14" stroke="#306AB4" stroke-width="7"/></svg>`;
+export const ART_PHONE = `<svg viewBox="0 0 400 530" fill="none" aria-hidden="true"><rect x="96" y="20" width="208" height="490" rx="30" fill="#fff" stroke="#306AB4" stroke-width="9"/><path d="M170 50h60" stroke="#9FC0D2" stroke-width="9" stroke-linecap="round"/><path d="M130 110h70" stroke="#F1A34B" stroke-width="12"/><path d="M130 165h140M130 200h105" stroke="#9FC0D2" stroke-width="8"/><path d="M130 330V290m35 40v-65m35 65v-45m35 45v-85m35 85v-60" stroke="#306AB4" stroke-width="12" stroke-linecap="round"/><path d="M130 400h140" stroke="#9FC0D2" stroke-width="8"/><circle cx="200" cy="470" r="14" stroke="#306AB4" stroke-width="7"/></svg>`;
 
 // ---------- services (each becomes its own page) ----------
 export const SERVICES = [
@@ -62,7 +62,7 @@ export const SERVICES = [
       "Get a picture of your income, monthly commitments, and a comfortable budget.",
       "Gather your down payment information and talk through where the funds are coming from.",
       "Ask about mortgage features, closing costs, and the documents a lender may need.",
-      "Talk through your timeline with your mortgage broker and realtor.",
+      "Talk through your timeline with your mortgage associate and realtor.",
     ],
     approach: "We look beyond a purchase price. We review your file, explain what needs attention, and help you understand the financing questions before you make decisions.",
     faq: [
@@ -265,7 +265,7 @@ const reviewsStrip = () => `<div class="wrap"><div class="reviews">
   <a class="btn btn-line" href="${SITE.reviewsUrl}" ${ext}>Read our Google reviews ↗</a>
 </div></div>`;
 
-const contactCard = (p, role = "Mortgage Broker") => `<article class="card">
+const contactCard = (p, role = "Mortgage Associate") => `<article class="card">
   <h3>${p.name}</h3>
   <span class="role">${role}</span>
   <a class="num" href="tel:${p.tel}">${p.phone}</a>
@@ -347,7 +347,7 @@ export function pages({ posts }) {
   // Home
   list.push({
     route: "/",
-    title: "Calgary Mortgage Brokers | Bureyko Mortgage Partners",
+    title: "Calgary Mortgage Associates | Bureyko Mortgage Partners",
     description: "Buying, renewing or refinancing in Calgary? Talk to Sherri and Robin Bureyko about a mortgage plan that fits where you are and where you want to go.",
     jsonld: jsonLd({
       "@context": "https://schema.org",
@@ -359,8 +359,8 @@ export function pages({ posts }) {
       areaServed: ["Calgary", "Alberta"],
       parentOrganization: { "@type": "Organization", name: "Mortgage Architects" },
       employee: [
-        { "@type": "Person", name: SITE.sherri.name, jobTitle: "Mortgage Broker", telephone: SITE.sherri.tel },
-        { "@type": "Person", name: SITE.robin.name, jobTitle: "Mortgage Broker", telephone: SITE.robin.tel },
+        { "@type": "Person", name: SITE.sherri.name, jobTitle: "Mortgage Associate", telephone: SITE.sherri.tel },
+        { "@type": "Person", name: SITE.robin.name, jobTitle: "Mortgage Associate", telephone: SITE.robin.tel },
       ],
     }),
     body: ({ u, a }) => `
@@ -463,7 +463,7 @@ ${pageHero(u, {
     <article class="bio">
       <div class="portrait"><img src="${a("photos/sherri.jpg")}" alt="Sherri Bureyko" width="260" height="300" loading="lazy"></div>
       <div class="stack">
-        <span class="eyebrow">Mortgage Broker</span>
+        <span class="eyebrow">Mortgage Associate</span>
         <h2>Sherri Bureyko</h2>
         <p class="lead">Sherri brings a practical eye for mortgage details and a clear, direct approach to client communication. She helps make the paperwork, conditions, and next steps easier to understand.</p>
         <div class="actions"><a class="btn btn-orange btn-sm" href="tel:${SITE.sherri.tel}">Call ${SITE.sherri.phone}</a><a class="btn btn-line btn-sm" href="sms:${SITE.sherri.tel}">Text Sherri</a></div>
@@ -472,7 +472,7 @@ ${pageHero(u, {
     <article class="bio">
       <div class="portrait"><img src="${a("photos/robin.jpg")}" alt="Robin Bureyko" width="260" height="300" loading="lazy"></div>
       <div class="stack">
-        <span class="eyebrow">Mortgage Broker</span>
+        <span class="eyebrow">Mortgage Associate</span>
         <h2>Robin Bureyko</h2>
         <p class="lead">Robin brings more than 20 years of experience in credit adjudication and risk management. He looks closely at the income and credit story behind a file, helping clients understand the path forward.</p>
         <div class="actions"><a class="btn btn-orange btn-sm" href="tel:${SITE.robin.tel}">Call ${SITE.robin.phone}</a><a class="btn btn-line btn-sm" href="sms:${SITE.robin.tel}">Text Robin</a></div>
@@ -548,7 +548,7 @@ ${pageHero(u, {
   actions: `<div class="actions"><a class="btn btn-orange" href="${u("/contact")}">Talk to us ${arrow}</a>${
     s.extraButton ? `<a class="btn btn-line" href="${u(s.extraButton[1])}">${s.extraButton[0]}</a>` : `<a class="btn btn-line" href="${SITE.applyUrl}" ${ext}>Apply online</a>`
   }</div>`,
-  art: `<svg viewBox="0 0 40 40" fill="none" stroke="#306AB4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[s.icon].replace(/stroke="#F38F26"/g, 'stroke="#F38F26" stroke-width="1.6"')}</svg>`,
+  art: `<svg viewBox="0 0 40 40" fill="none" stroke="#306AB4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[s.icon].replace(/stroke="#F1A34B"/g, 'stroke="#F1A34B" stroke-width="1.6"')}</svg>`,
 })}
 <section class="band">
   <div class="wrap split">
@@ -708,8 +708,8 @@ ${pageHero(u, {
 <section class="band">
   <div class="wrap" style="display:grid;gap:28px">
     <div class="cards-2">
-      ${contactCard(SITE.sherri).replace('<span class="role">Mortgage Broker</span>', '<span class="role">Mortgage Broker · Underwriting and operations experience</span>')}
-      ${contactCard(SITE.robin).replace('<span class="role">Mortgage Broker</span>', '<span class="role">Mortgage Broker · 20+ years in credit and risk</span>')}
+      ${contactCard(SITE.sherri).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · Underwriting and operations experience</span>')}
+      ${contactCard(SITE.robin).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · 20+ years in credit and risk</span>')}
     </div>
     <div class="cards-2">
       <div class="card">
