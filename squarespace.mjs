@@ -12,7 +12,8 @@ const OUT = path.join(ROOT, "squarespace");
 
 // Links: Squarespace pages live at /about, /contact, ... and the blog at /blog
 const u = (t) => (/^(https?:|tel:|sms:|mailto:|#)/.test(t) ? t : t === "/blog/" ? "/blog" : t);
-const a = (f) => f; // no local assets are used in Squarespace blocks
+// Photos come from the Squarespace image library; no other local assets are used in Squarespace blocks
+const a = (f) => (f === "photos/sherri.jpg" ? SITE.photos.sherri : f === "photos/robin.jpg" ? SITE.photos.robin : f);
 
 // ---------- scope the site CSS under .bmp so it can't clash with the Squarespace theme ----------
 const SKIP = [/^body::before$/, /^html$/, /^\.skip/, /^\.header/, /^\.lockup/, /^\.nav/, /^\.menu/];

@@ -289,14 +289,14 @@ const pageHero = (u, { trail, eyebrow, h1, lead, actions = "", art = "" }) => `<
   </div>
 </section>`;
 
-const portraits = () => `<div class="people" aria-label="Meet your mortgage partners">
+const portraits = (a) => `<div class="people" aria-label="Meet your mortgage partners">
   <div class="people-grid">
     <figure class="person">
-      <div class="portrait"><img src="${SITE.photos.sherri}" alt="Sherri Bureyko" width="260" height="300"></div>
+      <div class="portrait"><img src="${a("photos/sherri.jpg")}" alt="Sherri Bureyko" width="260" height="300"></div>
       <figcaption><span class="person-name">Sherri Bureyko</span><span class="person-role">Underwriting &amp; operations experience</span></figcaption>
     </figure>
     <figure class="person">
-      <div class="portrait"><img src="${SITE.photos.robin}" alt="Robin Bureyko" width="260" height="300"></div>
+      <div class="portrait"><img src="${a("photos/robin.jpg")}" alt="Robin Bureyko" width="260" height="300"></div>
       <figcaption><span class="person-name">Robin Bureyko</span><span class="person-role">Credit &amp; risk experience</span></figcaption>
     </figure>
   </div>
@@ -344,7 +344,7 @@ export function pages({ posts }) {
         { "@type": "Person", name: SITE.robin.name, jobTitle: "Mortgage Broker", telephone: SITE.robin.tel },
       ],
     }),
-    body: ({ u }) => `
+    body: ({ u, a }) => `
 <section class="hero">
   <div class="wrap">
     <div class="hero-copy">
@@ -357,7 +357,7 @@ export function pages({ posts }) {
       </div>
       <p class="hero-note">Call, text, or email. A clear conversation is a good place to start.</p>
     </div>
-    ${portraits()}
+    ${portraits(a)}
   </div>
 </section>
 
@@ -419,7 +419,7 @@ ${contactBand()}`,
     route: "/about",
     title: "Meet Sherri & Robin Bureyko",
     description: "Meet your Calgary mortgage partners. Sherri and Robin combine mortgage, underwriting, and credit experience with direct, personal guidance.",
-    body: ({ u }) => `
+    body: ({ u, a }) => `
 ${pageHero(u, {
   trail: [["Our team"]],
   eyebrow: "Our team",
@@ -441,7 +441,7 @@ ${pageHero(u, {
 <section class="band band-mist">
   <div class="wrap" style="display:grid;gap:56px">
     <article class="bio">
-      <div class="portrait"><img src="${SITE.photos.sherri}" alt="Sherri Bureyko" width="260" height="300" loading="lazy"></div>
+      <div class="portrait"><img src="${a("photos/sherri.jpg")}" alt="Sherri Bureyko" width="260" height="300" loading="lazy"></div>
       <div class="stack">
         <span class="eyebrow">Mortgage Broker</span>
         <h2>Sherri Bureyko</h2>
@@ -450,7 +450,7 @@ ${pageHero(u, {
       </div>
     </article>
     <article class="bio">
-      <div class="portrait"><img src="${SITE.photos.robin}" alt="Robin Bureyko" width="260" height="300" loading="lazy"></div>
+      <div class="portrait"><img src="${a("photos/robin.jpg")}" alt="Robin Bureyko" width="260" height="300" loading="lazy"></div>
       <div class="stack">
         <span class="eyebrow">Mortgage Broker</span>
         <h2>Robin Bureyko</h2>
