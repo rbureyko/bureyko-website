@@ -249,3 +249,5 @@ a.card:hover{background:var(--mist)}
 .prose ol{padding-left:1.4em}
 .prose .post-disclaimer{font-size:.85rem;color:var(--blue);opacity:.85;border-top:1px solid var(--line);padding-top:18px;margin-top:2.2em}
 .last-reviewed{margin-top:20px;font-size:.9rem;font-weight:500;color:var(--blue)}
+.reading-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;margin-bottom:24px}
+.reading-head h2{font-size:clamp(1.4rem,2.4vw,1.8rem)}

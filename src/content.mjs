@@ -336,6 +336,29 @@ const postCards = (u, a, posts, fmtDate) =>
         .join("\n")}</div>`
     : `<div class="empty"><p>New articles are on the way. In the meantime, <a class="text-link" href="${u("/contact")}">ask us your question directly</a>.</p></div>`;
 
+// Blog posts shown under "Helpful reading" on each Mortgages page (slugs from src/posts). Missing slugs are skipped.
+const READING = {
+  "mortgage-services": ["mortgage-broker-vs-bank-calgary", "mortgage-rates-calgary", "credit-score-mortgage-alberta"],
+  "first-time-home-buyer": ["first-time-home-buyer-calgary-guide", "down-payment-mortgage-insurance-calgary", "closing-costs-calgary-alberta"],
+  "mortgage-renewal": ["mortgage-renewal-calgary", "fixed-vs-variable-mortgage-calgary", "mortgage-rates-calgary"],
+  "refinance-home-equity": ["refinance-home-equity-calgary", "fixed-vs-variable-mortgage-calgary", "mortgage-stress-test-explained"],
+  "self-employed-mortgages": ["self-employed-mortgage-calgary", "credit-score-mortgage-alberta", "mortgage-broker-vs-bank-calgary"],
+  "rental-investor-mortgages": ["mortgage-stress-test-explained", "refinance-home-equity-calgary", "mortgage-rates-calgary"],
+  "second-mortgages": ["refinance-home-equity-calgary", "credit-score-mortgage-alberta"],
+  "divorce-separation": ["refinance-home-equity-calgary", "mortgage-stress-test-explained", "credit-score-mortgage-alberta"],
+  "renovation-financing": ["refinance-home-equity-calgary", "fixed-vs-variable-mortgage-calgary"],
+};
+const readingSection = (key, posts, u, a, fmtDate, mist = false) => {
+  const picks = (READING[key] || []).map((s) => posts.find((p) => p.slug === s)).filter(Boolean);
+  if (!picks.length) return "";
+  return `<section class="band-tight${mist ? " band-mist" : ""}">
+  <div class="wrap">
+    <div class="reading-head"><h2>Helpful reading</h2><a class="text-link" href="${u("/blog/")}">All articles</a></div>
+    ${postCards(u, a, picks, fmtDate)}
+  </div>
+</section>`;
+};
+
 const jsonLd = (obj) => `<script type="application/ld+json">${JSON.stringify(obj)}</script>`;
 
 // ---------- pages ----------
@@ -498,7 +521,7 @@ ${contactBand({ title: "Let's find your next step.", text: "A clear conversation
     route: "/mortgage-services",
     title: "Mortgage Services in Calgary & Alberta",
     description: "Mortgages for first-time buyers, renewals, refinancing, self-employed clients, rental properties, renovations, and changing life plans.",
-    body: ({ u }) => `
+    body: ({ u, a }) => `
 ${pageHero(u, {
   trail: [["Mortgages"]],
   eyebrow: "Mortgages",
@@ -510,6 +533,7 @@ ${pageHero(u, {
 <section class="band">
   <div class="wrap">${servicesGrid(u)}</div>
 </section>
+${readingSection("mortgage-services", posts, u, a, fmtDate)}
 <section class="band band-mist">
   <div class="wrap approach">
     <div class="stack">
@@ -539,7 +563,7 @@ ${contactBand({ title: "Not sure where to start?", text: "Tell us what you're th
         "@type": "FAQPage",
         mainEntity: s.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
       }),
-      body: ({ u }) => `
+      body: ({ u, a }) => `
 ${pageHero(u, {
   trail: [["Mortgages", "/mortgage-services"], [s.name]],
   eyebrow: s.name,
@@ -568,6 +592,7 @@ ${pageHero(u, {
     <div class="faq">${s.faq.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join("")}</div>
   </div>
 </section>
+${readingSection(s.slug, posts, u, a, fmtDate)}
 <section class="band-tight">
   <div class="wrap">
     <h2 style="font-size:1.4rem;margin-bottom:20px">Other paths to explore</h2>
