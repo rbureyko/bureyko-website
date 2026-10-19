@@ -523,8 +523,8 @@ ${contactBand({ title: "Let's find your next step.", text: "A clear conversation
     description: "Mortgages for first-time buyers, renewals, refinancing, self-employed clients, rental properties, renovations, and changing life plans.",
     body: ({ u, a }) => `
 ${pageHero(u, {
-  trail: [["Mortgages"]],
-  eyebrow: "Mortgages",
+  trail: [["Mortgage services"]],
+  eyebrow: "Mortgage services",
   h1: "Your mortgage should fit<br><em>what comes next.</em>",
   lead: "Start with your goal. We'll help you explore the financing options, requirements, and trade-offs that matter to your situation.",
   actions: `<div class="actions"><a class="btn btn-orange" href="${u("/contact")}">Talk through your plans ${arrow}</a><a class="btn btn-line" href="${SITE.applyUrl}" ${ext}>Apply online</a></div>`,
@@ -565,7 +565,7 @@ ${contactBand({ title: "Not sure where to start?", text: "Tell us what you're th
       }),
       body: ({ u, a }) => `
 ${pageHero(u, {
-  trail: [["Mortgages", "/mortgage-services"], [s.name]],
+  trail: [["Mortgage services", "/mortgage-services"], [s.name]],
   eyebrow: s.name,
   h1: s.h1,
   lead: s.lead,
