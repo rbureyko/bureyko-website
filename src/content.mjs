@@ -354,7 +354,14 @@ const readingSection = (key, posts, u, a, fmtDate, mist = false) => {
   return `<section class="band-tight${mist ? " band-mist" : ""}">
   <div class="wrap">
     <div class="reading-head"><h2>Helpful reading</h2><a class="text-link" href="${u("/blog/")}">All articles</a></div>
-    ${postCards(u, a, picks, fmtDate)}
+    <div class="mini-posts">${picks
+      .map(
+        (p) => `<a class="mini-post" href="${u(p.route)}">
+      <img src="${a("blog/" + p.slug + ".png")}" alt="" width="1200" height="630" loading="lazy">
+      <span class="mini-post-text"><strong>${p.title}</strong><span>${p.description}</span></span>
+    </a>`
+      )
+      .join("")}</div>
   </div>
 </section>`;
 };
