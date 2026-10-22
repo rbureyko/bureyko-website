@@ -45,6 +45,7 @@ export const fmtDate = (iso) =>
 
 // ---------- layout ----------
 const NAV = [
+  ["Home", "/"],
   ["Our team", "/about"],
   ["Mortgage services", "/mortgage-services"],
   ["For realtors", "/partnerships"],
