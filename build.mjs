@@ -138,7 +138,8 @@ ${body}
         <div class="foot-links">
           <a href="tel:${SITE.sherri.tel}">Sherri · ${SITE.sherri.phone}</a>
           <a href="tel:${SITE.robin.tel}">Robin · ${SITE.robin.phone}</a>
-          <a href="mailto:${SITE.email}">${SITE.email}</a>
+          <a href="mailto:${SITE.sherri.email}">${SITE.sherri.email}</a>
+          <a href="mailto:${SITE.robin.email}">${SITE.robin.email}</a>
           <a href="${SITE.applyUrl}" target="_blank" rel="noopener">Apply online ↗</a>
           <span>Calgary based. Serving Alberta.</span>
         </div>

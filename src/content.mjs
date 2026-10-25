@@ -6,8 +6,8 @@ export const SITE = {
   name: "Bureyko Mortgage Partners",
   url: "https://www.bureykomortgages.ca",
   email: "robin@bureykomortgages.ca",
-  sherri: { name: "Sherri Bureyko", phone: "403-510-8083", tel: "+14035108083" },
-  robin: { name: "Robin Bureyko", phone: "403-540-0629", tel: "+14035400629" },
+  sherri: { name: "Sherri Bureyko", phone: "403-510-8083", tel: "+14035108083", email: "sherri@bureykomortgages.ca" },
+  robin: { name: "Robin Bureyko", phone: "403-540-0629", tel: "+14035400629", email: "robin@bureykomortgages.ca" },
   applyUrl: "https://velocity.newton.ca/sso/public.php?sc=17dj8b6xmn74w",
   reviewsUrl: "https://share.google/j3kKjlHhIyBQU943E",
   appUrl: "https://maapp.ca/app/robin-bureyko/download",
@@ -18,7 +18,7 @@ export const SITE = {
     robin: "https://images.squarespace-cdn.com/content/68d822c1dd071007730b2263/b8e80d95-2346-49a7-ae64-d4bcedf5eaa0/Robin+-+White+Background.png?content-type=image%2Fpng",
   },
   brokerageStatement:
-    "Bureyko Mortgages, powered by Mortgage Architects, is a member of the publicly traded DLCG group of companies. Together, our networks originate more mortgages in Canada than any individual bank, trust company, or credit union.",
+    "Bureyko Mortgage Partners, powered by Mortgage Architects, is a member of the publicly traded DLCG group of companies. Together, our networks originate more mortgages in Canada than any individual bank, trust company, or credit union.",
   disclaimer:
     "Mortgage approvals, rates, fees and terms depend on borrower qualification, the property and lender requirements. Information on this website is general and should be discussed in the context of your circumstances.",
 };
@@ -269,6 +269,7 @@ const contactCard = (p, role = "Mortgage Associate") => `<article class="card">
   <h3>${p.name}</h3>
   <span class="role">${role}</span>
   <a class="num" href="tel:${p.tel}">${p.phone}</a>
+  <a class="card-email" href="mailto:${p.email}">${p.email}</a>
   <div class="actions"><a class="btn btn-orange" href="tel:${p.tel}">Call ${p.name.split(" ")[0]}</a><a class="btn btn-line" href="sms:${p.tel}">Text ${p.name.split(" ")[0]}</a></div>
 </article>`;
 
@@ -283,7 +284,7 @@ const contactBand = ({ id = "contact", eyebrow = "Let's start here", title = "Te
       ${contactCard(SITE.sherri)}
       ${contactCard(SITE.robin)}
     </div>
-    <p class="contact-more"><span>Prefer email? <a href="mailto:${SITE.email}">${SITE.email}</a></span><span>Ready to apply? <a href="${SITE.applyUrl}" ${ext}>Start your secure application ↗</a></span></p>
+    <p class="contact-more"><span>Prefer email? <a href="mailto:${SITE.sherri.email}">${SITE.sherri.email}</a> or <a href="mailto:${SITE.robin.email}">${SITE.robin.email}</a></span><span>Ready to apply? <a href="${SITE.applyUrl}" ${ext}>Start your secure application ↗</a></span></p>
   </div>
 </section>`;
 
@@ -495,7 +496,7 @@ ${pageHero(u, {
       <div class="stack">
         <span class="eyebrow">Mortgage Associate</span>
         <h2>Sherri Bureyko</h2>
-        <p class="lead">Sherri brings a practical eye for mortgage details and a clear, direct approach to client communication. She helps make the paperwork, conditions, and next steps easier to understand.</p>
+        <p class="lead">Sherri brings 5 years of high-volume mortgage underwriting on a team funding $125M+ a year. She has a practical eye for mortgage details and a clear, direct approach to client communication, and she helps make the paperwork, conditions, and next steps easier to understand.</p>
         <div class="actions"><a class="btn btn-orange btn-sm" href="tel:${SITE.sherri.tel}">Call ${SITE.sherri.phone}</a><a class="btn btn-line btn-sm" href="sms:${SITE.sherri.tel}">Text Sherri</a></div>
       </div>
     </article>
@@ -798,14 +799,14 @@ ${pageHero(u, {
 <section class="band">
   <div class="wrap" style="display:grid;gap:28px">
     <div class="cards-2">
-      ${contactCard(SITE.sherri).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · Underwriting and operations experience</span>')}
+      ${contactCard(SITE.sherri).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · 5 years in high-volume underwriting</span>')}
       ${contactCard(SITE.robin).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · 20+ years in credit and risk</span>')}
     </div>
     <div class="cards-2">
       <div class="card">
         <span class="eyebrow">Prefer email?</span>
         <h3>Tell us what you're planning and the best way to reach you.</h3>
-        <a class="num" style="font-size:1.35rem;overflow-wrap:anywhere" href="mailto:${SITE.email}?subject=Mortgage%20question">${SITE.email}</a>
+        <p class="email-list"><span>Sherri</span><a href="mailto:${SITE.sherri.email}?subject=Mortgage%20question">${SITE.sherri.email}</a><span>Robin</span><a href="mailto:${SITE.robin.email}?subject=Mortgage%20question">${SITE.robin.email}</a></p>
       </div>
       <div class="card">
         <span class="eyebrow">Ready to apply?</span>

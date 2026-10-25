@@ -286,3 +286,9 @@ a.card:hover{background:var(--mist)}
 .cards-4{grid-template-columns:repeat(4,1fr)}
 @media (max-width:1000px){.cards-4{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.cards-4{grid-template-columns:1fr}}
+.card-email{color:var(--blue);font-weight:600;text-decoration:none;margin:-10px 0 16px;overflow-wrap:anywhere}
+.card-email:hover{text-decoration:underline;text-underline-offset:4px}
+.email-list{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;margin-top:4px}
+.email-list span{font-size:.85rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.email-list a{font-size:1.15rem;font-weight:600;color:var(--blue);text-decoration:none;overflow-wrap:anywhere}
+.email-list a:hover{text-decoration:underline}
