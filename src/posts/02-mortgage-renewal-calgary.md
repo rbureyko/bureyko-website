@@ -7,7 +7,7 @@ order: 2
 hub: "renewal"
 hubMain: true
 author: "Sherri Bureyko"
-authorTitle: "Mortgage Associate"
+authorTitle: "Mortgage Professional"
 company: "Bureyko Mortgage Partners"
 date: "{{LAUNCH_DATE}}"
 lastReviewed: "October 2026"
@@ -63,7 +63,7 @@ Renewal is a natural moment to step back and ask whether your mortgage still fit
 
 ## How we can help
 
-When you're renewing, a mortgage broker can compare your lender's offer with options from other lenders and explain the differences in plain language. Many Calgary homeowners find it helpful to work with local mortgage associates, like our team at Bureyko Mortgage Partners, who'll look at the whole picture, not just the rate.
+When you're renewing, a mortgage broker can compare your lender's offer with options from other lenders and explain the differences in plain language. Many Calgary homeowners find it helpful to work with local mortgage professionals, like our team at Bureyko Mortgage Partners, who'll look at the whole picture, not just the rate.
 
 ## Not sure where to start?
 

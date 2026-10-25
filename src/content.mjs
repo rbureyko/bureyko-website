@@ -62,7 +62,7 @@ export const SERVICES = [
       "Get a picture of your income, monthly commitments, and a comfortable budget.",
       "Gather your down payment information and talk through where the funds are coming from.",
       "Ask about mortgage features, closing costs, and the documents a lender may need.",
-      "Talk through your timeline with your mortgage associate and realtor.",
+      "Talk through your timeline with your mortgage professional and realtor.",
     ],
     approach: "We look beyond a purchase price. We review your file, explain what needs attention, and help you understand the financing questions before you make decisions.",
     faq: [
@@ -265,7 +265,7 @@ const reviewsStrip = () => `<div class="wrap"><div class="reviews">
   <a class="btn btn-line" href="${SITE.reviewsUrl}" ${ext}>Read our Google reviews ↗</a>
 </div></div>`;
 
-const contactCard = (p, role = "Mortgage Associate") => `<article class="card">
+const contactCard = (p, role = "Mortgage Professional") => `<article class="card">
   <h3>${p.name}</h3>
   <span class="role">${role}</span>
   <a class="num" href="tel:${p.tel}">${p.phone}</a>
@@ -378,7 +378,7 @@ export function pages({ posts }) {
   // Home
   list.push({
     route: "/",
-    title: "Calgary Mortgage Associates | Bureyko Mortgage Partners",
+    title: "Calgary Mortgage Professionals | Bureyko Mortgage Partners",
     description: "Buying, renewing or refinancing in Calgary? Talk to Sherri and Robin Bureyko about a mortgage plan that fits where you are and where you want to go.",
     jsonld: jsonLd({
       "@context": "https://schema.org",
@@ -390,8 +390,8 @@ export function pages({ posts }) {
       areaServed: ["Calgary", "Alberta"],
       parentOrganization: { "@type": "Organization", name: "Mortgage Architects" },
       employee: [
-        { "@type": "Person", name: SITE.sherri.name, jobTitle: "Mortgage Associate", telephone: SITE.sherri.tel },
-        { "@type": "Person", name: SITE.robin.name, jobTitle: "Mortgage Associate", telephone: SITE.robin.tel },
+        { "@type": "Person", name: SITE.sherri.name, jobTitle: "Mortgage Professional", telephone: SITE.sherri.tel },
+        { "@type": "Person", name: SITE.robin.name, jobTitle: "Mortgage Professional", telephone: SITE.robin.tel },
       ],
     }),
     body: ({ u, a }) => `
@@ -494,7 +494,7 @@ ${pageHero(u, {
     <article class="bio">
       <div class="portrait"><img src="${a("photos/sherri.jpg")}" alt="Sherri Bureyko" width="260" height="300" loading="lazy"></div>
       <div class="stack">
-        <span class="eyebrow">Mortgage Associate</span>
+        <span class="eyebrow">Mortgage Professional</span>
         <h2>Sherri Bureyko</h2>
         <p class="lead">Sherri brings 5 years of high-volume mortgage underwriting on a team funding $125M+ a year. She has a practical eye for mortgage details and a clear, direct approach to client communication, and she helps make the paperwork, conditions, and next steps easier to understand.</p>
         <div class="actions"><a class="btn btn-orange btn-sm" href="tel:${SITE.sherri.tel}">Call ${SITE.sherri.phone}</a><a class="btn btn-line btn-sm" href="sms:${SITE.sherri.tel}">Text Sherri</a></div>
@@ -503,7 +503,7 @@ ${pageHero(u, {
     <article class="bio">
       <div class="portrait"><img src="${a("photos/robin.jpg")}" alt="Robin Bureyko" width="260" height="300" loading="lazy"></div>
       <div class="stack">
-        <span class="eyebrow">Mortgage Associate</span>
+        <span class="eyebrow">Mortgage Professional</span>
         <h2>Robin Bureyko</h2>
         <p class="lead">Robin brings more than 20 years of experience in credit adjudication and risk management. He looks closely at the income and credit story behind a file, helping clients understand the path forward.</p>
         <div class="actions"><a class="btn btn-orange btn-sm" href="tel:${SITE.robin.tel}">Call ${SITE.robin.phone}</a><a class="btn btn-line btn-sm" href="sms:${SITE.robin.tel}">Text Robin</a></div>
@@ -653,7 +653,7 @@ ${pageHero(u, {
         <div class="portrait"><img src="${a("photos/robin.jpg")}" alt="Robin Bureyko" width="260" height="300" loading="lazy"></div>
         <div class="stack" style="gap:8px">
           <h3>Robin Bureyko</h3>
-          <span class="role">Mortgage Associate</span>
+          <span class="role">Mortgage Professional</span>
           <p>20+ years in credit adjudication, credit analysis and risk management.</p>
           <p class="partner-contact"><a href="tel:${SITE.robin.tel}">${SITE.robin.phone}</a><a href="mailto:robin@bureykomortgages.ca">robin@bureykomortgages.ca</a></p>
         </div>
@@ -662,7 +662,7 @@ ${pageHero(u, {
         <div class="portrait"><img src="${a("photos/sherri.jpg")}" alt="Sherri Bureyko" width="260" height="300" loading="lazy"></div>
         <div class="stack" style="gap:8px">
           <h3>Sherri Bureyko</h3>
-          <span class="role">Mortgage Associate</span>
+          <span class="role">Mortgage Professional</span>
           <p>5 years of high-volume mortgage underwriting on a team funding $125M+ a year.</p>
           <p class="partner-contact"><a href="tel:${SITE.sherri.tel}">${SITE.sherri.phone}</a><a href="mailto:sherri@bureykomortgages.ca">sherri@bureykomortgages.ca</a></p>
         </div>
@@ -705,8 +705,8 @@ ${pageHero(u, {
       <p>Within 24 hours, we'll tell you if there's a path.</p>
     </div>
     <div class="contact-grid">
-      ${contactCard(SITE.robin).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · Credit &amp; risk</span>')}
-      ${contactCard(SITE.sherri).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · Underwriting</span>')}
+      ${contactCard(SITE.robin).replace('<span class="role">Mortgage Professional</span>', '<span class="role">Mortgage Professional · Credit &amp; risk</span>')}
+      ${contactCard(SITE.sherri).replace('<span class="role">Mortgage Professional</span>', '<span class="role">Mortgage Professional · Underwriting</span>')}
     </div>
     <p class="contact-more"><span>Email <a href="mailto:robin@bureykomortgages.ca?subject=A%20file%20for%20a%20second%20look">robin@bureykomortgages.ca</a> or <a href="mailto:sherri@bureykomortgages.ca?subject=A%20file%20for%20a%20second%20look">sherri@bureykomortgages.ca</a></span></p>
     <p class="note">Please don't email SINs, bank statements or ID. Tell us about the file, and we'll set up a secure way to share documents.</p>
@@ -799,8 +799,8 @@ ${pageHero(u, {
 <section class="band">
   <div class="wrap" style="display:grid;gap:28px">
     <div class="cards-2">
-      ${contactCard(SITE.sherri).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · 5 years in high-volume underwriting</span>')}
-      ${contactCard(SITE.robin).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · 20+ years in credit and risk</span>')}
+      ${contactCard(SITE.sherri).replace('<span class="role">Mortgage Professional</span>', '<span class="role">Mortgage Professional · 5 years in high-volume underwriting</span>')}
+      ${contactCard(SITE.robin).replace('<span class="role">Mortgage Professional</span>', '<span class="role">Mortgage Professional · 20+ years in credit and risk</span>')}
     </div>
     <div class="cards-2">
       <div class="card">

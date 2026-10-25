@@ -7,7 +7,7 @@ order: 10
 hub: "mortgage-basics"
 hubMain: true
 author: "Sherri Bureyko"
-authorTitle: "Mortgage Associate"
+authorTitle: "Mortgage Professional"
 company: "Bureyko Mortgage Partners"
 date: "{{LAUNCH_DATE}}"
 lastReviewed: "October 2026"
@@ -70,7 +70,7 @@ If you ever have questions about how your broker is being paid, ask. A good brok
 
 There's no wrong answer. Some people love the simplicity of going to their bank. Others like having someone compare options and guide them through it.
 
-If you're curious what working with a broker looks like, we'd love to chat. Many Calgary homeowners find it helpful to work with local mortgage associates, like our team at Bureyko Mortgage Partners, who knows Alberta lending and takes the time to explain each step. [Reach out]({{CONTACT_URL}}) anytime, with no pressure at all.
+If you're curious what working with a broker looks like, we'd love to chat. Many Calgary homeowners find it helpful to work with local mortgage professionals, like our team at Bureyko Mortgage Partners, who knows Alberta lending and takes the time to explain each step. [Reach out]({{CONTACT_URL}}) anytime, with no pressure at all.
 
 ## Keep reading
 

@@ -7,7 +7,7 @@ order: 1
 hub: "first-time-buyers"
 hubMain: true
 author: "Sherri Bureyko"
-authorTitle: "Mortgage Associate"
+authorTitle: "Mortgage Professional"
 company: "Bureyko Mortgage Partners"
 date: "{{LAUNCH_DATE}}"
 lastReviewed: "October 2026"
@@ -107,7 +107,7 @@ Here's what usually happens next:
 
 A mortgage broker shops your mortgage around to different lenders and explains your options in plain language. For first-time buyers, that often means help with the parts that feel the most unfamiliar: getting your credit ready, understanding what you qualify for, and making sense of the fine print.
 
-Many Calgary buyers find it helpful to work with local mortgage associates, like our team at Bureyko Mortgage Partners, who knows Alberta lending and takes the time to walk you through each step.
+Many Calgary buyers find it helpful to work with local mortgage professionals, like our team at Bureyko Mortgage Partners, who knows Alberta lending and takes the time to walk you through each step.
 
 ## Ready when you are
 

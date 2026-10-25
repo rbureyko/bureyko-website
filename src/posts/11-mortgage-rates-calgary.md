@@ -7,7 +7,7 @@ order: 11
 hub: "mortgage-basics"
 hubMain: false
 author: "Sherri Bureyko"
-authorTitle: "Mortgage Associate"
+authorTitle: "Mortgage Professional"
 company: "Bureyko Mortgage Partners"
 date: "{{LAUNCH_DATE}}"
 lastReviewed: "October 2026"
