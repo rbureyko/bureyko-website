@@ -18,7 +18,7 @@ export const SITE = {
     robin: "https://images.squarespace-cdn.com/content/68d822c1dd071007730b2263/b8e80d95-2346-49a7-ae64-d4bcedf5eaa0/Robin+-+White+Background.png?content-type=image%2Fpng",
   },
   brokerageStatement:
-    "Bureyko Mortgage Partners is part of Mortgage Architects, which operates under the publicly traded DLCG group of companies.",
+    "Bureyko Mortgages, powered by Mortgage Architects, is a member of the publicly traded DLCG group of companies. Together, our networks originate more mortgages in Canada than any individual bank, trust company, or credit union.",
   disclaimer:
     "Mortgage approvals, rates, fees and terms depend on borrower qualification, the property and lender requirements. Information on this website is general and should be discussed in the context of your circumstances.",
 };
