@@ -612,48 +612,106 @@ ${contactBand({ title: "Let's look at your situation.", text: "Every file has it
     });
   }
 
-  // Partnerships
+  // Partnerships (For REALTORS®), wording based on the October 2026 realtor one-pager
   list.push({
     route: "/partnerships",
-    title: "Realtor & Professional Partnerships",
-    description: "Partner with Sherri and Robin Bureyko for mortgage readiness conversations, open house feature sheets, and clear financing support for your clients.",
-    body: ({ u }) => `
+    title: "For REALTORS®: Fewer Deals Lost to Financing",
+    description: "Underwriter-level pre-approvals, a second look within 24 hours when a bank says no, and a team that stays with your buyers. Robin and Sherri Bureyko, Calgary.",
+    body: ({ u, a }) => `
 ${pageHero(u, {
   trail: [["For realtors"]],
-  eyebrow: "For realtors",
-  h1: "A local mortgage partner.<br><em>In your corner.</em>",
-  lead: "You work hard for your clients. We're here to support the financing side with thoughtful file preparation, clear conversations, and practical tools for your business.",
-  actions: `<div class="actions"><a class="btn btn-orange" href="${u("/contact")}">Start a partner conversation ${arrow}</a></div>`,
+  eyebrow: "For REALTORS® · Calgary &amp; area",
+  h1: "Fewer deals lost<br><em>to financing.</em>",
+  lead: "We don't just understand mortgages. We understand credit. Between us, 25+ years of credit and underwriting experience. We read your buyer's file the way the lender will, so problems surface before the offer, not after.",
+  actions: `<div class="actions"><a class="btn btn-orange" href="#one-file">Send us your toughest file ${arrow}</a><a class="btn btn-line" href="tel:${SITE.robin.tel}">Call or text ${SITE.robin.phone}</a></div>`,
   art: ART_HOUSE,
 })}
 <section class="band">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">How we help</span>
-      <h2>Useful tools. Real relationships.</h2>
-      <p>We're active in our community and enjoy meeting the people helping our neighbours buy and sell homes. Let's talk about what would make your work easier.</p>
+      <span class="eyebrow">What you can count on</span>
+      <h2>Three promises to your buyers, and to you.</h2>
+      <p>We don't compete on rate or on free marketing. We lead with credit, because that's where deals fall apart.</p>
     </div>
-    <div class="cards">
-      <div class="card"><h3>Open house support</h3><p>Mortgage information sheets prepared for your listing, and we're happy to attend your open houses with you to answer visitors' financing questions on the spot.</p></div>
-      <div class="card"><h3>Referrals &amp; lifetime lead tracking</h3><p>Every client you refer is tracked back to you for life. When they come back for a renewal, a refinance, or their next purchase, we let you know, so the relationship stays yours.</p></div>
-      <div class="card"><h3>Realtor &amp; client education</h3><p>We host free mortgage seminars for buyers in the community, and we're glad to come to your team meetings to share market and lending updates with you and your agents.</p></div>
-      <div class="card"><h3>Buyer guides you can share</h3><p>Our First-Time Homebuyer Guide and other plain-language materials, ready to pass along to your clients.</p></div>
-      <div class="card"><h3>Scenario &amp; readiness conversations</h3><p>A place to talk through financing questions and identify what needs attention before a client moves forward.</p></div>
-      <div class="card"><h3>Clear file communication</h3><p>A careful review of the mortgage details, with updates that help everyone understand the next steps.</p></div>
+    <ol class="promises">
+      <li><span class="promise-num">01</span><h3>Underwriter-level pre-approvals</h3><p>We check income, credit, debts and documents up front, so your buyer shops in a range that funds.</p></li>
+      <li><span class="promise-num">02</span><h3>A second look in 24 hours</h3><p>Bank said no? Self-employed or bruised credit? Send them to us before you let them go.</p></li>
+      <li><span class="promise-num">03</span><h3>Your clients come back to you</h3><p>We stay with your buyers through renewals, and send them back to you when they're ready to move.</p></li>
+    </ol>
+  </div>
+</section>
+<section class="band band-mist">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Who you'll work with</span>
+      <h2>Two people who read files the way lenders do.</h2>
+      <p>You deal with us directly, from the first question to funding.</p>
+    </div>
+    <div class="cards-2">
+      <article class="card partner">
+        <div class="portrait"><img src="${a("photos/robin.jpg")}" alt="Robin Bureyko" width="260" height="300" loading="lazy"></div>
+        <div class="stack" style="gap:8px">
+          <h3>Robin Bureyko</h3>
+          <span class="role">Mortgage Associate</span>
+          <p>20+ years in credit adjudication, credit analysis and risk management.</p>
+          <p class="partner-contact"><a href="tel:${SITE.robin.tel}">${SITE.robin.phone}</a><a href="mailto:robin@bureykomortgages.ca">robin@bureykomortgages.ca</a></p>
+        </div>
+      </article>
+      <article class="card partner">
+        <div class="portrait"><img src="${a("photos/sherri.jpg")}" alt="Sherri Bureyko" width="260" height="300" loading="lazy"></div>
+        <div class="stack" style="gap:8px">
+          <h3>Sherri Bureyko</h3>
+          <span class="role">Mortgage Associate</span>
+          <p>5 years of high-volume mortgage underwriting on a team funding $125M+ a year.</p>
+          <p class="partner-contact"><a href="tel:${SITE.sherri.tel}">${SITE.sherri.phone}</a><a href="mailto:sherri@bureykomortgages.ca">sherri@bureykomortgages.ca</a></p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">How we support your business</span>
+      <h2>Here when your buyers need us.</h2>
+      <p>Practical help for the way you actually work, including the evenings and weekends when deals happen.</p>
+    </div>
+    <div class="cards cards-4">
+      <div class="card"><h3>Evenings &amp; weekends</h3><p>Offers don't wait for office hours, and neither do we. Call or text when a buyer has a question.</p></div>
+      <div class="card"><h3>Open house support</h3><p>We'll join you at an open house to answer visitors' financing questions on the spot.</p></div>
+      <div class="card"><h3>Listing feature sheets</h3><p>Mortgage feature sheets for your listing, showing payments at a few down payment levels. Send us the listing.</p></div>
+      <div class="card"><h3>Team presentations</h3><p>Fifteen minutes at your next team meeting on what's changing in mortgages. We also host mortgage seminars for buyers in the community.</p></div>
     </div>
   </div>
 </section>
 <section class="band band-mist">
   <div class="wrap split">
-    <h2>A coffee is a good starting point.</h2>
     <div class="stack">
-      <p class="lead">We'd like to learn about your business, the clients you work with, and the support that would be useful to you. Call, text, or send us a note to start the conversation.</p>
-      <a class="btn btn-orange" href="mailto:${SITE.email}?subject=Realtor%20partnership">Email us about a partnership</a>
+      <span class="eyebrow">Working together</span>
+      <h2>Already have a mortgage person you like?</h2>
+    </div>
+    <div class="stack">
+      <p class="lead"><strong>Keep them.</strong> We're the second look for the files they can't place.</p>
+      <p class="lead">And if your buyer's own bank turns out to be the better fit, we'll tell them honestly. We shop many lenders, and we'd rather keep your trust than force a deal.</p>
     </div>
   </div>
 </section>
-${reviewsStrip()}
-${contactBand({ eyebrow: "Let's connect", title: "Connect with Sherri &amp; Robin.", text: "Call or text either of us directly." })}`,
+<section class="contact" id="one-file">
+  <div class="wrap">
+    <span class="eyebrow">Try us on one file</span>
+    <div class="contact-head">
+      <h2>Send us your toughest file.</h2>
+      <p>Within 24 hours, we'll tell you if there's a path.</p>
+    </div>
+    <div class="contact-grid">
+      ${contactCard(SITE.robin).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · Credit &amp; risk</span>')}
+      ${contactCard(SITE.sherri).replace('<span class="role">Mortgage Associate</span>', '<span class="role">Mortgage Associate · Underwriting</span>')}
+    </div>
+    <p class="contact-more"><span>Email <a href="mailto:robin@bureykomortgages.ca?subject=A%20file%20for%20a%20second%20look">robin@bureykomortgages.ca</a> or <a href="mailto:sherri@bureykomortgages.ca?subject=A%20file%20for%20a%20second%20look">sherri@bureykomortgages.ca</a></span></p>
+    <p class="note">Please don't email SINs, bank statements or ID. Tell us about the file, and we'll set up a secure way to share documents.</p>
+  </div>
+</section>
+${reviewsStrip()}`,
   });
 
   // Resources
