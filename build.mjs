@@ -127,6 +127,7 @@ ${body}
           <a href="${u("/mortgage-services")}">Mortgage services</a>
           <a href="${u("/first-time-home-buyer-guide")}">First-Time Homebuyer Guide</a>
           <a href="${u("/mortgage-renewal-checkup")}">Mortgage Renewal Checkup</a>
+          <a href="${u("/resources#renewal-calculator")}">Renewal payment calculator</a>
           <a href="${u("/partnerships")}">Realtor partnerships</a>
           <a href="${u("/blog/")}">Blog</a>
           <a href="${SITE.appUrl}" target="_blank" rel="noopener">Rates &amp; calculators app ↗</a>

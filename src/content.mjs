@@ -78,7 +78,7 @@ export const SERVICES = [
     description: "Review your options before signing your next mortgage term. Talk to Sherri and Robin Bureyko.",
     h1: "A renewal deserves<br><em>a fresh look.</em>",
     lead: "Your life may have changed since you first arranged your mortgage. Let's review the renewal in the context of where you are now and what comes next.",
-    extraButton: ["Get my renewal checkup", "/mortgage-renewal-checkup"],
+    extraButton: ["Try the renewal calculator", "/resources#renewal-calculator"],
     listTitle: "What's worth reviewing",
     list: [
       "Your renewal date and the offer from your current lender.",
@@ -259,6 +259,112 @@ const resourceCards = (u) => `<div class="cards-2">
     <a class="btn btn-orange" href="${u("/mortgage-renewal-checkup")}">Get my renewal checkup</a>
   </article>
 </div>`;
+
+// Renewal payment calculator (Resources page). People type their own rates; we never show rates.
+// The "Get my renewal options" button opens the Renewal Checkup and tags the lead with where it came from
+// (renewal_calculator, plus utm_source from an ad or reel link, e.g. renewal_calculator_facebook).
+const renewalCalculator = (u) => `<section class="band calc-band" id="renewal-calculator">
+  <div class="wrap">
+    <div class="calc">
+      <div class="calc-intro stack">
+        <span class="eyebrow">Renewal payment calculator</span>
+        <h2>What will your payment be at renewal?</h2>
+        <p class="lead">Enter your balance, your current rate and the rate your lender offered. See how your monthly payment changes before you sign anything.</p>
+        <p class="fine">Don't have an offer yet? Enter the rate you expect, or any rate you'd like to test.</p>
+      </div>
+      <form class="calc-form" novalidate onsubmit="return false">
+        <label class="field"><span>Mortgage balance at renewal</span>
+          <span class="input-wrap"><span class="affix">$</span><input id="rc-balance" inputmode="numeric" autocomplete="off" placeholder="e.g. 400,000"></span></label>
+        <label class="field"><span>Years left to pay it off (amortization)</span>
+          <span class="input-wrap"><input id="rc-years" inputmode="numeric" value="20"><span class="affix">years</span></span></label>
+        <label class="field"><span>Your current rate</span>
+          <span class="input-wrap"><input id="rc-current" inputmode="decimal" placeholder="Your rate"><span class="affix">%</span></span></label>
+        <label class="field"><span>Rate you've been offered at renewal</span>
+          <span class="input-wrap"><input id="rc-offer" inputmode="decimal" placeholder="Offered rate"><span class="affix">%</span></span></label>
+        <label class="field field-wide"><span>When does your mortgage renew?</span>
+          <select id="rc-when">
+            <option value="">Choose one</option>
+            <option value="0-4">In the next 4 months</option>
+            <option value="4-12">In 4 to 12 months</option>
+            <option value="12+">More than a year away</option>
+            <option value="unsure">I'm not sure</option>
+          </select></label>
+      </form>
+      <div class="calc-result" id="rc-result" aria-live="polite">
+        <p class="calc-empty" id="rc-empty">Fill in the four numbers to see your estimate.</p>
+        <div class="calc-out" id="rc-out" hidden>
+          <div class="calc-pay">
+            <div><span>Payment at your current rate</span><strong id="rc-p1"></strong></div>
+            <div><span>Payment at the offered rate</span><strong id="rc-p2"></strong></div>
+          </div>
+          <p class="calc-diff" id="rc-diff"></p>
+          <p class="calc-when" id="rc-whenmsg" hidden></p>
+          <a class="btn btn-orange" id="rc-cta" href="${u("/mortgage-renewal-checkup")}">Get my renewal options ${arrow}</a>
+          <p class="fine">Estimate only, using monthly payments and semi-annual compounding. Your actual payment depends on your lender, mortgage terms and qualification.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var num = function (id) { var v = parseFloat(String($(id).value).replace(/[^0-9.]/g, "")); return isFinite(v) ? v : NaN; };
+  var money = function (n) { return "$" + Math.round(n).toLocaleString("en-CA"); };
+  // Canadian fixed-rate mortgages compound semi-annually.
+  var payment = function (bal, rate, years) {
+    var n = years * 12;
+    if (rate === 0) return bal / n;
+    var i = Math.pow(1 + rate / 200, 1 / 6) - 1;
+    return bal * i / (1 - Math.pow(1 + i, -n));
+  };
+  var source = "renewal_calculator";
+  try {
+    var utm = new URLSearchParams(location.search).get("utm_source");
+    if (utm) source += "_" + utm.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 20);
+  } catch (e) {}
+  var cta = $("rc-cta");
+  cta.href = cta.getAttribute("href").split("?")[0] + "?source=" + source;
+  var whenMsg = {
+    "0-4": "You're inside the window where many lenders will hold a rate for you. Now is a good time to compare.",
+    "4-12": "You have time to plan. Many lenders let you lock in a rate about four months before renewal.",
+    "12+": "Put your date on our radar and we'll reach out when it's time to compare.",
+    "unsure": "Your renewal date is on your lender's annual statement or online banking. We can help you find it."
+  };
+  function update() {
+    var bal = num("rc-balance"), yrs = num("rc-years"), r1 = num("rc-current"), r2 = num("rc-offer");
+    var ok = bal > 0 && yrs > 0 && yrs <= 40 && r1 >= 0 && r1 < 25 && r2 >= 0 && r2 < 25;
+    $("rc-empty").hidden = ok;
+    $("rc-out").hidden = !ok;
+    if (!ok) return;
+    var p1 = payment(bal, r1, yrs), p2 = payment(bal, r2, yrs), d = p2 - p1;
+    $("rc-p1").textContent = money(p1) + "/mo";
+    $("rc-p2").textContent = money(p2) + "/mo";
+    var diff = $("rc-diff");
+    if (Math.abs(d) < 1) {
+      diff.className = "calc-diff";
+      diff.textContent = "Your payment stays about the same.";
+    } else if (d > 0) {
+      diff.className = "calc-diff up";
+      diff.innerHTML = "That's <strong>" + money(d) + " more per month</strong>, about " + money(d * 12) + " a year. Before you sign, it's worth seeing what other lenders would offer.";
+    } else {
+      diff.className = "calc-diff down";
+      diff.innerHTML = "That's <strong>" + money(-d) + " less per month</strong>. Good news, but it's still worth checking the offer is the best one available to you.";
+    }
+    var w = $("rc-when").value, m = $("rc-whenmsg");
+    m.hidden = !whenMsg[w];
+    m.textContent = whenMsg[w] || "";
+  }
+  ["rc-balance", "rc-years", "rc-current", "rc-offer", "rc-when"].forEach(function (id) {
+    $(id).addEventListener("input", update);
+    $(id).addEventListener("change", update);
+  });
+  $("rc-balance").addEventListener("blur", function () {
+    var v = num("rc-balance");
+    if (v > 0) this.value = Math.round(v).toLocaleString("en-CA");
+  });
+})();
+</script>
+</section>`;
 
 const reviewsStrip = () => `<div class="wrap"><div class="reviews">
   <p>Google reviews</p>
@@ -726,8 +832,10 @@ ${pageHero(u, {
   eyebrow: "Resources",
   h1: "A little clarity.<br><em>A useful head start.</em>",
   lead: "Practical places to begin, whether you're buying your first home or thinking about your next mortgage term.",
+  actions: `<div class="actions"><a class="btn btn-orange" href="#renewal-calculator">Try the renewal calculator ${arrow}</a></div>`,
 })}
-<section class="band">
+${renewalCalculator(u)}
+<section class="band band-mist">
   <div class="wrap">${resourceCards(u)}</div>
 </section>
 ${appSection()}
@@ -752,11 +860,21 @@ ${pageHero(u, { trail: [["Resources", "/resources"], [title]], eyebrow, h1, lead
       </div>
     </div>
     <div class="stack">
-      <div class="form-frame" style="width:100%"><iframe src="${form}?source=${source}" title="${title} form" loading="lazy" allow="geolocation; microphone; camera"></iframe></div>
+      <div class="form-frame" style="width:100%"><iframe id="lead-form" src="${form}?source=${source}" title="${title} form" loading="lazy" allow="geolocation; microphone; camera"></iframe></div>
       <p class="fine">Form not showing? <a class="text-link" href="${form}?source=${source}" ${ext}>Open it in a new tab ↗</a>. The form is hosted by Jotform. Please share only the information requested; sensitive mortgage documents belong in your secure application.</p>
     </div>
   </div>
 </section>
+<script>
+(function () {
+  try {
+    var src = new URLSearchParams(location.search).get("source");
+    if (!src || !/^[a-z0-9_]{1,60}$/.test(src)) return;
+    var f = document.getElementById("lead-form");
+    f.src = f.src.split("?")[0] + "?source=" + src;
+  } catch (e) {}
+})();
+</script>
 ${contactBand({ title: "Prefer to talk first?", text: "We're happy to start with your questions." })}`,
   });
   list.push(formPage({
