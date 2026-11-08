@@ -9,7 +9,7 @@ export const SITE = {
   sherri: { name: "Sherri Bureyko", phone: "403-510-8083", tel: "+14035108083", email: "sherri@bureykomortgages.ca" },
   robin: { name: "Robin Bureyko", phone: "403-540-0629", tel: "+14035400629", email: "robin@bureykomortgages.ca" },
   applyUrl: "https://velocity.newton.ca/sso/public.php?sc=17dj8b6xmn74w",
-  reviewsUrl: "https://share.google/j3kKjlHhIyBQU943E",
+  reviewsUrl: "https://maps.app.goo.gl/BTesNBKsJyALK5hQA",
   appUrl: "https://maapp.ca/app/robin-bureyko/download",
   guideForm: "https://form.jotform.com/262367662550259",
   renewalForm: "https://form.jotform.com/260465756960063",
