@@ -222,6 +222,17 @@ export const SERVICES = [
 ];
 
 // ---------- shared sections ----------
+const buwrCallout = (u) => `<section class="band-tight">
+  <div class="wrap">
+    <a class="buwr-callout" href="${u("/break-up-with-renting/")}">
+      <span class="eyebrow">Free 12-month program</span>
+      <strong>Break Up With Renting</strong>
+      <span>For Calgarians in their 20s who want to own in the next few years. Tips every two weeks, live Q&amp;As, no homework. Free, always.</span>
+      <span class="more">See the program <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+    </a>
+  </div>
+</section>`;
+
 const appSection = () => `<section class="band band-mist">
   <div class="wrap">
     <article class="card res res-4" style="max-width:860px">
@@ -706,6 +717,7 @@ ${pageHero(u, {
     <div class="faq">${s.faq.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join("")}</div>
   </div>
 </section>
+${s.slug === "first-time-home-buyer" ? buwrCallout(u) : ""}
 ${readingSection(s.slug, posts, u, a, fmtDate)}
 <section class="band-tight">
   <div class="wrap">
@@ -838,6 +850,7 @@ ${renewalCalculator(u)}
 <section class="band band-mist">
   <div class="wrap">${resourceCards(u)}</div>
 </section>
+${buwrCallout(u)}
 ${appSection()}
 ${posts.length ? `<section class="band"><div class="wrap"><div class="sec-head"><span class="eyebrow">From the blog</span><h2>Recent articles.</h2><p><a class="text-link" href="${u("/blog/")}">See all articles</a></p></div>${postCards(u, a, posts.slice(0, 3), fmtDate)}</div></section>` : ""}
 ${contactBand({ title: "Let's find your next step.", text: "A clear conversation is a good place to start." })}`,
@@ -1040,6 +1053,8 @@ ${pageHero(u, { trail: [["Privacy"]], h1: "Privacy information.", lead: "How thi
 <p>The First-Time Homebuyer Guide and Mortgage Renewal Checkup use Jotform. Information submitted through those forms goes through Jotform under the form's terms and settings. Jotform may use cookies or similar technologies as part of its service. See Jotform's privacy policy for its practices.</p>
 <h2>Mortgage applications</h2>
 <p>The "Apply" links open a secure application hosted by Velocity, the application platform used by our brokerage. Information you submit there is handled under that platform's and Mortgage Architects' privacy practices.</p>
+<h2>Break Up With Renting scorecard</h2>
+<p>When a Break Up With Renting member sends their Mortgage-Ready Scorecard, their answers are emailed to them and to Robin to help them prepare for homeownership. The scorecard is sent through Jotform, so a copy is kept in our Jotform account. Answers aren't stored on this website, and they're never shared or sold.</p>
 <h2>Share information through the right channel</h2>
 <p>General inquiries should be limited to your question and contact information. Use the secure application, or ask us for the right process, before sending identity documents, banking information, a SIN, or other sensitive financial records.</p>
 <h2>Website data</h2>

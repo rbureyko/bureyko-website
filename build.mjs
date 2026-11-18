@@ -5,6 +5,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { SITE, SERVICES, pages } from "./src/content.mjs";
 import { loadPosts } from "./src/blog.mjs";
+import { buwrPages } from "./src/buwr.mjs";
+import { makeProtector, gateBody } from "./src/protect.mjs";
 
 const PREVIEW = process.argv.includes("--preview");
 const OUT = PREVIEW ? "preview" : "dist";
@@ -169,11 +171,21 @@ if (fs.existsSync(path.join(ROOT, "src/static"))) fs.cpSync(path.join(ROOT, "src
 
 const ctx = { posts: allPosts, PREVIEW };
 const built = [];
-for (const page of pages(ctx)) {
+// Members pages are encrypted with MEMBERS_PASSWORD (a GitHub Actions secret). Without it, they're
+// published as "opening soon" pages with no content, so nothing private can ever leak.
+// A preview build uses the password "preview" so the pages can be checked locally.
+const MEMBERS_PASSWORD = process.env.MEMBERS_PASSWORD || (PREVIEW ? "preview" : "");
+const protect = MEMBERS_PASSWORD ? await makeProtector(MEMBERS_PASSWORD) : null;
+if (!protect) console.warn("MEMBERS_PASSWORD is not set: the members area is published as 'opening soon'.");
+for (const page of [...pages(ctx), ...buwrPages()]) {
   const h = makeHelpers(page.route);
   const body = page.body(h);
-  const html = layout({ ...page, body }, h);
+  let html = layout({ ...page, body }, h);
   if (html.includes("{{")) throw new Error(`Unfilled {{TOKEN}} on ${page.route}. Add its value to src/posts/links.json.`);
+  if (page.protect) {
+    const payload = protect ? await protect(html) : null;
+    html = layout({ ...page, body: gateBody(payload, SITE.robin) }, h);
+  }
   write(fileFor(page.route), html);
   if (!page.noindex) built.push(page.route);
 }
@@ -186,6 +198,6 @@ write(
     .map((r) => `  <url><loc>${SITE.url}${r}</loc><lastmod>${today}</lastmod></url>`)
     .join("\n")}\n</urlset>\n`
 );
-write("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${SITE.url}/sitemap.xml\n`);
+write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /break-up-with-renting/members/\nSitemap: ${SITE.url}/sitemap.xml\n`);
 if (!PREVIEW && CUSTOM_DOMAIN) write("CNAME", SITE.url.replace(/^https?:\/\//, "") + "\n");
 console.log(`Built ${built.length} pages into ${OUT}/ (${allPosts.length} blog posts${PREVIEW ? ", drafts included" : ""}).`);

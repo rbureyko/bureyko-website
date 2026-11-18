@@ -1,0 +1,302 @@
+<style>
+  /* Layout: single centred column, phone first; Bureyko blue and orange on a quiet blue-grey ground */
+  :root {
+    --blue: #306AB4; --fill: #306AB4; --orange: #F1A34B; --light-blue: #9FC0D2;
+    --ink: #1d2a3a; --muted: #5b6b7d; --bg: #ffffff; --soft: #f3f7fa; --line: #dbe5ec;
+    --warm: #fff4e5; --warn: #b3541e; --on-fill: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --blue: #8DB6EC; --fill: #2C5F9E; --orange: #F1A34B; --light-blue: #3E6A90;
+    --ink: #E4EBF2; --muted: #9DAEBF; --bg: #0F1822; --soft: #172331; --line: #2A3A4B;
+    --warm: #2B2116; --warn: #F0A273; --on-fill: #ffffff; color-scheme: dark } }
+  :root[data-theme="dark"] {
+    --blue: #8DB6EC; --fill: #2C5F9E; --orange: #F1A34B; --light-blue: #3E6A90;
+    --ink: #E4EBF2; --muted: #9DAEBF; --bg: #0F1822; --soft: #172331; --line: #2A3A4B;
+    --warm: #2B2116; --warn: #F0A273; --on-fill: #ffffff; color-scheme: dark }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.5; }
+  .wrap { max-width: 640px; margin: 0 auto; padding-block: 24px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .eyebrow { color: var(--orange); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 6px; }
+  h1 { color: var(--blue); font-size: 28px; line-height: 1.15; margin: 0 0 10px; }
+  .intro { color: var(--muted); margin: 0 0 24px; }
+  .q { border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+  .q h2 { font-size: 17px; margin: 0 0 12px; }
+  .q .num { color: var(--orange); font-weight: 700; margin-right: 6px; }
+  .opts { display: grid; gap: 8px; }
+  .opts label { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; font-size: 15px; }
+  .opts input { accent-color: var(--blue); width: 18px; height: 18px; flex: none; }
+  .opts label:has(input:checked) { border-color: var(--blue); background: var(--soft); }
+  .btn { display: block; width: 100%; padding: 15px; border: 0; border-radius: 12px; background: var(--orange); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+  .btn.secondary { background: var(--fill); }
+  .btn.ghost { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+  .hint { color: var(--warn); font-size: 14px; min-height: 20px; margin: 8px 0 0; }
+  #result { display: none; margin-top: 28px; }
+  .score-box { background: var(--fill); color: var(--on-fill); border-radius: 16px; padding: 22px; text-align: center; }
+  .score-box .big { font-size: 52px; font-weight: 800; line-height: 1; }
+  .score-box .of { opacity: .85; }
+  .score-box .band { display: inline-block; margin-top: 12px; background: var(--orange); padding: 6px 14px; border-radius: 999px; font-weight: 700; }
+  .bar { height: 10px; background: rgba(255,255,255,.3); border-radius: 999px; margin-top: 16px; overflow: hidden; }
+  .bar span { display: block; height: 100%; background: var(--orange); }
+  .card { border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 14px; }
+  .card h3 { margin: 0 0 8px; color: var(--blue); font-size: 17px; }
+  .card ul { margin: 0; padding-left: 20px; }
+  .card li { margin-bottom: 6px; }
+  .compare { background: var(--soft); }
+  .actions { display: grid; gap: 10px; margin-top: 18px; }
+  .fields { display: grid; gap: 10px; }
+  .field { display: grid; gap: 4px; font-size: 14px; font-weight: 600; color: var(--muted); }
+  .field input { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-weight: 400; }
+  .field-q { font-weight: 600; margin: 14px 0 8px; }
+  .consent { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font-size: 15px; cursor: pointer; }
+  .consent input { width: 20px; height: 20px; flex: none; margin-top: 2px; accent-color: var(--blue); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .send-status { margin: 16px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--soft); font-weight: 600; }
+  .send-status:empty { display: none; }
+  footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+  .btn:focus-visible, input:focus-visible, label:focus-within { outline: 2px solid var(--orange); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Break Up With Renting · Credit Glow-Up</p>
+  <h1>Mortgage-Ready Scorecard</h1>
+  <p class="intro">Eight quick questions, about two minutes. Do it in week 1, then again in week 12 to see how far you've come. Be honest. Your results go only to you and Robin.</p>
+
+  <fieldset class="q" style="margin:0 0 14px;background:var(--soft)">
+    <h2>First, where are you at right now?</h2>
+    <div class="opts">
+      <label><input type="radio" name="stage" value="work">Working full time</label>
+      <label><input type="radio" name="stage" value="school-done">In school, finishing within a year</label>
+      <label><input type="radio" name="stage" value="school">In school, more than a year to go</label>
+      <label><input type="radio" name="stage" value="parttime">Working part-time, contract or gig work</label>
+    </div>
+  </fieldset>
+
+  <form id="sc"></form>
+
+  <fieldset class="q send" style="margin:0 0 14px;background:var(--soft)">
+    <h2>Where should we send your results?</h2>
+    <div class="fields">
+      <label class="field">First name<input id="fname" type="text" autocomplete="given-name" required></label>
+      <label class="field">Email<input id="femail" type="email" autocomplete="email" inputmode="email" required></label>
+    </div>
+    <p class="field-q">Is this your week 1 or week 12 scorecard?</p>
+    <div class="opts">
+      <label><input type="radio" name="round" value="Week 1">Week 1</label>
+      <label><input type="radio" name="round" value="Week 12">Week 12</label>
+      <label><input type="radio" name="round" value="Just checking">Just checking</label>
+    </div>
+    <label class="consent"><input id="fconsent" type="checkbox" required> Email my results to me and send a copy to Robin Bureyko at Bureyko Mortgage Partners.</label>
+    <div class="hp" aria-hidden="true"><label>Leave this empty<input id="fwebsite" type="text" tabindex="-1" autocomplete="off"></label></div>
+  </fieldset>
+
+  <button class="btn" id="go" type="button">See my score</button>
+  <p class="hint" id="hint" aria-live="polite"></p>
+
+  <section id="result" aria-live="polite">
+    <div class="score-box">
+      <div class="big"><span id="pts">0</span></div>
+      <div class="of">out of 24</div>
+      <div class="band" id="band"></div>
+      <div class="bar"><span id="fill" style="width:0"></span></div>
+    </div>
+    <div class="card"><h3>What it means</h3><p id="meaning" style="margin:0"></p></div>
+    <div class="card" id="strongCard"><h3>You're strong on</h3><ul id="strong"></ul></div>
+    <div class="card" id="workCard"><h3>Focus here next</h3><ul id="work"></ul></div>
+    <div class="card" id="schoolCard" style="display:none;border-color:var(--orange)"><h3>Still in school? You're early, and that's a good thing</h3><ul id="school"></ul></div>
+    <div class="card compare" id="compareCard" style="display:none"><h3>Your progress</h3><p id="compare" style="margin:0"></p></div>
+    <div class="actions">
+      <button class="btn secondary" id="saveStart" type="button">Save as my week 1 score</button>
+      <button class="btn ghost" id="retake" type="button">Start over</button>
+    </div>
+    <p class="send-status" id="sendStatus" role="status" aria-live="polite"></p>
+    <p class="intro" style="margin-top:16px">📸 Screenshot your score and text it to Robin. He'll tell you what to tackle first.</p>
+  </section>
+
+  <footer>
+    This scorecard is a general learning tool, not a credit assessment or a mortgage approval. Only a lender can decide what you qualify for.
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  { id: "score", q: "What's your credit score right now?",
+    opts: [["I don't know yet", 0], ["Under 600", 0], ["600 to 679", 1], ["680 to 719", 2], ["720 or higher", 3]],
+    good: "A strong credit score", fix: "Check your free score on Borrowell or Credit Karma (week 1)" },
+  { id: "late", q: "Any late payments in the last 2 years? (cards, loans, phone bill)",
+    opts: [["Yes, a few", 0], ["One or two", 1], ["None, but I pay manually", 2], ["None, and everything's on autopay", 3]],
+    good: "Paying on time", fix: "Put every bill on autopay, at least the minimum (week 2)" },
+  { id: "util", q: "How full are your credit cards, compared to their limits?",
+    opts: [["Close to maxed out (over 70%)", 0], ["About 30% to 70%", 1], ["Under 30%", 2], ["I pay them off in full every month", 3], ["I don't have a credit card", 1]],
+    good: "Keeping card balances low", fix: "Get each card under 30% of its limit (week 3)" },
+  { id: "accounts", q: "How many credit accounts have you had open for 2+ years?",
+    opts: [["None", 0], ["One", 1], ["Two", 2], ["Three or more", 3]],
+    good: "Credit history lenders can see", fix: "Build a second account and keep your oldest one open (weeks 4 and 7)" },
+  { id: "collections", q: "Anything in collections, a consumer proposal or a bankruptcy?",
+    opts: [["Yes, and it's not dealt with yet", 0], ["Yes, but it's paid or finished", 1], ["Not that I know of", 2], ["No, and I've checked my report", 3]],
+    good: "A clean credit report", fix: "Pull your free Equifax and TransUnion reports and check for mistakes (week 6)" },
+  { id: "debts", q: "Total monthly debt payments, not counting rent or tuition? (car, student loans, cards, lines of credit). Student loans you don't pay on yet count as $0 for now.",
+    opts: [["Over $1,000", 0], ["$500 to $1,000", 1], ["Under $500", 2], ["No debt payments", 3]],
+    good: "Low monthly debts", fix: "List your debts and pick a payoff order (week 11)" },
+  { id: "saved", q: "Where's your down payment savings at?",
+    opts: [["Nothing saved yet", 0], ["Started, but no plan", 1], ["I have a goal and save automatically", 2], ["I've saved 5% or more of my target price", 3]],
+    good: "Down payment savings", fix: "Pick a target price and work out your number (week 8)" },
+  { id: "fhsa", q: "Do you have a First Home Savings Account (FHSA)?",
+    opts: [["What's that?", 0], ["I've heard of it", 1], ["It's open", 2], ["It's open and I'm putting money in", 3]],
+    good: "Using your FHSA", fix: "Open an FHSA, even with $1, so your room starts counting (week 9)" }
+];
+
+const BANDS = [
+  { min: 0, name: "Just getting started", text: "Everyone starts somewhere, and you've already done the hardest part by looking. The Glow-Up is built for exactly where you are. Focus on the first two items below." },
+  { min: 9, name: "Building", text: "You've got some good habits in place. A few changes over the next 12 weeks will move you up fast. Start with the items below." },
+  { min: 15, name: "Almost there", text: "You're in solid shape. Tighten up the items below and you'll look great to a lender." },
+  { min: 20, name: "Mortgage-ready habits", text: "Your habits look strong. The next step is a review with Robin and Sherri to see where you really stand and what you could qualify for." }
+];
+
+const form = document.getElementById("sc");
+QUESTIONS.forEach((item, i) => {
+  const box = document.createElement("fieldset");
+  box.className = "q";
+  box.style.margin = "0 0 14px";
+  box.innerHTML = `<h2><span class="num">${i + 1}.</span>${item.q}</h2><div class="opts">` +
+    item.opts.map(([label, pts], j) =>
+      `<label><input type="radio" name="${item.id}" value="${pts}" id="${item.id}${j}">${label}</label>`).join("") +
+    `</div>`;
+  form.appendChild(box);
+});
+
+function store(key, val) {
+  try { if (val === undefined) return localStorage.getItem(key); localStorage.setItem(key, val); } catch (e) { return null; }
+}
+
+let lastScore = null;
+
+document.getElementById("go").addEventListener("click", () => {
+  let total = 0, missing = 0;
+  const strong = [], work = [];
+  QUESTIONS.forEach(item => {
+    const picked = form.querySelector(`input[name="${item.id}"]:checked`);
+    if (!picked) { missing++; return; }
+    const pts = Number(picked.value);
+    total += pts;
+    if (pts >= 2) strong.push(item.good); else work.push({ fix: item.fix, pts });
+  });
+  const hint = document.getElementById("hint");
+  if (missing) { hint.textContent = `Answer all 8 questions to see your score (${missing} left).`; return; }
+  const fname = document.getElementById("fname").value.trim();
+  const femail = document.getElementById("femail").value.trim();
+  if (!fname) { hint.textContent = "Add your first name so we can send your results."; return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(femail)) { hint.textContent = "Check your email address. It doesn't look quite right."; return; }
+  if (!document.getElementById("fconsent").checked) { hint.textContent = "Tick the box so we can email your results."; return; }
+  hint.textContent = "";
+  lastScore = total;
+
+  const band = [...BANDS].reverse().find(b => total >= b.min);
+  document.getElementById("pts").textContent = total;
+  document.getElementById("band").textContent = band.name;
+  document.getElementById("fill").style.width = Math.round(total / 24 * 100) + "%";
+  document.getElementById("meaning").textContent = band.text;
+
+  const s = document.getElementById("strong");
+  s.innerHTML = strong.map(x => `<li>${x}</li>`).join("");
+  document.getElementById("strongCard").style.display = strong.length ? "" : "none";
+
+  work.sort((a, b) => a.pts - b.pts);
+  const w = document.getElementById("work");
+  w.innerHTML = work.slice(0, 3).map(x => `<li>${x.fix}</li>`).join("");
+  document.getElementById("workCard").style.display = work.length ? "" : "none";
+
+  const stage = (document.querySelector('input[name="stage"]:checked') || {}).value;
+  const schoolCard = document.getElementById("schoolCard");
+  const tips = {
+    "school-done": [
+      "Know your student loan total and when payments start. It's usually about six months after you finish.",
+      "Lenders want steady income. Many like to see you past probation in a job, so a job lined up in your field helps a lot.",
+      "Open your FHSA now, even with $1. You can save the tax deduction for later, when you're earning more."
+    ],
+    "school": [
+      "Your job right now: build good credit habits, not save a down payment. One card, paid on time, low balance.",
+      "Keep track of your student loans so there are no surprises when payments start.",
+      "Open your FHSA now, even with $1. Your room starts counting, and you can save the tax deduction for later."
+    ],
+    "parttime": [
+      "Lenders look closely at part-time, contract and gig income. Many want a two-year history, so keep your tax returns and pay records.",
+      "Text Robin about how a lender would count your income. It's often the deciding factor."
+    ]
+  };
+  if (tips[stage]) {
+    document.getElementById("school").innerHTML = tips[stage].map(x => `<li>${x}</li>`).join("");
+    schoolCard.querySelector("h3").textContent = stage === "parttime" ? "About your income" : "Still in school? You're early, and that's a good thing";
+    schoolCard.style.display = "";
+  } else { schoolCard.style.display = "none"; }
+
+  const start = store("bwr-scorecard-start");
+  const cmp = document.getElementById("compareCard");
+  if (start !== null && start !== undefined && start !== "") {
+    const diff = total - Number(start);
+    document.getElementById("compare").textContent = diff > 0
+      ? `Your week 1 score was ${start}. You're up ${diff} point${diff === 1 ? "" : "s"}. That's real progress. 🎉`
+      : diff === 0 ? `Your week 1 score was ${start}. Same as today. Pick one item above and tackle it this week.`
+      : `Your week 1 score was ${start}. You're down ${-diff}. That happens. Text Robin and figure out what changed.`;
+    cmp.style.display = "";
+  } else { cmp.style.display = "none"; }
+
+  const res = document.getElementById("result");
+  res.style.display = "block";
+  res.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  sendResults({
+    name: fname, email: femail,
+    round: (document.querySelector('input[name="round"]:checked') || {}).value || "Not chosen",
+    stage: (document.querySelector('input[name="stage"]:checked') || { parentElement: { textContent: "Not chosen" } }).parentElement.textContent.trim(),
+    score: total + "/24", band: band.name, meaning: band.text,
+    strong: strong.join("\n") || "(none yet)",
+    focus: work.slice(0, 3).map(x => x.fix).join("\n") || "(nothing flagged)",
+    tips: tips[stage] ? tips[stage].join("\n") : "",
+    progress: cmp.style.display === "" ? document.getElementById("compare").textContent : "",
+    answers: QUESTIONS.map((item, i) => {
+      const picked = form.querySelector(`input[name="${item.id}"]:checked`);
+      return `${i + 1}. ${item.q}\n   ${picked ? picked.parentElement.textContent.trim() : "(no answer)"}`;
+    }).join("\n")
+  });
+});
+
+// Results go to a Jotform, which emails the member their copy and sends Robin every answer.
+// Field names come from the "Break Up With Renting: Scorecard Results" form.
+const JOTFORM_ID = "__SCORECARD_FORM_ID__";
+let sentOnce = false;
+function sendResults(r) {
+  const status = document.getElementById("sendStatus");
+  if (document.getElementById("fwebsite").value) return; // spam trap filled in: quietly do nothing
+  if (sentOnce) { status.textContent = "Your results were already sent. Start over to send a new scorecard."; return; }
+  status.textContent = "Sending your results…";
+  const f = new FormData();
+  const add = (k, v) => f.append(k, v);
+  add("formID", JOTFORM_ID); add("simple_spc", JOTFORM_ID + "-" + JOTFORM_ID); add("website", "");
+  add("submitSource", "form"); add("jsExecutionTracker", "build-date-" + Date.now());
+  add("q2_q2_fullname0[first]", r.name); add("q2_q2_fullname0[last]", "");
+  add("q3_q3_email1", r.email); add("q4_q4_textbox2", r.round); add("q5_q5_textbox3", r.stage);
+  add("q6_q6_textbox4", r.score); add("q7_q7_textbox5", r.band); add("q8_q8_textarea6", r.meaning);
+  add("q9_q9_textarea7", r.strong); add("q10_q10_textarea8", r.focus); add("q11_q11_textarea9", r.tips);
+  add("q12_q12_textarea10", r.progress); add("q13_q13_textarea11", r.answers);
+  add("q14_q14_checkbox12[]", "Email my results to me and send a copy to Robin Bureyko at Bureyko Mortgage Partners.");
+  fetch("https://submit.jotform.com/submit/" + JOTFORM_ID, { method: "POST", body: f, mode: "no-cors" })
+    .then(() => { sentOnce = true; status.textContent = "✅ Sent! Check your inbox (and junk folder)."; })
+    .catch(() => { status.textContent = "We couldn't send your email. Screenshot your score and text it to Robin at 403-540-0629."; });
+}
+
+document.getElementById("saveStart").addEventListener("click", e => {
+  if (lastScore === null) return;
+  store("bwr-scorecard-start", String(lastScore));
+  e.target.textContent = "Saved! Come back in week 12 to compare";
+});
+
+document.getElementById("retake").addEventListener("click", () => {
+  form.reset();
+  sentOnce = false;
+  document.getElementById("sendStatus").textContent = "";
+  document.querySelectorAll('input[name="stage"]').forEach(i => i.checked = false);
+  document.getElementById("result").style.display = "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+</script>

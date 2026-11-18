@@ -1,0 +1,134 @@
+<style>
+  /* Layout: single column of budget sections, totals pinned in a summary card; Bureyko blue and orange on a quiet blue-grey ground */
+  :root {
+    --blue: #306AB4; --fill: #306AB4; --orange: #F1A34B; --light-blue: #9FC0D2;
+    --ink: #1d2a3a; --muted: #5b6b7d; --bg: #ffffff; --soft: #f3f7fa; --line: #dbe5ec;
+    --warm: #fff4e5; --warn: #b3541e; --on-fill: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --blue: #8DB6EC; --fill: #2C5F9E; --orange: #F1A34B; --light-blue: #3E6A90;
+    --ink: #E4EBF2; --muted: #9DAEBF; --bg: #0F1822; --soft: #172331; --line: #2A3A4B;
+    --warm: #2B2116; --warn: #F0A273; --on-fill: #ffffff; color-scheme: dark }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.5; }
+  .wrap { max-width: 680px; margin: 0 auto; padding-block: 24px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .eyebrow { color: var(--orange); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 6px; }
+  h1 { color: var(--blue); font-size: 28px; line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+  h2 { color: var(--blue); font-size: 17px; margin: 0; }
+  .intro, .muted { color: var(--muted); }
+  .intro { margin: 0 0 18px; }
+  .month { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; }
+  .month label { font-weight: 700; }
+  input { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+  input[type=number] { width: 100%; text-align: right; font-variant-numeric: tabular-nums; }
+  input:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  section.block { border: 1px solid var(--line); border-radius: 14px; margin-bottom: 14px; overflow: hidden; }
+  .head { display: grid; grid-template-columns: 1fr 84px 84px; gap: 8px; align-items: end; padding: 12px 14px; background: var(--soft); }
+  .head span { font-size: 12px; color: var(--muted); font-weight: 700; text-align: right; }
+  .row { display: grid; grid-template-columns: 1fr 84px 84px; gap: 8px; align-items: center; padding: 8px 14px; border-top: 1px solid var(--line); }
+  .row .lbl { min-width: 0; font-size: 15px; }
+  .row .lbl small { display: block; color: var(--muted); font-size: 12px; }
+  .row.total { font-weight: 700; background: var(--soft); }
+  .row.total div:not(.lbl) { text-align: right; font-variant-numeric: tabular-nums; padding-right: 10px; }
+  .summary { background: var(--fill); color: var(--on-fill); border-radius: 16px; padding: 18px; margin: 20px 0 14px; }
+  .summary .grid { display: grid; grid-template-columns: 1fr auto auto; gap: 6px 16px; font-variant-numeric: tabular-nums; }
+  .summary .grid div:nth-child(3n+2), .summary .grid div:nth-child(3n) { text-align: right; }
+  .summary .gh { font-size: 12px; opacity: .85; font-weight: 700; }
+  .summary .left { font-size: 20px; font-weight: 800; border-top: 1px solid rgba(255,255,255,.35); padding-top: 8px; }
+  .pill { display: inline-block; margin-top: 12px; background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; padding: 5px 12px; border-radius: 999px; }
+  .tip { background: var(--warm); border-radius: 12px; padding: 14px; font-size: 15px; margin-bottom: 14px; }
+  .btn { font: inherit; font-weight: 700; padding: 12px; border-radius: 12px; border: 2px solid var(--blue); background: transparent; color: var(--blue); cursor: pointer; width: 100%; }
+  footer { margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+  @media (max-width: 420px) { .head, .row { grid-template-columns: 1fr 72px 72px; } }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Break Up With Renting · Credit Glow-Up · Week 2</p>
+  <h1>Monthly Budget Tracker</h1>
+  <p class="intro">Fill in <b>Planned</b> at the start of the month and <b>Actual</b> at the end, from your bank and card statements. The example numbers show the idea; replace them with yours. </p>
+  <p class="intro"><b>Your numbers stay on this phone or computer. Clearing your browser erases them.</b></p>
+  <div class="month"><label for="month">Month</label><input id="month" type="text" value="January 2027"></div>
+
+  <div id="sections"></div>
+
+  <div class="summary" aria-live="polite">
+    <div class="grid">
+      <div class="gh">The bottom line</div><div class="gh">Planned</div><div class="gh">Actual</div>
+      <div>Money coming in</div><div id="inP"></div><div id="inA"></div>
+      <div>Spending</div><div id="spP"></div><div id="spA"></div>
+      <div>Saving for your home</div><div id="svP"></div><div id="svA"></div>
+      <div class="left">Money left over</div><div class="left" id="lfP"></div><div class="left" id="lfA"></div>
+    </div>
+    <div class="pill" id="status"></div>
+  </div>
+
+  <div class="tip"><b>Still in school?</b> Turn tuition, books, student loans and summer savings into a monthly share: divide the term amount by the months it covers. $4,000 tuition for a 4-month term is $1,000 a month. Not paying on student loans yet? Put $0 for now.</div>
+  <div class="tip">If "Money left over" is negative, trim flexible spending before you cut your home savings. Screenshot your bottom line and text it to Robin.</div>
+  <button class="btn" id="clear" type="button">Clear my numbers and start fresh</button>
+
+  <footer>General information, not financial advice. Prefer a spreadsheet? Ask Robin for the Google Sheets version.</footer>
+</div>
+
+<script>
+const SECTIONS = [
+  { key: "in", title: "Money coming in (after tax)", rows: [["Main job take-home pay",3800],["Partner or second job",0],["Side income or gig work",200],["Student loans, grants or scholarships","",1],["Summer job savings or family help","",1],["Other (tax refund, gifts)",0]] },
+  { key: "fx", title: "Fixed costs (same every month)", rows: [["Rent (or what you pay at home)",1300],["Tuition","",1],["Books and school fees","",1],["Phone",70],["Internet",60],["Car payment",350],["Car insurance",180],["Gas or transit",150],["Student loan payment (0 if still in school)",250],["Credit card minimum payments",50],["Subscriptions (streaming, apps, gym)",40],["Other fixed",0]] },
+  { key: "fl", title: "Flexible spending (changes month to month)", rows: [["Groceries",400],["Eating out and delivery",200],["Fun and entertainment",100],["Shopping and clothes",100],["Personal care",50],["Gifts",30],["Other flexible",0]] },
+  { key: "sv", title: "Saving for your home", rows: [["Down payment savings",300],["FHSA contribution",200],["Emergency fund",100],["Closing cost fund",50]] }
+];
+const KEY = "bwr-budget-v1";
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+const money = n => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-CA");
+
+const wrap = document.getElementById("sections");
+SECTIONS.forEach(sec => {
+  const el = document.createElement("section");
+  el.className = "block";
+  el.innerHTML = `<div class="head"><h2>${sec.title}</h2><span>Planned</span><span>Actual</span></div>` +
+    sec.rows.map(([label, val, monthly], i) => {
+      const id = `${sec.key}${i}`;
+      const p = saved[id + "p"] ?? (saved.cleared ? "" : val);
+      const a = saved[id + "a"] ?? "";
+      return `<div class="row"><div class="lbl">${label}${monthly ? "<small>monthly share</small>" : ""}</div>
+        <input id="${id}p" data-sec="${sec.key}" data-col="p" type="number" inputmode="decimal" min="0" step="10" value="${p}" aria-label="${label}, planned">
+        <input id="${id}a" data-sec="${sec.key}" data-col="a" type="number" inputmode="decimal" min="0" step="10" value="${a}" aria-label="${label}, actual"></div>`;
+    }).join("") +
+    `<div class="row total"><div class="lbl">Total</div><div id="${sec.key}P"></div><div id="${sec.key}A"></div></div>`;
+  wrap.appendChild(el);
+});
+try { if (saved.month) document.getElementById("month").value = saved.month; } catch (e) {}
+
+function sum(sec, col) {
+  return [...document.querySelectorAll(`input[data-sec="${sec}"][data-col="${col}"]`)].reduce((s, i) => s + (parseFloat(i.value) || 0), 0);
+}
+function anyActual() { return [...document.querySelectorAll('input[data-col="a"]')].some(i => i.value !== ""); }
+function update() {
+  const t = {};
+  ["in","fx","fl","sv"].forEach(k => ["p","a"].forEach(c => {
+    t[k+c] = sum(k, c);
+    document.getElementById(k + c.toUpperCase()).textContent = money(t[k+c]);
+  }));
+  const has = anyActual();
+  const set = (id, v, show = true) => document.getElementById(id).textContent = show ? money(v) : "–";
+  set("inP", t.inp); set("inA", t.ina, has);
+  set("spP", t.fxp + t.flp); set("spA", t.fxa + t.fla, has);
+  set("svP", t.svp); set("svA", t.sva, has);
+  const lp = t.inp - t.fxp - t.flp - t.svp, la = t.ina - t.fxa - t.fla - t.sva;
+  set("lfP", lp); set("lfA", la, has);
+  const left = has ? la : lp, share = (has ? t.ina : t.inp) ? Math.round((has ? t.sva : t.svp) / (has ? t.ina : t.inp) * 100) : 0;
+  document.getElementById("status").textContent = left < 0 ? `Over budget by ${money(-left)}` : `On track · ${share}% of income going to your home`;
+}
+document.addEventListener("input", e => {
+  if (!e.target.matches("input")) return;
+  try { saved[e.target.id === "month" ? "month" : e.target.id] = e.target.value; localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
+  update();
+});
+document.getElementById("clear").addEventListener("click", () => {
+  document.querySelectorAll('input[type=number]').forEach(i => i.value = "");
+  saved = { cleared: 1 };
+  try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+  update();
+});
+update();
+</script>

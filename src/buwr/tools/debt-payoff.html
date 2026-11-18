@@ -1,0 +1,248 @@
+<style>
+  /* Layout: single centred column, phone first; Bureyko blue and orange on a quiet blue-grey ground */
+  :root {
+    --blue: #306AB4; --fill: #306AB4; --orange: #F1A34B; --light-blue: #9FC0D2;
+    --ink: #1d2a3a; --muted: #5b6b7d; --bg: #ffffff; --soft: #f3f7fa; --line: #dbe5ec;
+    --warm: #fff4e5; --warn: #b3541e; --on-fill: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --blue: #8DB6EC; --fill: #2C5F9E; --orange: #F1A34B; --light-blue: #3E6A90;
+    --ink: #E4EBF2; --muted: #9DAEBF; --bg: #0F1822; --soft: #172331; --line: #2A3A4B;
+    --warm: #2B2116; --warn: #F0A273; --on-fill: #ffffff; color-scheme: dark } }
+  :root[data-theme="dark"] {
+    --blue: #8DB6EC; --fill: #2C5F9E; --orange: #F1A34B; --light-blue: #3E6A90;
+    --ink: #E4EBF2; --muted: #9DAEBF; --bg: #0F1822; --soft: #172331; --line: #2A3A4B;
+    --warm: #2B2116; --warn: #F0A273; --on-fill: #ffffff; color-scheme: dark }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.5; }
+  .wrap { max-width: 680px; margin: 0 auto; padding-block: 24px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .eyebrow { color: var(--orange); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 6px; }
+  h1 { color: var(--blue); font-size: 28px; line-height: 1.15; margin: 0 0 10px; }
+  h2 { color: var(--blue); font-size: 19px; margin: 28px 0 10px; }
+  .intro, .muted { color: var(--muted); }
+  .intro { margin: 0 0 20px; }
+  .debt { border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 12px; position: relative; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid .full { grid-column: 1 / -1; }
+  label { display: block; font-size: 13px; color: var(--muted); font-weight: 600; }
+  input, select { width: 100%; margin-top: 4px; padding: 11px 10px; font-size: 16px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); background: var(--bg); }
+  input:focus, select:focus { outline: 2px solid var(--light-blue); border-color: var(--blue); }
+  .remove { position: absolute; top: 8px; right: 10px; border: 0; background: none; color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1; }
+  .btn { display: block; width: 100%; padding: 14px; border: 0; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; }
+  .btn.add { background: transparent; color: var(--blue); border: 2px dashed var(--light-blue); }
+  .btn.go { background: var(--orange); color: #fff; margin-top: 18px; font-size: 17px; }
+  .toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
+  .toggle label { border: 1px solid var(--line); border-radius: 10px; padding: 12px; cursor: pointer; color: var(--ink); font-size: 14px; font-weight: 400; }
+  .toggle label strong { display: block; color: var(--blue); font-size: 15px; }
+  .toggle input { display: none; }
+  .toggle label:has(input:checked) { border-color: var(--blue); background: var(--soft); }
+  label.later { display: flex; align-items: center; gap: 8px; font-weight: 400; color: var(--ink); font-size: 14px; }
+  label.later input { width: 18px; height: 18px; margin: 0; flex: none; accent-color: var(--blue); }
+  .hint { color: var(--warn); font-size: 14px; min-height: 20px; margin: 8px 0 0; }
+  #result { display: none; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { background: var(--fill); color: var(--on-fill); border-radius: 14px; padding: 16px; }
+  .stat .v { font-size: 24px; font-weight: 800; line-height: 1.2; }
+  .stat .l { font-size: 13px; opacity: .9; }
+  .stat.alt { background: var(--orange); }
+  ol.plan { padding-left: 0; list-style: none; counter-reset: n; margin: 0; }
+  ol.plan li { counter-increment: n; border: 1px solid var(--line); border-radius: 12px; padding: 12px 12px 12px 52px; margin-bottom: 8px; position: relative; }
+  ol.plan li::before { content: counter(n); position: absolute; left: 12px; top: 12px; width: 28px; height: 28px; border-radius: 50%; background: var(--orange); color: #fff; font-weight: 700; display: grid; place-items: center; }
+  .note { background: var(--soft); border-radius: 12px; padding: 14px; margin-top: 14px; font-size: 15px; }
+  footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+  .btn:focus-visible, input:focus-visible, label:focus-within { outline: 2px solid var(--orange); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Break Up With Renting · Credit Glow-Up</p>
+  <h1>Debt Payoff Planner</h1>
+  <p class="intro">List every debt, add whatever extra you can put toward them each month, and see your debt-free date. Find your balances, rates and minimum payments on your latest statements. Still in school? Add your student loans anyway and tick "not paying on this yet."</p>
+  <p class="intro"><b>Your numbers stay on this phone or computer. Clearing your browser erases them.</b></p>
+
+  <h2>1. Your debts</h2>
+  <div id="debts"></div>
+  <button class="btn add" id="add" type="button">+ Add another debt</button>
+
+  <h2>2. Extra you can pay each month</h2>
+  <label for="extra">On top of all your minimum payments ($)</label>
+  <input id="extra" type="number" inputmode="decimal" min="0" step="10" value="100">
+  <p class="muted" style="font-size:14px;margin:6px 0 0">Even $50 a month makes a real difference. When a debt is paid off, its minimum rolls into the next one automatically.</p>
+
+  <h2>3. Pick your method</h2>
+  <div class="toggle">
+    <label><input type="radio" name="method" value="snowball" checked><strong>Smallest first</strong>Quick wins that keep you going</label>
+    <label><input type="radio" name="method" value="avalanche"><strong>Highest rate first</strong>Saves the most on interest</label>
+  </div>
+
+  <button class="btn go" id="go" type="button">Show my plan</button>
+  <p class="hint" id="hint" aria-live="polite"></p>
+
+  <section id="result" aria-live="polite">
+    <h2>Your plan</h2>
+    <div class="stats">
+      <div class="stat"><div class="v" id="date"></div><div class="l">Debt-free by</div></div>
+      <div class="stat alt"><div class="v" id="interest"></div><div class="l">Total interest you'll pay</div></div>
+    </div>
+    <h2>Pay them off in this order</h2>
+    <ol class="plan" id="order"></ol>
+    <div class="note" id="compare"></div>
+    <div class="note" id="laterNote" style="display:none;background:var(--warm)"></div>
+    <p class="muted" style="margin-top:16px">📸 Screenshot your plan and text it to Robin. Lenders look at your monthly payments, so every debt you clear can raise what you qualify for.</p>
+  </section>
+
+  <footer>
+    Estimates only: assumes rates stay the same, no new borrowing and payments made monthly. Your real numbers may differ. General information, not financial advice.
+  </footer>
+</div>
+
+<script>
+const debtsEl = document.getElementById("debts");
+const TYPES = ["Credit card", "Line of credit", "Car loan", "Student loan", "Phone financing", "Buy now, pay later", "Other"];
+
+function addDebt(d = {}) {
+  const box = document.createElement("div");
+  box.className = "debt";
+  box.innerHTML = `
+    <button class="remove" type="button" aria-label="Remove this debt">×</button>
+    <div class="grid">
+      <div class="full"><label>What is it?
+        <select data-f="name">${TYPES.map(t => `<option${t === d.name ? " selected" : ""}>${t}</option>`).join("")}</select></label></div>
+      <div><label>Balance owing ($)<input data-f="bal" type="number" inputmode="decimal" min="0" step="1" value="${d.bal ?? ""}" placeholder="2500"></label></div>
+      <div><label>Interest rate (%)<input data-f="rate" type="number" inputmode="decimal" min="0" step="0.01" value="${d.rate ?? ""}" placeholder="19.99"></label></div>
+      <div class="full"><label>Minimum monthly payment ($)<input data-f="min" type="number" inputmode="decimal" min="0" step="1" value="${d.min ?? ""}" placeholder="75"></label></div>
+      <div class="full"><label class="later"><input data-f="later" type="checkbox"${d.later ? " checked" : ""}> Not paying on this yet (still in school)</label></div>
+    </div>`;
+  box.querySelector(".remove").addEventListener("click", () => {
+    if (debtsEl.children.length > 1) box.remove();
+  });
+  debtsEl.appendChild(box);
+}
+
+// Saved on this device only (localStorage), so the plan is still here next visit
+const SAVE_KEY = "bwr-debts-v1";
+function saveDebts() {
+  try {
+    const debts = [...debtsEl.children].map(box => {
+      const v = f => box.querySelector(`[data-f="${f}"]`);
+      return { name: v("name").value, bal: v("bal").value, rate: v("rate").value, min: v("min").value, later: v("later").checked };
+    });
+    const method = (document.querySelector('input[name="method"]:checked') || {}).value;
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ debts, extra: document.getElementById("extra").value, method }));
+  } catch (e) {}
+}
+let restored = null;
+try { restored = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); } catch (e) {}
+if (restored && Array.isArray(restored.debts) && restored.debts.length) {
+  restored.debts.forEach(d => addDebt(d));
+} else {
+  addDebt({ name: "Credit card" });
+  addDebt({ name: "Student loan" });
+}
+document.getElementById("add").addEventListener("click", () => { addDebt({ name: "Other" }); saveDebts(); });
+if (restored) {
+  if (restored.extra !== undefined) document.getElementById("extra").value = restored.extra;
+  const m = document.querySelector(`input[name="method"][value="${restored.method}"]`);
+  if (m) m.checked = true;
+}
+document.addEventListener("input", saveDebts);
+document.addEventListener("change", saveDebts);
+debtsEl.addEventListener("click", e => { if (e.target.closest(".remove")) setTimeout(saveDebts, 0); });
+
+function readDebts() {
+  const out = [];
+  [...debtsEl.children].forEach((box, i) => {
+    const v = f => box.querySelector(`[data-f="${f}"]`).value;
+    const bal = parseFloat(v("bal")), rate = parseFloat(v("rate")), min = parseFloat(v("min"));
+    if (!bal) return;
+    let name = v("name");
+    const later = box.querySelector('[data-f="later"]').checked;
+    out.push({ id: i, name, bal, rate: isNaN(rate) ? 0 : rate, min: isNaN(min) ? 0 : min, later });
+  });
+  // Give duplicate types a number so the plan reads clearly
+  const counts = {};
+  out.forEach(d => counts[d.name] = (counts[d.name] || 0) + 1);
+  const seen = {};
+  out.forEach(d => { if (counts[d.name] > 1) { seen[d.name] = (seen[d.name] || 0) + 1; d.name += " " + seen[d.name]; } });
+  return out;
+}
+
+function simulate(debts, extra, method) {
+  const list = debts.map(d => ({ ...d }));
+  const order = [...list].sort(method === "snowball"
+    ? (a, b) => a.bal - b.bal || b.rate - a.rate
+    : (a, b) => b.rate - a.rate || a.bal - b.bal);
+  const budget = list.reduce((s, d) => s + d.min, 0) + extra;
+  let month = 0, interest = 0;
+  const paidOff = {};
+  while (list.some(d => d.bal > 0.005) && month < 600) {
+    month++;
+    list.forEach(d => { if (d.bal > 0) { const i = d.bal * d.rate / 100 / 12; d.bal += i; interest += i; } });
+    let left = budget;
+    list.forEach(d => { if (d.bal > 0) { const p = Math.min(d.min, d.bal); d.bal -= p; left -= p; } });
+    for (const t of order) {
+      const d = list.find(x => x.id === t.id);
+      if (d.bal > 0 && left > 0) { const p = Math.min(left, d.bal); d.bal -= p; left -= p; }
+    }
+    list.forEach(d => { if (d.bal <= 0.005 && !(d.id in paidOff)) { d.bal = 0; paidOff[d.id] = month; } });
+  }
+  return { months: month, interest, order, paidOff, stuck: month >= 600 };
+}
+
+function monthLabel(n) {
+  const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + n);
+  return d.toLocaleDateString("en-CA", { month: "short", year: "numeric" });
+}
+const money = n => "$" + Math.round(n).toLocaleString("en-CA");
+
+document.getElementById("go").addEventListener("click", () => {
+  const hint = document.getElementById("hint");
+  const all = readDebts();
+  const debts = all.filter(d => !d.later);
+  const waiting = all.filter(d => d.later);
+  const extra = Math.max(0, parseFloat(document.getElementById("extra").value) || 0);
+  const method = document.querySelector('input[name="method"]:checked').value;
+  const laterNote = document.getElementById("laterNote");
+  laterNote.style.display = waiting.length ? "" : "none";
+  laterNote.innerHTML = waiting.length ? `<strong>Not in this plan yet:</strong> ${waiting.map(d => `${d.name} (${money(d.bal)})`).join(", ")}. Payments on student loans usually start about six months after you finish school. When yours start, uncheck the box, add the payment and run this again. Paying on time from day one builds your credit.` : "";
+  if (!all.length) { hint.textContent = "Add at least one debt with a balance."; return; }
+  if (!debts.length) {
+    hint.textContent = "";
+    document.getElementById("date").textContent = "After school";
+    document.getElementById("interest").textContent = "—";
+    document.getElementById("order").innerHTML = "";
+    document.getElementById("compare").textContent = "Nothing to pay down yet. Great time to build good habits: keep any card balance low and paid on time, and put your extra money toward savings instead.";
+    const res = document.getElementById("result"); res.style.display = "block"; res.scrollIntoView({ behavior: "smooth" }); return;
+  }
+  if (debts.some(d => !d.min)) { hint.textContent = "Add the minimum monthly payment for each debt."; return; }
+  hint.textContent = "";
+
+  const r = simulate(debts, extra, method);
+  const other = simulate(debts, extra, method === "snowball" ? "avalanche" : "snowball");
+  const res = document.getElementById("result");
+
+  if (r.stuck) {
+    document.getElementById("date").textContent = "50+ years";
+    document.getElementById("interest").textContent = "—";
+    document.getElementById("order").innerHTML = "";
+    document.getElementById("compare").textContent = "At these payments, interest is growing faster than you're paying it down. Try a bigger extra amount, and text Robin. There are ways to fix this, like consolidating at a lower rate.";
+    res.style.display = "block"; res.scrollIntoView({ behavior: "smooth" }); return;
+  }
+
+  document.getElementById("date").textContent = monthLabel(r.months);
+  document.getElementById("interest").textContent = money(r.interest);
+  document.getElementById("order").innerHTML = r.order.map(d =>
+    `<li><strong>${d.name}</strong><br><span class="muted">${money(d.bal)} at ${d.rate}% · paid off ${monthLabel(r.paidOff[d.id])}</span></li>`).join("");
+
+  const diff = Math.round(other.interest - r.interest);
+  const otherName = method === "snowball" ? "highest rate first" : "smallest first";
+  let msg;
+  if (Math.abs(diff) < 25) msg = `Both methods come out about the same for your debts. Pick the one you'll stick with.`;
+  else if (diff > 0) msg = `Nice pick. Going ${otherName} instead would cost you about ${money(diff)} more in interest.`;
+  else msg = `Going ${otherName} would save you about ${money(-diff)} in interest. Smallest first can still be worth it if quick wins keep you motivated.`;
+  document.getElementById("compare").textContent = msg;
+
+  res.style.display = "block";
+  res.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+</script>
