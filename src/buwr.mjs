@@ -42,6 +42,44 @@ const people = (a) => `<div class="buwr-people">
   <figure><div class="portrait"><img src="${a("photos/robin.jpg")}" alt="Robin Bureyko" width="260" height="300"></div><figcaption><strong>Robin Bureyko</strong><span>Mortgage Professional</span></figcaption></figure>
   <figure><div class="portrait"><img src="${a("photos/sherri.jpg")}" alt="Sherri Bureyko" width="260" height="300"></div><figcaption><strong>Sherri Bureyko</strong><span>Mortgage Professional</span></figcaption></figure>
 </div>`;
+// "Coming Tue Jan 19" (short weekday, short month, day), from a YYYY-MM-DD date
+const comingLabel = (iso) =>
+  "Coming " + new Date(iso + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" }).replace(",", "");
+// A Session 1 tip card. Everything is in the (encrypted) page; the browser decides what to show based on
+// today's date in Calgary, so cards unlock on their own without a rebuild (see TIP_SCRIPT).
+const tipCard = (tip, u) => `<article class="card tip-card" data-release="${tip.releaseDate}" data-video="${ytId(tip.videoUrl) || ""}" data-title="${tip.title.replace(/"/g, "&quot;")}" data-number="${tip.number}">
+  <span class="tip-num">Tip ${tip.number}</span>
+  <h3>${tip.title}</h3>
+  <p class="tip-coming">${comingLabel(tip.releaseDate)}</p>
+  <div class="tip-body" hidden>
+    <div class="tip-video-slot"></div>
+    <ul class="tip-bullets">${tip.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
+    <a class="btn btn-orange" href="${u(tip.toolLink)}">${tip.toolLabel} ${arrow}</a>
+  </div>
+</article>`;
+const TIP_SCRIPT = `<script>
+(() => {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Edmonton", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+  const showAll = new URLSearchParams(location.search).get("preview") === "all";
+  document.querySelectorAll(".tip-card").forEach((card) => {
+    if (!showAll && today < card.dataset.release) return; // not released yet: title and "Coming" label only
+    card.classList.add("is-live");
+    card.querySelector(".tip-coming").hidden = true;
+    card.querySelector(".tip-body").hidden = false;
+    const slot = card.querySelector(".tip-video-slot");
+    if (card.dataset.video) {
+      slot.innerHTML = '<div class="tip-video"><iframe loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+      const f = slot.querySelector("iframe");
+      f.title = "Tip " + card.dataset.number + " video: " + card.dataset.title;
+      f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(card.dataset.video) + "?rel=0&playsinline=1";
+    } else {
+      slot.innerHTML = '<div class="tip-video-soon"><span>Video coming soon</span></div>';
+    }
+  });
+  if (showAll) { const n = document.getElementById("tipPreviewNote"); if (n) n.hidden = false; }
+})();
+</script>`;
+
 const backLink = (u) => `<a class="back-link" href="${u(MEMBERS + "/")}">← Back to members hub</a>`;
 
 // The next live Q&A: the first one whose week hasn't ended yet (checked when the site is built)
@@ -269,8 +307,14 @@ export function buwrPages() {
   </div>
 </section>
 
-<section class="band-tight">
+<section class="band-tight session-block" id="session-1">
   <div class="wrap">
+    <h2 class="hub-title">${S.session1.title} · ${S.session1.months} · “${S.session1.worry}”</h2>
+    <div class="session-intro-video">${video(S.videos.session1Intro, "Session 1 intro")}</div>
+
+    <p class="tip-preview-note" id="tipPreviewNote" hidden>Preview mode: every tip is showing, including ones that aren't released yet.</p>
+    <div class="tip-grid">${S.session1Tips.map((tip) => tipCard(tip, u)).join("")}</div>
+
     <div class="qa-card">
       <span class="eyebrow">Next live Q&amp;A</span>
       <h2>${q.label}</h2>
@@ -281,17 +325,20 @@ export function buwrPages() {
       </div>
       <p class="fine">Prefer in person? Office Hours with Robin: ${S.officeHoursVenue ? S.officeHoursVenue : "venue coming soon"}.</p>
     </div>
-  </div>
-</section>
 
-<section class="band-tight">
-  <div class="wrap">
-    <h2 class="hub-title">Session 1 tools: “Can I even qualify?”</h2>
+    <h3 class="session-sub">Session 1 tools</h3>
     <div class="tool-grid">
       ${TOOLS.map((t) => `<a class="card tool-card" href="${u(MEMBERS + "/" + t.slug)}"><h3>${t.title}</h3><p>${t.blurb}</p><span class="more">Open ${arrow}</span></a>`).join("")}
     </div>
+
+    <h3 class="session-sub">Extras</h3>
+    <div class="cards">
+      <div class="card"><h3>Your free credit reports</h3><ul class="downloads">${S.session1Extras.creditReports.map((l) => `<li><a href="${l.url}" ${ext}>${l.label} ↗</a></li>`).join("")}</ul></div>
+      <a class="card" href="${S.session1Extras.homebuyerGuide.url}" ${ext}><h3>${S.session1Extras.homebuyerGuide.label} ↗</h3><p>Our free guide, a good companion to the whole program.</p></a>
+    </div>
   </div>
 </section>
+${TIP_SCRIPT}
 
 <section class="band-tight">
   <div class="wrap">
@@ -309,7 +356,6 @@ export function buwrPages() {
   <div class="wrap">
     <h2 class="hub-title">Videos</h2>
     <div class="video-grid">
-      <div><h3>Session 1 intro</h3>${video(S.videos.session1Intro, "Session 1 intro")}</div>
       ${[2, 3, 4].filter((n) => S.videos["session" + n + "Intro"]).map((n) => `<div><h3>Session ${n} intro</h3>${video(S.videos["session" + n + "Intro"], "Session " + n + " intro")}</div>`).join("")}
       ${[1, 2, 3, 4].filter((n) => S.videos["qa" + n + "Recording"]).map((n) => `<div><h3>Q${n} live Q&amp;A recording</h3>${video(S.videos["qa" + n + "Recording"], "Q" + n + " live Q&A recording")}</div>`).join("")}
     </div>
@@ -322,7 +368,6 @@ export function buwrPages() {
     <h2 class="hub-title">More tools</h2>
     <div class="cards">
       <a class="card" href="${SITE.appUrl}" ${ext}><h3>Current rates and calculators ↗</h3><p>Robin's mortgage app. Download it and create an account.</p></a>
-      <a class="card" href="${u("/first-time-home-buyer-guide")}"><h3>First-Time Homebuyer Guide</h3><p>Our free guide, a good companion to the whole year.</p></a>
     </div>
   </div>
 </section>

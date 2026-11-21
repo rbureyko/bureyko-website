@@ -7,6 +7,84 @@
   "youtubeChannelUrl": null,
   "zoomUrl": null,
   "officeHoursVenue": null,
+  "session1": {
+    "title": "Session 1: Credit Glow-Up",
+    "months": "Jan–Feb",
+    "worry": "Can we trust you?"
+  },
+  "_session1Tips_note": "One card per Session 1 message from Robin. Cards unlock on their own on releaseDate (Calgary time). Paste an unlisted YouTube link (vertical video) into videoUrl; leave it empty to show 'Video coming soon'. Add ?preview=all to the members hub address to see every card early.",
+  "session1Tips": [
+    {
+      "number": 1,
+      "title": "Your credit is your reputation",
+      "releaseDate": "2027-01-05",
+      "bullets": [
+        "Pay on time, even the minimum. Set up autopay.",
+        "Keep card balances under about 30% of the limit. Lower is better.",
+        "Don't close your oldest card.",
+        "Aim for a score of 660 or higher."
+      ],
+      "videoUrl": "",
+      "toolLabel": "Take the scorecard",
+      "toolLink": "/break-up-with-renting/members/scorecard"
+    },
+    {
+      "number": 2,
+      "title": "Read your report like a lender",
+      "releaseDate": "2027-01-19",
+      "bullets": [
+        "Check your payment history first.",
+        "Compare your balances to your limits.",
+        "Look for anything that isn't yours, and dispute it for free."
+      ],
+      "videoUrl": "",
+      "toolLabel": "Open the Credit Report Decoder",
+      "toolLink": "/break-up-with-renting/members/credit-decoder"
+    },
+    {
+      "number": 3,
+      "title": "Your first budget, the 10-minute version",
+      "releaseDate": "2027-02-02",
+      "bullets": [
+        "Write down what actually came in last month.",
+        "Drop every charge into the tracker.",
+        "Find one spending leak."
+      ],
+      "videoUrl": "",
+      "toolLabel": "Open the Budget Tracker",
+      "toolLink": "/break-up-with-renting/members/budget"
+    },
+    {
+      "number": 4,
+      "title": "Debt triage: what to pay first",
+      "releaseDate": "2027-02-16",
+      "bullets": [
+        "Stop adding new debt.",
+        "Anything late or in collections goes first.",
+        "Then the highest interest debt.",
+        "Minimums on everything else, always on time."
+      ],
+      "videoUrl": "",
+      "toolLabel": "Open the Debt Payoff Planner",
+      "toolLink": "/break-up-with-renting/members/debt-payoff"
+    }
+  ],
+  "session1Extras": {
+    "creditReports": [
+      {
+        "label": "Equifax: your free credit report",
+        "url": "https://www.consumer.equifax.ca/personal/"
+      },
+      {
+        "label": "TransUnion: your free credit report",
+        "url": "https://www.transunion.ca/"
+      }
+    ],
+    "homebuyerGuide": {
+      "label": "First-Time Home Buyers Guide",
+      "url": "https://form.jotform.com/262367662550259"
+    }
+  },
   "liveQA": [
     {
       "session": 1,
