@@ -290,7 +290,7 @@ export function buwrPages() {
     <div class="stack" style="margin-bottom:24px">
       <span class="eyebrow">Join free</span>
       <h2>Ready to break up with renting?</h2>
-      <p class="lead">Sign up below. Robin's welcome message, with your members link and password, arrives by email and text.</p>
+      <p class="lead">Sign up below. You'll get a quick note from Robin now, and your members link and password in December.</p>
       <div class="member-login-row"><p>Already a member?</p>${memberBtn(u)}</div>
     </div>
     <div class="form-frame"><iframe src="${S.signupFormUrl}" title="Break Up With Renting sign-up form" loading="lazy" style="min-height:1250px"></iframe></div>
@@ -331,9 +331,8 @@ ${loginKit(u)}`,
 <section class="band">
   <div class="wrap narrow buwr-welcome">
     <span class="eyebrow">Break Up With Renting</span>
-    <h1>You're in!</h1>
-    <p class="lead">Robin's welcome message is on its way by email and text. It has your link and password to the members area.</p>
-    <p>Don't see it in a few minutes? Check your junk folder, or text Robin at <a class="text-link" href="sms:${SITE.robin.tel}">${SITE.robin.phone}</a>.</p>
+    <h1>You're in! <span aria-hidden="true">🎉</span></h1>
+    <p class="lead">Check your inbox for a quick note from Robin. In December, you'll get your welcome email and text with your link and password to the members area. We kick off in January 2027.</p>
     <div class="actions"><a class="btn btn-orange" href="${S.instagramUrl}" ${ext}>Follow ${S.instagramHandle} ↗</a><a class="btn btn-line" href="${u(BASE + "/")}">Back to the program</a></div>
   </div>
 </section>`,
