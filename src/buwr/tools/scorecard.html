@@ -162,7 +162,7 @@ window.SendToRobin = (function () {
     add("q8_q8_textarea6", clip(p.question, 500));
     add("q9_q9_textarea7", summary);
     add("q10_q10_textarea8", details);
-    add("q11_q11_textarea9", p.followUp ? "Robin will be in touch soon." : "Want Robin's take? Just reply to this email.");
+    add("q11_q11_textarea9", (p.followUp ? "Robin will be in touch soon." : "Want Robin's take? Just reply to this email.") + " Retake the scorecard in June before graduation to see how far you've come.");
     add("q12_q12_textbox10", sent);
     return fetch("https://submit.jotform.com/submit/" + FORM_ID, { method: "POST", body: f, mode: "no-cors" }).then(() => {
       log.push({ e: who, t: now });

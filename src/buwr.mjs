@@ -1,4 +1,4 @@
-// Break Up With Renting: the free 12-month first-time buyer program.
+// Break Up With Renting: the free 6-month first-time buyer program (January to June 2027).
 // Public page, thank-you page, and the password-protected members area (hub + Session 1 tools).
 // Dates, links, videos and downloads come from src/buwr/content.json.
 import fs from "node:fs";
@@ -13,15 +13,9 @@ const ext = `target="_blank" rel="noopener"`;
 const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>`;
 const lock = `<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>`;
 
-const SESSIONS = [
-  { n: 1, months: "Jan – Mar", worry: "Can I even qualify?", covers: ["Credit and debt triage", "How credit scores work", "Your first real budget", "Qualifying basics, in plain language (GDS and TDS)"] },
-  { n: 2, months: "Apr – Jun", worry: "How will I ever save a down payment?", covers: ["A savings plan that fits your life", "The FHSA and the RRSP Home Buyers' Plan", "Gifted down payments", "Minimum down payment rules"] },
-  { n: 3, months: "Jul – Sep", worry: "What if I lose a bidding war or overpay?", covers: ["Needs vs wants", "How a purchase actually works", "What a realtor does for you, with a guest Calgary realtor"] },
-  { n: 4, months: "Oct – Dec", worry: "What about hidden costs at closing?", covers: ["Alberta closing costs", "The true monthly cost of owning", "Getting pre-approved", "Graduation"] },
-];
 
 const TOOLS = [
-  { slug: "scorecard", file: "scorecard.html", title: "Mortgage-Ready Scorecard", blurb: "Eight quick questions. Do it now, then again later to see how far you've come." },
+  { slug: "scorecard", file: "scorecard.html", title: "Mortgage-Ready Scorecard", blurb: "Eight quick questions. Do it now, then again in June before graduation to see how far you've come." },
   { slug: "credit-decoder", file: "credit-decoder.html", title: "Credit Report Decoder", blurb: "Read your Equifax and TransUnion reports the way a lender does." },
   { slug: "budget", file: "budget.html", title: "Monthly Budget Tracker", blurb: "Planned vs actual, with student lines and a money-left-over check." },
   { slug: "debt-payoff", file: "debt-payoff.html", title: "Debt Payoff Planner", blurb: "Your debt-free date and the order to pay things off." },
@@ -83,22 +77,32 @@ const TIP_SCRIPT = `<script>
 const backLink = (u) => `<a class="back-link" href="${u(MEMBERS + "/")}">← Back to members hub</a>`;
 
 // The next live Q&A: the first one whose week hasn't ended yet (checked when the site is built)
-const nextQA = () => {
-  const today = new Date().toISOString().slice(0, 10);
-  return BUWR.liveQA.find((q) => q.endsOn >= today) || BUWR.liveQA[BUWR.liveQA.length - 1];
+// (null once every session Q&A is over; graduation is shown separately)
+const buildDay = () => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Edmonton", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+const nextQA = () => BUWR.liveQA.find((q) => q.endsOn >= buildDay()) || null;
+// "7:00–7:45 p.m.", or "11:30 a.m.–12:15 p.m." when it crosses noon
+const timeRange = (a, b) => {
+  if (!b) return fmtTime(a);
+  const A = fmtTime(a), B = fmtTime(b);
+  return A.slice(-4) === B.slice(-4) ? A.slice(0, -5) + "–" + B : A + "–" + B;
 };
+const eventWhen = (q) =>
+  q.date && q.time
+    ? `${fmtDay(q.date)}, ${timeRange(q.time, q.endTime)} (Calgary time)`
+    : `${q.week ? "Week of " + q.week + ". " : ""}Exact day and time coming soon.`;
 const icsLink = (q) => {
   if (!q.date || !q.time || !BUWR.zoomUrl) return "";
   const [h, m] = q.time.split(":").map(Number);
   const pad = (n) => String(n).padStart(2, "0");
   const start = `${q.date.replace(/-/g, "")}T${pad(h)}${pad(m)}00`;
-  const end = `${q.date.replace(/-/g, "")}T${pad(h + 1)}${pad(m)}00`;
+  const [eh, em] = q.endTime ? q.endTime.split(":").map(Number) : [h + 1, m];
+  const end = `${q.date.replace(/-/g, "")}T${pad(eh)}${pad(em)}00`;
   const ics = [
     "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Bureyko Mortgage Partners//Break Up With Renting//EN", "BEGIN:VEVENT",
-    `UID:buwr-qa-${q.session}-${q.date}@bureykomortgages.ca`, `DTSTART;TZID=America/Edmonton:${start}`, `DTEND;TZID=America/Edmonton:${end}`,
+    `UID:buwr-${q.session ? "qa-" + q.session : "graduation"}-${q.date}@bureykomortgages.ca`, `DTSTART;TZID=America/Edmonton:${start}`, `DTEND;TZID=America/Edmonton:${end}`,
     `SUMMARY:Break Up With Renting: ${q.label}`, `DESCRIPTION:Join on Zoom: ${BUWR.zoomUrl}`, `URL:${BUWR.zoomUrl}`, "END:VEVENT", "END:VCALENDAR",
   ].join("\r\n");
-  return `<a class="btn btn-line btn-sm" download="break-up-with-renting-qa.ics" href="data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}">Add to calendar</a>`;
+  return `<a class="btn btn-line btn-sm" download="break-up-with-renting-${q.session ? "qa" : "graduation"}.ics" href="data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}">Add to calendar</a>`;
 };
 const fmtDay = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("en-CA", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
 const fmtTime = (t) => {
@@ -166,15 +170,15 @@ export function buwrPages() {
   list.push({
     route: BASE + "/",
     title: "Break Up With Renting",
-    exactTitle: "Break Up With Renting | Free First-Time Buyer Program in Calgary",
-    description: "A free 12-month program for Calgarians in their 20s who want to buy their first home. Tips every two weeks, live Q&As, no homework.",
+    exactTitle: "Break Up With Renting | Free 6-Month First-Time Buyer Program in Calgary",
+    description: "A free 6-month program for Calgarians in their 20s. Learn the four things every lender looks at, join live Q&As, and graduate with your real numbers.",
     body: ({ u, a }) => `
 <section class="buwr-hero">
   <div class="wrap">
     <div class="stack">
-      <span class="eyebrow">Free 12-month program · Starts January 2027</span>
+      <span class="eyebrow">Free 6-month program · ${S.programDates}</span>
       <h1>Break Up<br><em>With Renting.</em></h1>
-      <p class="lead">A free 12-month program for Calgarians in their 20s who want to own a home in the next few years. Real tips, no homework.</p>
+      <p class="lead">A free 6-month program for Calgarians in their 20s who want to own a home. Learn what lenders look at, then graduate in June with your real numbers. Real tips, no homework.</p>
       <div class="actions"><a class="btn btn-orange" href="#join">Join free ${arrow}</a></div>
       <p class="hero-note">Free. Always. No credit check to join.</p>
     </div>
@@ -187,7 +191,7 @@ export function buwrPages() {
 
 <section class="band band-mist">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">Is this you?</span><h2>Built for where you are right now.</h2><p>You don't need a down payment or a plan yet. That's what the year is for.</p></div>
+    <div class="sec-head"><span class="eyebrow">Is this you?</span><h2>Built for where you are right now.</h2><p>You don't need a down payment or a plan yet. That's what the program is for.</p></div>
     <div class="cards">
       <div class="card"><h3>Renting</h3><p>You're paying someone else's mortgage every month, and you'd rather be paying your own.</p></div>
       <div class="card"><h3>Living with your parents</h3><p>You've got a chance to save, and you want a real plan for getting out on your own.</p></div>
@@ -201,38 +205,47 @@ export function buwrPages() {
     <div class="stack">
       <span class="eyebrow">How it works</span>
       <h2>Light effort. Real progress.</h2>
-      <p>Tips, tricks and plain-language information. Not homework. A few minutes every two weeks.</p>
+      <p>Tips, tricks and plain-language information. Not homework. A few minutes every two weeks, then weekly in May and June.</p>
     </div>
     <ol class="steps">
       <li class="step"><div><h3>Sign up free.</h3><p>Join any time. Each session leads into the next.</p></div></li>
-      <li class="step"><div><h3>Get a short tip from Robin every two weeks.</h3><p>By email and text, straight to your phone.</p></div></li>
-      <li class="step"><div><h3>Join a live Q&amp;A each quarter.</h3><p>On Zoom, or in person at Office Hours with Robin.</p></div></li>
-      <li class="step"><div><h3>Graduate with a pre-approval.</h3><p>See exactly where you stand.</p></div></li>
+      <li class="step"><div><h3>Get a short tip from Robin every two weeks.</h3><p>Then weekly in May and June. By email and text, straight to your phone.</p></div></li>
+      <li class="step"><div><h3>Join a live Q&amp;A each session.</h3><p>On Zoom, or in person at Office Hours with Robin.</p></div></li>
+      <li class="step"><div><h3>Graduate in June with a pre-approval.</h3><p>See your real numbers and exactly where you stand.</p></div></li>
     </ol>
   </div>
 </section>
 
 <section class="band band-mist">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">The year at a glance</span><h2>Four sessions. Four big worries, sorted.</h2><p>Each session runs 12 weeks, one calendar quarter, starting January 2027.</p></div>
-    <ol class="buwr-sessions">
-      ${SESSIONS.map((s) => `<li><span class="when">Session ${s.n} · ${s.months}</span><h3>“${s.worry}”</h3><ul>${s.covers.map((c) => `<li>${c}</li>`).join("")}</ul></li>`).join("")}
-    </ol>
+    <div class="sec-head"><span class="eyebrow">The 4 things every lender looks at</span><h2>${S.lenderHook.title}</h2><p>${S.lenderHook.text}</p></div>
+    <div class="lender-four">
+      ${S.sessions.map((s) => `<div class="card"><span class="lender-num">${s.number}</span><h3>${s.lenderLooksAt}</h3><p class="lender-q">“${s.question}”</p><p class="lender-session">Session ${s.number}: ${s.name}</p></div>`).join("")}
+    </div>
   </div>
 </section>
 
 <section class="band">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">What members get</span><h2>Tools that make it simple.</h2><p>Members only. You'll get the link and password in Robin's welcome message.</p></div>
-    <div class="buwr-locked">
-      ${TOOLS.map((t) => `<div class="card">${lock}<h3>${t.title}</h3><p>${t.blurb}</p><span class="members-only">Members only</span></div>`).join("")}
-      <div class="card">${lock}<h3>More every session</h3><p>New tools each quarter, plus "Questions to ask" scripts for lenders, realtors, inspectors, condos and lawyers.</p><span class="members-only">Members only</span></div>
-      <div class="card">${lock}<h3>Live Q&amp;As and recordings</h3><p>Ask anything once a quarter, and catch the recording if you miss it.</p><span class="members-only">Members only</span></div>
-    </div>
+    <div class="sec-head"><span class="eyebrow">Six months at a glance</span><h2>Four sessions, ${S.programDates}.</h2><p>One session for each thing a lender looks at, ending with graduation in June.</p></div>
+    <ol class="buwr-sessions">
+      ${S.sessions.map((s) => `<li><span class="when">Session ${s.number} · ${s.months}</span><h3>${s.name}</h3><p class="session-q">“${s.question}”</p><ul>${s.covers.map((c) => `<li>${c}</li>`).join("")}</ul></li>`).join("")}
+    </ol>
   </div>
 </section>
 
 <section class="band band-mist">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">What members get</span><h2>Tools that make it simple.</h2><p>Members only. You'll get the link and password in Robin's welcome message.</p></div>
+    <div class="buwr-locked">
+      ${TOOLS.map((t) => `<div class="card">${lock}<h3>${t.title}</h3><p>${t.blurb}</p><span class="members-only">Members only</span></div>`).join("")}
+      <div class="card">${lock}<h3>More every session</h3><p>New tools each session, plus "Questions to ask" scripts for lenders, realtors, inspectors, condo boards and lawyers.</p><span class="members-only">Members only</span></div>
+      <div class="card">${lock}<h3>Live Q&amp;As and graduation</h3><p>A live Q&amp;A every session plus a June graduation. Catch the recording if you miss one.</p><span class="members-only">Members only</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
   <div class="wrap split">
     <div class="stack">
       <span class="eyebrow">Meet Robin and Sherri</span>
@@ -243,20 +256,21 @@ export function buwrPages() {
   </div>
 </section>
 
-<section class="band">
+<section class="band band-mist">
   <div class="wrap narrow">
     <h2 style="margin-bottom:24px">Questions you might have</h2>
     <div class="faq">
       <details><summary>Is it really free?</summary><p>Yes. Free, always. There's no credit check to join.</p></details>
-      <details><summary>How much time does it take?</summary><p>A few minutes every two weeks. It's tips and information, not homework.</p></details>
-      <details><summary>Can I join partway through the year?</summary><p>Yes. Join any time. Each session leads into the next, so you can pick up wherever we are.</p></details>
-      <details><summary>I'm not planning to buy for years. Is this for me?</summary><p>That's exactly who it's for. The earlier you start on credit and savings, the easier buying gets.</p></details>
+      <details><summary>How long is it?</summary><p>Six months, January to June 2027.</p></details>
+      <details><summary>How much time does it take?</summary><p>A few minutes every two weeks, then weekly in May and June. It's tips and information, not homework.</p></details>
+      <details><summary>Can I join partway?</summary><p>Yes. You'll start with the current session, and all earlier tools stay open to you.</p></details>
+      <details><summary>I'm not planning to buy for years. Is this for me?</summary><p>Perfect. You'll graduate knowing exactly where you stand, then we'll keep helping you save until you're ready.</p></details>
       <details><summary>Do I have to come in person?</summary><p>No. Everything works from your phone. Live Q&amp;As are on Zoom, with an in-person option if you'd like to meet.</p></details>
     </div>
   </div>
 </section>
 
-<section class="band band-mist" id="join">
+<section class="band" id="join">
   <div class="wrap narrow">
     <div class="stack" style="margin-bottom:24px">
       <span class="eyebrow">Join free</span>
@@ -296,7 +310,10 @@ export function buwrPages() {
     protect: true,
     body: ({ u, a }) => {
       const q = nextQA();
-      const when = q.date && q.time ? `${fmtDay(q.date)} at ${fmtTime(q.time)} (Calgary time)` : `Week of ${q.week}. Exact day and time coming soon.`;
+      const g = S.graduation;
+      const s1 = S.sessions[0];
+      const zoomBtn = S.zoomUrl ? `<a class="btn btn-orange" href="${S.zoomUrl}" ${ext}>Join on Zoom ↗</a>` : `<span class="btn btn-line is-disabled" aria-disabled="true">Zoom link coming soon</span>`;
+      const venue = `Prefer in person? Office Hours with Robin: ${S.officeHoursVenue ? S.officeHoursVenue : "venue coming soon"}.`;
       return `
 <section class="band-tight buwr-members-top">
   <div class="wrap">
@@ -309,21 +326,27 @@ export function buwrPages() {
 
 <section class="band-tight session-block" id="session-1">
   <div class="wrap">
-    <h2 class="hub-title">${S.session1.title} · ${S.session1.months} · “${S.session1.worry}”</h2>
+    <h2 class="hub-title">Session 1: ${s1.name} · ${s1.months} · “${s1.question}”</h2>
     <div class="session-intro-video">${video(S.videos.session1Intro, "Session 1 intro")}</div>
 
     <p class="tip-preview-note" id="tipPreviewNote" hidden>Preview mode: every tip is showing, including ones that aren't released yet.</p>
     <div class="tip-grid">${S.session1Tips.map((tip) => tipCard(tip, u)).join("")}</div>
 
-    <div class="qa-card">
-      <span class="eyebrow">Next live Q&amp;A</span>
-      <h2>${q.label}</h2>
-      <p class="when">${when}</p>
-      <div class="actions">
-        ${S.zoomUrl ? `<a class="btn btn-orange" href="${S.zoomUrl}" ${ext}>Join on Zoom ↗</a>` : `<span class="btn btn-line is-disabled" aria-disabled="true">Zoom link coming soon</span>`}
-        ${icsLink(q)}
+    <div class="qa-row">
+      ${q ? `<div class="qa-card">
+        <span class="eyebrow">Next live Q&amp;A</span>
+        <h2>${q.label}</h2>
+        <p class="when">${eventWhen(q)}</p>
+        <div class="actions">${zoomBtn}${icsLink(q)}</div>
+        <p class="fine">${venue}</p>
+      </div>` : ""}
+      <div class="qa-card qa-grad">
+        <span class="eyebrow">Graduation · End of June</span>
+        <h2>${g.label}</h2>
+        <p class="when">${eventWhen(g)}</p>
+        <p>${g.text}</p>
+        <div class="actions">${icsLink(g)}</div>
       </div>
-      <p class="fine">Prefer in person? Office Hours with Robin: ${S.officeHoursVenue ? S.officeHoursVenue : "venue coming soon"}.</p>
     </div>
 
     <h3 class="session-sub">Session 1 tools</h3>
@@ -344,10 +367,7 @@ ${TIP_SCRIPT}
   <div class="wrap">
     <h2 class="hub-title">Coming up</h2>
     <div class="cards">
-      <div class="card"><h3>Session 2 · Apr – Jun</h3><ul class="downloads">${S.downloads.session2.map(download).join("")}</ul></div>
-      <div class="card"><h3>Session 3 · Jul – Sep</h3><ul class="downloads">${S.downloads.session3.map(download).join("")}</ul></div>
-      <div class="card"><h3>Session 4 · Oct – Dec</h3><ul class="downloads">${S.downloads.session4.map(download).join("")}</ul></div>
-      <div class="card"><h3>“Questions to ask” scripts</h3><ul class="downloads">${S.downloads.scripts.map(download).join("")}</ul></div>
+      ${S.sessions.slice(1).map((s) => { const d = S.downloads["session" + s.number]; return `<div class="card"><span class="eyebrow">Session ${s.number} · ${s.months}</span><h3>${s.name}</h3><p class="session-q">“${s.question}”</p><ul class="downloads">${d.tools.map(download).join("")}</ul>${d.scripts.length ? `<h4 class="downloads-sub">“Questions to ask” scripts</h4><ul class="downloads">${d.scripts.map(download).join("")}</ul>` : ""}</div>`; }).join("")}
     </div>
   </div>
 </section>
@@ -357,9 +377,10 @@ ${TIP_SCRIPT}
     <h2 class="hub-title">Videos</h2>
     <div class="video-grid">
       ${[2, 3, 4].filter((n) => S.videos["session" + n + "Intro"]).map((n) => `<div><h3>Session ${n} intro</h3>${video(S.videos["session" + n + "Intro"], "Session " + n + " intro")}</div>`).join("")}
-      ${[1, 2, 3, 4].filter((n) => S.videos["qa" + n + "Recording"]).map((n) => `<div><h3>Q${n} live Q&amp;A recording</h3>${video(S.videos["qa" + n + "Recording"], "Q" + n + " live Q&A recording")}</div>`).join("")}
+      ${[1, 2, 3].filter((n) => S.videos["qa" + n + "Recording"]).map((n) => `<div><h3>Session ${n} live Q&amp;A recording</h3>${video(S.videos["qa" + n + "Recording"], "Session " + n + " live Q&A recording")}</div>`).join("")}
+      ${S.videos.graduationRecording ? `<div><h3>Graduation recording</h3>${video(S.videos.graduationRecording, "Graduation recording")}</div>` : ""}
     </div>
-    <p class="fine">Live Q&amp;A recordings appear here after each session's Q&amp;A.</p>
+    <p class="fine">Session intros, Q&amp;A recordings and the graduation recording appear here after each one.</p>
   </div>
 </section>
 
@@ -374,8 +395,8 @@ ${TIP_SCRIPT}
 
 <section class="contact">
   <div class="wrap">
-    <span class="eyebrow">Ready to see where you stand?</span>
-    <div class="contact-head"><h2>Get pre-approved when you're ready.</h2><p>It's the best way to see exactly where you stand.</p></div>
+    <span class="eyebrow">Graduating in June? This is your next step</span>
+    <div class="contact-head"><h2>Get pre-approved when you're ready.</h2><p>It's the best way to see your real numbers and exactly where you stand.</p></div>
     <div class="actions"><a class="btn btn-orange" href="${SITE.applyUrl}" ${ext}>Start my pre-approval ↗</a><a class="btn btn-line" href="sms:${SITE.robin.tel}">Text Robin · ${SITE.robin.phone}</a></div>
     <p class="contact-more"><span>Email <a href="mailto:${SITE.robin.email}">${SITE.robin.email}</a></span></p>
   </div>

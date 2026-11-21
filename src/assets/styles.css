@@ -356,6 +356,21 @@ a.card:hover{background:var(--mist)}
 @media (max-width:520px){.welcome-bar{grid-template-columns:1fr}}
 .qa-card{border:2px solid var(--orange);border-radius:12px;padding:clamp(22px,3.5vw,32px);display:grid;gap:12px;justify-items:start;background:var(--paper)}
 .qa-card .when{font-size:1.15rem;font-weight:600;color:var(--ink)}
+.qa-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px;margin:28px 0}
+.qa-row .qa-card{margin:0}
+.qa-card.qa-grad{background:var(--blue);border-color:var(--blue);color:#fff}
+.qa-card.qa-grad h2,.qa-card.qa-grad .when,.qa-card.qa-grad p{color:#fff}
+.qa-card.qa-grad .eyebrow{color:#fff}
+.qa-card.qa-grad .btn-line{background:#fff;color:var(--ink);border-color:#fff}
+.lender-four{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.lender-four .card{display:grid;gap:8px;align-content:start;border-top:4px solid var(--sky)}
+.lender-num{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--orange);color:var(--ink);font-weight:700}
+.lender-four h3{color:var(--blue);font-size:1.3rem}
+.lender-q,.session-q{font-style:italic;color:var(--ink);margin:0}
+.lender-session{font-size:.85rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin:0}
+@media (max-width:1000px){.lender-four{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.lender-four{grid-template-columns:1fr}}
+.downloads-sub{font-size:.95rem;margin:14px 0 6px;color:var(--blue)}
 .btn.is-disabled{opacity:.6;cursor:default;pointer-events:none}
 .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:18px}
 .tool-card h3{color:var(--blue)}

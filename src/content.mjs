@@ -225,9 +225,9 @@ export const SERVICES = [
 const buwrCallout = (u) => `<section class="band-tight">
   <div class="wrap">
     <a class="buwr-callout" href="${u("/break-up-with-renting/")}">
-      <span class="eyebrow">Free 12-month program</span>
+      <span class="eyebrow">Free 6-month program · January to June 2027</span>
       <strong>Break Up With Renting</strong>
-      <span>For Calgarians in their 20s who want to own in the next few years. Tips every two weeks, live Q&amp;As, no homework. Free, always.</span>
+      <span>For Calgarians in their 20s who want to own a home. Learn the four things every lender looks at, join live Q&amp;As, and graduate in June with your real numbers. Free, always.</span>
       <span class="more">See the program <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
     </a>
   </div>

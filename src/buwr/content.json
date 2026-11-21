@@ -1,5 +1,5 @@
 {
-  "_about": "Break Up With Renting: everything that changes during the year lives here. Leave a value as null until it exists; the site shows 'Coming soon' instead. After editing, the site rebuilds when the change is pushed.",
+  "_about": "Break Up With Renting: everything that changes during the program lives here. Leave a value as null until it exists; the site shows 'Coming soon' instead. After editing, the site rebuilds when the change is pushed.",
   "signupFormUrl": "https://form.jotform.com/263036354620047",
   "sendToRobinFormId": "263244384274056",
   "instagramUrl": "https://instagram.com/bureyko_mortgages",
@@ -7,11 +7,72 @@
   "youtubeChannelUrl": null,
   "zoomUrl": null,
   "officeHoursVenue": null,
-  "session1": {
-    "title": "Session 1: Credit Glow-Up",
-    "months": "Jan–Feb",
-    "worry": "Can we trust you?"
+  "programDates": "January to June 2027",
+  "lenderHook": {
+    "title": "Every lender looks at four things.",
+    "text": "We'll walk you through each one, then show you your real number."
   },
+  "_sessions_note": "The four sessions, one for each thing every lender looks at. Session names are drafts until Sherri and Robin confirm them.",
+  "sessions": [
+    {
+      "number": 1,
+      "name": "Credit Glow-Up",
+      "months": "Jan–Feb",
+      "lenderLooksAt": "Credit",
+      "question": "Can we trust you?",
+      "covers": [
+        "How credit works",
+        "Reading your credit report",
+        "A first budget",
+        "Debt triage"
+      ]
+    },
+    {
+      "number": 2,
+      "name": "Stack Your Down Payment",
+      "months": "Mar–Apr",
+      "lenderLooksAt": "Down payment",
+      "question": "Do you have the money to put down?",
+      "covers": [
+        "A savings plan",
+        "The FHSA",
+        "The RRSP Home Buyers' Plan",
+        "TFSAs",
+        "Gifted down payments",
+        "Minimum down payment rules"
+      ]
+    },
+    {
+      "number": 3,
+      "name": "Make Your Income Count",
+      "months": "May",
+      "lenderLooksAt": "Income",
+      "question": "Can your income carry it?",
+      "covers": [
+        "How lenders see your job",
+        "Career timing",
+        "Side hustles and self-employment",
+        "Taxes",
+        "Debts vs. income",
+        "Your lender folder"
+      ]
+    },
+    {
+      "number": 4,
+      "name": "Know Your Number",
+      "months": "June",
+      "lenderLooksAt": "Your number",
+      "question": "What can you afford, and what are you buying?",
+      "covers": [
+        "What you can actually afford",
+        "Realtor tips",
+        "Inspections and appraisals",
+        "Alberta closing costs",
+        "Insurance",
+        "Graduation with a pre-approval"
+      ]
+    }
+  ],
   "_session1Tips_note": "One card per Session 1 message from Robin. Cards unlock on their own on releaseDate (Calgary time). Paste an unlisted YouTube link (vertical video) into videoUrl; leave it empty to show 'Video coming soon'. Add ?preview=all to the members hub address to see every card early.",
   "session1Tips": [
     {
@@ -88,38 +149,42 @@
   "liveQA": [
     {
       "session": 1,
-      "label": "Q1 live Q&A",
-      "week": "January 12–16, 2027",
-      "endsOn": "2027-01-16",
-      "date": null,
-      "time": null
+      "label": "Session 1 live Q&A",
+      "week": null,
+      "endsOn": "2027-02-24",
+      "date": "2027-02-24",
+      "time": "19:00",
+      "endTime": "19:45"
     },
     {
       "session": 2,
-      "label": "Q2 live Q&A",
-      "week": "April 12–16, 2027",
-      "endsOn": "2027-04-16",
+      "label": "Session 2 live Q&A",
+      "week": "April 26–30, 2027",
+      "endsOn": "2027-04-30",
       "date": null,
-      "time": null
+      "time": null,
+      "endTime": null
     },
     {
       "session": 3,
-      "label": "Q3 live Q&A",
-      "week": "July 12–16, 2027",
-      "endsOn": "2027-07-16",
+      "label": "Session 3 live Q&A",
+      "week": "May 25–28, 2027",
+      "endsOn": "2027-05-28",
       "date": null,
-      "time": null
-    },
-    {
-      "session": 4,
-      "label": "Q4 live Q&A",
-      "week": "October 11–15, 2027",
-      "endsOn": "2027-10-15",
-      "date": null,
-      "time": null
+      "time": null,
+      "endTime": null
     }
   ],
-  "_liveQA_note": "Fill in date as YYYY-MM-DD and time as Calgary time, e.g. \"19:00\". The members hub shows the next Q&A whose week hasn't ended yet, and offers an 'Add to calendar' file once the date, time and Zoom link are all set.",
+  "graduation": {
+    "label": "Graduation",
+    "week": "June 21–25 or June 28–30, 2027",
+    "endsOn": "2027-06-30",
+    "date": null,
+    "time": null,
+    "endTime": null,
+    "text": "A Zoom celebration with an in-person option, ending with your pre-approval invite."
+  },
+  "_liveQA_note": "Fill in date as YYYY-MM-DD and time/endTime as Calgary time, e.g. \"19:00\". Until a date is set, the week shows with 'Exact day and time coming soon'. The members hub shows the next Q&A whose day or week hasn't ended yet, plus graduation as its own highlighted event, and offers an 'Add to calendar' file once the date, time and Zoom link are all set.",
   "videos": {
     "_note": "Paste the YouTube link (unlisted is fine for members videos). null shows 'Video coming soon'.",
     "welcome": null,
@@ -130,65 +195,85 @@
     "qa1Recording": null,
     "qa2Recording": null,
     "qa3Recording": null,
-    "qa4Recording": null
+    "graduationRecording": null
   },
   "downloads": {
-    "_note": "Templates and scripts for Sessions 2 to 4. Add a url when each one is ready. Files put on this site are public if someone has the exact link, so use Google Drive links shared with 'anyone with the link' or ask for them to be added to the members area.",
-    "session2": [
-      {
-        "title": "Down payment goal planner",
-        "url": null
-      },
-      {
-        "title": "Savings bucket tracker",
-        "url": null
-      }
-    ],
-    "session3": [
-      {
-        "title": "Needs vs wants checklist",
-        "url": null
-      },
-      {
-        "title": "Rent vs own comparison",
-        "url": null
-      }
-    ],
-    "session4": [
-      {
-        "title": "GDS/TDS self-check",
-        "url": null
-      },
-      {
-        "title": "Alberta closing cost estimator",
-        "url": null
-      },
-      {
-        "title": "Pre-approval document checklist",
-        "url": null
-      }
-    ],
-    "scripts": [
-      {
-        "title": "Questions to ask a mortgage professional or lender",
-        "url": null
-      },
-      {
-        "title": "Questions to ask a realtor",
-        "url": null
-      },
-      {
-        "title": "Questions to ask a home inspector",
-        "url": null
-      },
-      {
-        "title": "Questions to ask about a condo",
-        "url": null
-      },
-      {
-        "title": "Questions to ask a lawyer",
-        "url": null
-      }
-    ]
+    "_note": "Templates and scripts for Sessions 2 to 4. Add a url when each one is ready. Files put on this site are public if someone has the exact link, so use Google Drive links shared with 'anyone with the link' or ask for them to be added to the members area. neededBy is when each session's tools should be ready.",
+    "session2": {
+      "neededBy": "March 1",
+      "tools": [
+        {
+          "title": "Down payment goal planner",
+          "url": null
+        },
+        {
+          "title": "Savings bucket tracker (FHSA, RRSP, TFSA, gifts)",
+          "url": null
+        }
+      ],
+      "scripts": []
+    },
+    "session3": {
+      "neededBy": "May 1",
+      "tools": [
+        {
+          "title": "“Does my income count?” checker",
+          "url": null
+        },
+        {
+          "title": "Lender folder checklist",
+          "url": null
+        },
+        {
+          "title": "“Before you finance that car” reality check",
+          "url": null
+        }
+      ],
+      "scripts": [
+        {
+          "title": "Questions to ask a mortgage professional or lender",
+          "url": null
+        }
+      ]
+    },
+    "session4": {
+      "neededBy": "June 1",
+      "tools": [
+        {
+          "title": "GDS/TDS self-check",
+          "url": null
+        },
+        {
+          "title": "Rent vs own true-cost comparison",
+          "url": null
+        },
+        {
+          "title": "Alberta closing cost estimator",
+          "url": null
+        },
+        {
+          "title": "Needs vs wants checklist",
+          "url": null
+        }
+      ],
+      "scripts": [
+        {
+          "title": "Questions to ask a realtor",
+          "url": null
+        },
+        {
+          "title": "Questions to ask a home inspector",
+          "url": null
+        },
+        {
+          "title": "Questions to ask a condo board",
+          "url": null
+        },
+        {
+          "title": "Questions to ask a lawyer",
+          "url": null
+        }
+      ]
+    }
   }
 }
