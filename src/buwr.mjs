@@ -275,7 +275,7 @@ export function buwrPages() {
     <div class="stack" style="margin-bottom:24px">
       <span class="eyebrow">Join free</span>
       <h2>Ready to break up with renting?</h2>
-      <p class="lead">Sign up below. Robin's welcome message, with your members link and password, arrives by email and text.</p>
+      <p class="lead">Sign up below. You'll get a quick note from Robin now, and your members link and password in December.</p>
     </div>
     <div class="form-frame"><iframe src="${S.signupFormUrl}" title="Break Up With Renting sign-up form" loading="lazy" style="min-height:1250px"></iframe></div>
     <p class="fine" style="margin-top:12px">Form not showing? <a class="text-link" href="${S.signupFormUrl}" ${ext}>Open it in a new tab ↗</a></p>
