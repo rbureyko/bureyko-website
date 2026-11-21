@@ -52,8 +52,11 @@ ${payload ? `<script>
   const gate = document.getElementById("gate"), msg = document.getElementById("gateMsg");
   const bytes = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
   const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
+  // Wait until this page has fully loaded, so the real page replaces it instead of being added below it
+  const loaded = new Promise((r) => document.readyState === "complete" ? r() : window.addEventListener("load", r, { once: true }));
   async function open(key) {
     const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: bytes(P.iv) }, key, bytes(P.data));
+    await loaded;
     const html = new TextDecoder().decode(plain);
     document.open(); document.write(html); document.close();
   }

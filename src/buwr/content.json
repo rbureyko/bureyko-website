@@ -1,23 +1,47 @@
 {
   "_about": "Break Up With Renting: everything that changes during the year lives here. Leave a value as null until it exists; the site shows 'Coming soon' instead. After editing, the site rebuilds when the change is pushed.",
-
   "signupFormUrl": "https://form.jotform.com/263036354620047",
-  "scorecardFormId": "263208207210040",
+  "sendToRobinFormId": "263244384274056",
   "instagramUrl": "https://instagram.com/bureyko_mortgages",
   "instagramHandle": "@bureyko_mortgages",
   "youtubeChannelUrl": null,
-
   "zoomUrl": null,
   "officeHoursVenue": null,
-
   "liveQA": [
-    { "session": 1, "label": "Q1 live Q&A", "week": "January 12–16, 2027", "endsOn": "2027-01-16", "date": null, "time": null },
-    { "session": 2, "label": "Q2 live Q&A", "week": "April 12–16, 2027", "endsOn": "2027-04-16", "date": null, "time": null },
-    { "session": 3, "label": "Q3 live Q&A", "week": "July 12–16, 2027", "endsOn": "2027-07-16", "date": null, "time": null },
-    { "session": 4, "label": "Q4 live Q&A", "week": "October 11–15, 2027", "endsOn": "2027-10-15", "date": null, "time": null }
+    {
+      "session": 1,
+      "label": "Q1 live Q&A",
+      "week": "January 12–16, 2027",
+      "endsOn": "2027-01-16",
+      "date": null,
+      "time": null
+    },
+    {
+      "session": 2,
+      "label": "Q2 live Q&A",
+      "week": "April 12–16, 2027",
+      "endsOn": "2027-04-16",
+      "date": null,
+      "time": null
+    },
+    {
+      "session": 3,
+      "label": "Q3 live Q&A",
+      "week": "July 12–16, 2027",
+      "endsOn": "2027-07-16",
+      "date": null,
+      "time": null
+    },
+    {
+      "session": 4,
+      "label": "Q4 live Q&A",
+      "week": "October 11–15, 2027",
+      "endsOn": "2027-10-15",
+      "date": null,
+      "time": null
+    }
   ],
   "_liveQA_note": "Fill in date as YYYY-MM-DD and time as Calgary time, e.g. \"19:00\". The members hub shows the next Q&A whose week hasn't ended yet, and offers an 'Add to calendar' file once the date, time and Zoom link are all set.",
-
   "videos": {
     "_note": "Paste the YouTube link (unlisted is fine for members videos). null shows 'Video coming soon'.",
     "welcome": null,
@@ -30,28 +54,63 @@
     "qa3Recording": null,
     "qa4Recording": null
   },
-
   "downloads": {
     "_note": "Templates and scripts for Sessions 2 to 4. Add a url when each one is ready. Files put on this site are public if someone has the exact link, so use Google Drive links shared with 'anyone with the link' or ask for them to be added to the members area.",
     "session2": [
-      { "title": "Down payment goal planner", "url": null },
-      { "title": "Savings bucket tracker", "url": null }
+      {
+        "title": "Down payment goal planner",
+        "url": null
+      },
+      {
+        "title": "Savings bucket tracker",
+        "url": null
+      }
     ],
     "session3": [
-      { "title": "Needs vs wants checklist", "url": null },
-      { "title": "Rent vs own comparison", "url": null }
+      {
+        "title": "Needs vs wants checklist",
+        "url": null
+      },
+      {
+        "title": "Rent vs own comparison",
+        "url": null
+      }
     ],
     "session4": [
-      { "title": "GDS/TDS self-check", "url": null },
-      { "title": "Alberta closing cost estimator", "url": null },
-      { "title": "Pre-approval document checklist", "url": null }
+      {
+        "title": "GDS/TDS self-check",
+        "url": null
+      },
+      {
+        "title": "Alberta closing cost estimator",
+        "url": null
+      },
+      {
+        "title": "Pre-approval document checklist",
+        "url": null
+      }
     ],
     "scripts": [
-      { "title": "Questions to ask a mortgage professional or lender", "url": null },
-      { "title": "Questions to ask a realtor", "url": null },
-      { "title": "Questions to ask a home inspector", "url": null },
-      { "title": "Questions to ask about a condo", "url": null },
-      { "title": "Questions to ask a lawyer", "url": null }
+      {
+        "title": "Questions to ask a mortgage professional or lender",
+        "url": null
+      },
+      {
+        "title": "Questions to ask a realtor",
+        "url": null
+      },
+      {
+        "title": "Questions to ask a home inspector",
+        "url": null
+      },
+      {
+        "title": "Questions to ask about a condo",
+        "url": null
+      },
+      {
+        "title": "Questions to ask a lawyer",
+        "url": null
+      }
     ]
   }
 }

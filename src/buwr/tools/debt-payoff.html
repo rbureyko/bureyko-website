@@ -88,13 +88,157 @@
     <ol class="plan" id="order"></ol>
     <div class="note" id="compare"></div>
     <div class="note" id="laterNote" style="display:none;background:var(--warm)"></div>
-    <p class="muted" style="margin-top:16px">📸 Screenshot your plan and text it to Robin. Lenders look at your monthly payments, so every debt you clear can raise what you qualify for.</p>
+    <p class="muted" style="margin-top:16px">Lenders look at your monthly payments, so every debt you clear can raise what you qualify for.</p>
+    <div id="s2rMount"></div>
   </section>
 
   <footer>
     Estimates only: assumes rates stay the same, no new borrowing and payments made monthly. Your real numbers may differ. General information, not financial advice.
   </footer>
 </div>
+
+<style>
+  /* Send to Robin panel (shared by the three Break Up With Renting tools) */
+  .s2r { border: 2px solid var(--blue); border-radius: 16px; padding: 18px; margin-top: 18px; background: var(--card, var(--bg)); display: grid; gap: 12px; position: relative; }
+  .s2r h2 { margin: 0; color: var(--blue); font-size: 19px; }
+  .s2r p { margin: 0; }
+  .s2r .lead { color: var(--muted); font-size: 15px; }
+  .s2r .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .s2r .two > * { min-width: 0; }
+  .s2r label.f { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  .s2r input[type=text], .s2r input[type=email], .s2r select, .s2r textarea { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px; width: 100%; }
+  .s2r textarea { min-height: 72px; resize: vertical; }
+  .s2r .check { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--ink); cursor: pointer; }
+  .s2r .check input { width: 20px; height: 20px; margin: 1px 0 0; flex: none; accent-color: var(--blue); }
+  .s2r .preview { background: var(--soft); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+  .s2r .preview .h { display: block; margin-bottom: 8px; font-weight: 700; color: var(--ink); }
+  .s2r .preview dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 5px 14px; }
+  .s2r .preview dt { white-space: nowrap; }
+  .s2r .preview dt { color: var(--muted); }
+  .s2r .preview dd { margin: 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .s2r .note { font-size: 13px; color: var(--muted); }
+  .s2r .go { border: 0; border-radius: 12px; padding: 15px; background: var(--orange); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; width: 100%; }
+  .s2r .go[disabled] { opacity: .6; cursor: wait; }
+  .s2r .go:focus-visible, .s2r input:focus-visible, .s2r select:focus-visible, .s2r textarea:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .s2r .status { font-weight: 600; min-height: 1.2em; }
+  .s2r .status.ok { color: var(--good, #2E8B57); }
+  .s2r .status.err { color: var(--warn, var(--bad, #b3541e)); }
+  .s2r .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  @media (max-width: 440px) { .s2r .two { grid-template-columns: 1fr; } }
+</style>
+<script>
+/* Send to Robin: sends the member's results to the Jotform "Break Up With Renting: Send to Robin",
+   which emails Robin and sends the member a copy. (The site is on GitHub Pages, so there's no server function.) */
+window.SendToRobin = (function () {
+  const FORM_ID = "__SEND_TO_ROBIN_FORM_ID__";
+  const TOOLS = ["scorecard", "budget", "debt-payoff"];
+  const clip = (s, n) => String(s == null ? "" : s).slice(0, n);
+  function sendViaJotform(p) {
+    if (p.website) return Promise.resolve(); // spam trap filled in: act as if sent, send nothing
+    if (!TOOLS.includes(p.tool)) return Promise.reject(new Error("tool"));
+    const now = Date.now(), LOG = "bwr-s2r-sent", who = p.email.toLowerCase();
+    let log = [];
+    try { log = JSON.parse(localStorage.getItem(LOG) || "[]").filter(x => now - x.t < 3600000); } catch (e) {}
+    if (log.filter(x => x.e === who).length >= 5) return Promise.reject(new Error("limit")); // 5 sends per email per hour, on this device
+    const summary = (p.summary || []).slice(0, 15).map(r => clip(r.label, 300) + ": " + clip(r.value, 300)).join("\n");
+    let details = "";
+    if (p.tool !== "budget") { // budget: totals only, never line items
+      details = p.includeDetails && Array.isArray(p.details)
+        ? p.details.slice(0, 3).map(s => clip(s.section, 300) + "\n" + (s.rows || []).slice(0, 20).map(r => "• " + clip(r.label, 300) + ": " + clip(r.value, 300)).join("\n")).join("\n\n")
+        : "Details not shared";
+    }
+    let tag = p.toolName;
+    if (p.tool === "scorecard") {
+      const row = (p.summary || []).find(r => r.label === "Scorecard");
+      const kind = !row ? "" : /^Start/.test(row.value) ? "Start" : /^Graduation/.test(row.value) ? "Graduation" : "Just checking";
+      tag = "Scorecard" + (kind ? " · " + kind : "");
+    }
+    const sent = new Date(p.sentAt || now).toLocaleString("en-CA", { timeZone: "America/Edmonton", dateStyle: "medium", timeStyle: "short" });
+    const f = new FormData();
+    const add = (k, v) => f.append(k, v);
+    add("formID", FORM_ID); add("simple_spc", FORM_ID + "-" + FORM_ID); add("website", "");
+    add("submitSource", "form"); add("jsExecutionTracker", "build-date-" + now);
+    add("q2_q2_textbox0", p.toolName);
+    add("q3_q3_textbox1", clip(p.firstName, 60));
+    add("q4_q4_email2", clip(p.email, 254));
+    add("q5_q5_textbox3", `[BUWR · ${tag}] ${clip(p.firstName, 60)}${p.followUp ? " · Wants a follow-up" : ""}`);
+    add("q6_q6_textbox4", `Your ${p.toolName} results`);
+    add("q7_q7_textbox5", p.followUp ? "Yes" : "No");
+    add("q8_q8_textarea6", clip(p.question, 500));
+    add("q9_q9_textarea7", summary);
+    add("q10_q10_textarea8", details);
+    add("q11_q11_textarea9", p.followUp ? "Robin will be in touch soon." : "Want Robin's take? Just reply to this email.");
+    add("q12_q12_textbox10", sent);
+    return fetch("https://submit.jotform.com/submit/" + FORM_ID, { method: "POST", body: f, mode: "no-cors" }).then(() => {
+      log.push({ e: who, t: now });
+      try { localStorage.setItem(LOG, JSON.stringify(log)); } catch (e) {}
+    });
+  }
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  function mount(el, cfg) {
+    const id = cfg.tool;
+    el.innerHTML = `
+    <section class="s2r" aria-labelledby="${id}-s2r-h">
+      <h2 id="${id}-s2r-h">Send this to Robin</h2>
+      <p class="lead">${cfg.lead}</p>
+      <div class="two">
+        <label class="f">First name<input type="text" id="${id}-fn" autocomplete="given-name"></label>
+        <label class="f">Email (for your copy)<input type="email" id="${id}-em" autocomplete="email"></label>
+      </div>
+      ${cfg.extraHtml || ""}
+      <label class="f">A question for Robin (optional)<textarea id="${id}-q" maxlength="500" placeholder="${esc(cfg.questionHint || "")}"></textarea></label>
+      ${cfg.detailsLabel ? `<label class="check"><input type="checkbox" id="${id}-det"><span>${cfg.detailsLabel}</span></label>` : ""}
+      <label class="check"><input type="checkbox" id="${id}-fu"><span>Yes, I'd like Robin to follow up with me about this.</span></label>
+      <div class="preview"><span class="h">What Robin will see</span><dl id="${id}-pv"></dl><p class="note" id="${id}-pvnote" style="margin-top:8px"></p></div>
+      <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" id="${id}-hp" tabindex="-1" autocomplete="off"></label></div>
+      <button class="go" type="button" id="${id}-send">Send to Robin</button>
+      <p class="status" id="${id}-st" role="status" aria-live="polite"></p>
+      <p class="note">Tapping Send shares the summary above with Robin Bureyko at Bureyko Mortgage Partners and emails you a copy. Nothing is sent until you tap Send.</p>
+    </section>`;
+    const $ = s => el.querySelector("#" + id + "-" + s);
+    function refresh() {
+      const rows = cfg.getSummary() || [];
+      $("pv").innerHTML = rows.map(r => `<dt>${esc(r.label)}</dt><dd>${esc(r.value)}</dd>`).join("");
+      const det = $("det") && $("det").checked;
+      $("pvnote").textContent = det ? cfg.detailsOnNote : cfg.detailsOffNote;
+    }
+    el.addEventListener("change", refresh);
+    $("send").addEventListener("click", async () => {
+      const st = $("st"), btn = $("send");
+      st.className = "status";
+      const fn = $("fn").value.trim(), em = $("em").value.trim();
+      if (!fn) { st.textContent = "Add your first name so Robin knows who it's from."; st.className = "status err"; $("fn").focus(); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { st.textContent = "Check your email address. We'll send your copy there."; st.className = "status err"; $("em").focus(); return; }
+      const includeDetails = !!($("det") && $("det").checked);
+      const payload = {
+        tool: cfg.tool, toolName: cfg.toolName, firstName: fn, email: em,
+        question: $("q").value.trim(), followUp: $("fu").checked, includeDetails,
+        summary: cfg.getSummary(), details: includeDetails && cfg.getDetails ? cfg.getDetails() : null,
+        website: $("hp").value, sentAt: new Date().toISOString()
+      };
+      btn.disabled = true; btn.textContent = "Sending…";
+      try {
+        await sendViaJotform(payload);
+        st.textContent = "✅ Sent! Robin has it, and your copy is on its way. Check your inbox (and junk folder).";
+        st.className = "status ok";
+        btn.textContent = "Send an update";
+      } catch (e) {
+        st.textContent = "We couldn't send it right now. Screenshot your results and text Robin at 403-540-0629.";
+        st.className = "status err";
+        btn.textContent = "Try again";
+      }
+      btn.disabled = false;
+    });
+    try { const m = JSON.parse(localStorage.getItem("bwr-member") || "{}"); if (m.fn) $("fn").value = m.fn; if (m.em) $("em").value = m.em; } catch (e) {}
+    ["fn", "em"].forEach(k => $(k).addEventListener("change", () => {
+      try { localStorage.setItem("bwr-member", JSON.stringify({ fn: $("fn").value.trim(), em: $("em").value.trim() })); } catch (e) {}
+    }));
+    refresh();
+    return { refresh };
+  }
+  return { mount };
+})();
+</script>
 
 <script>
 const debtsEl = document.getElementById("debts");
@@ -145,8 +289,8 @@ if (restored) {
   const m = document.querySelector(`input[name="method"][value="${restored.method}"]`);
   if (m) m.checked = true;
 }
-document.addEventListener("input", saveDebts);
-document.addEventListener("change", saveDebts);
+document.addEventListener("input", e => { if (!e.target.closest(".s2r")) saveDebts(); });
+document.addEventListener("change", e => { if (!e.target.closest(".s2r")) saveDebts(); });
 debtsEl.addEventListener("click", e => { if (e.target.closest(".remove")) setTimeout(saveDebts, 0); });
 
 function readDebts() {
@@ -245,4 +389,40 @@ document.getElementById("go").addEventListener("click", () => {
   res.style.display = "block";
   res.scrollIntoView({ behavior: "smooth", block: "start" });
 });
+
+const s2r = SendToRobin.mount(document.getElementById("s2rMount"), {
+  tool: "debt-payoff", toolName: "Debt Payoff Planner",
+  lead: "Robin will look over your plan and get back to you with ideas, like whether a lower-rate option could speed it up. You'll get a copy by email too.",
+  questionHint: "e.g. Should I pay off my car or save for a down payment first?",
+  detailsLabel: "Include each debt's balance, interest rate and minimum payment",
+  detailsOffNote: "Robin sees your totals and debt-free date, not the details of each debt.",
+  detailsOnNote: "Robin also sees each debt's balance, interest rate and minimum payment.",
+  getSummary: () => {
+    const all = readDebts();
+    if (!all.length) return [{ label: "Debts", value: "None entered yet" }];
+    const active = all.filter(d => !d.later), waiting = all.filter(d => d.later);
+    const extra = Math.max(0, parseFloat(document.getElementById("extra").value) || 0);
+    const method = document.querySelector('input[name="method"]:checked').value;
+    const types = [...new Set(all.map(d => d.name.replace(/ \d+$/, "")))].join(", ");
+    const rows = [
+      { label: "Debts", value: all.length + " (" + types + ")" },
+      { label: "Total owing", value: money(all.reduce((s, d) => s + d.bal, 0)) },
+      { label: "Monthly minimums", value: money(active.reduce((s, d) => s + d.min, 0)) },
+      { label: "Extra each month", value: money(extra) },
+      { label: "Method", value: method === "snowball" ? "Smallest first" : "Highest rate first" }
+    ];
+    if (active.length && active.every(d => d.min)) {
+      const r = simulate(active, extra, method);
+      if (r.stuck) rows.push({ label: "Debt-free by", value: "Not at these payments" });
+      else { rows.push({ label: "Debt-free by", value: monthLabel(r.months) }); rows.push({ label: "Total interest", value: money(r.interest) }); }
+    }
+    if (waiting.length) rows.push({ label: "Not paying yet (in school)", value: money(waiting.reduce((s, d) => s + d.bal, 0)) });
+    return rows;
+  },
+  getDetails: () => [{ section: "Each debt", rows: readDebts().map(d => ({
+    label: d.name, value: money(d.bal) + " at " + d.rate + "% · " + (d.later ? "not paying yet" : money(d.min) + "/month minimum")
+  })) }]
+});
+document.getElementById("go").addEventListener("click", () => setTimeout(() => s2r.refresh(), 0));
+document.addEventListener("input", e => { if (!e.target.closest(".s2r")) s2r.refresh(); });
 </script>

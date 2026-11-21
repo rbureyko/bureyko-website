@@ -1,134 +1,504 @@
 <style>
-  /* Layout: single column of budget sections, totals pinned in a summary card; Bureyko blue and orange on a quiet blue-grey ground */
+  /* Layout: one phone-first column. Summary card with a "where your money goes" bar on top, Plan/Actual tabs, then one card per budget section. */
   :root {
-    --blue: #306AB4; --fill: #306AB4; --orange: #F1A34B; --light-blue: #9FC0D2;
-    --ink: #1d2a3a; --muted: #5b6b7d; --bg: #ffffff; --soft: #f3f7fa; --line: #dbe5ec;
-    --warm: #fff4e5; --warn: #b3541e; --on-fill: #ffffff;
+    --blue: #306AB4; --fill: #306AB4; --orange: #F1A34B; --orange-ink: #B86A12;
+    --sky: #9FC0D2; --ink: #1d2a3a; --muted: #5b6b7d; --bg: #f6f9fb; --card: #ffffff;
+    --soft: #eef4f8; --line: #dbe5ec; --warm: #fff4e5; --on-fill: #ffffff;
+    --good: #2E8B57; --good-bg: #e6f4ec; --bad: #C2462B; --bad-bg: #fbe9e5;
+    --c-fixed: #306AB4; --c-flex: #9FC0D2; --c-home: #F1A34B; --c-left: #7BC49A;
+    --b-fixed: #ffffff; --b-flex: #9FC0D2;
+    --shadow: 0 1px 2px rgba(29,42,58,.06), 0 4px 14px rgba(29,42,58,.06);
   }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-    --blue: #8DB6EC; --fill: #2C5F9E; --orange: #F1A34B; --light-blue: #3E6A90;
-    --ink: #E4EBF2; --muted: #9DAEBF; --bg: #0F1822; --soft: #172331; --line: #2A3A4B;
-    --warm: #2B2116; --warn: #F0A273; --on-fill: #ffffff; color-scheme: dark }
+    --blue: #8DB6EC; --fill: #2C5F9E; --orange: #F1A34B; --orange-ink: #F5B867;
+    --sky: #4F7FA6; --ink: #E4EBF2; --muted: #9DAEBF; --bg: #0F1822; --card: #162230;
+    --soft: #1B2A3A; --line: #2A3A4B; --warm: #2B2116; --on-fill: #ffffff;
+    --good: #6FCF97; --good-bg: #173326; --bad: #F08A73; --bad-bg: #3A1F1A;
+    --c-fixed: #4F8BD6; --c-flex: #4F7FA6; --c-home: #F1A34B; --c-left: #5DB585;
+    --shadow: none; color-scheme: dark } }
+  :root[data-theme="dark"] {
+    --blue: #8DB6EC; --fill: #2C5F9E; --orange: #F1A34B; --orange-ink: #F5B867;
+    --sky: #4F7FA6; --ink: #E4EBF2; --muted: #9DAEBF; --bg: #0F1822; --card: #162230;
+    --soft: #1B2A3A; --line: #2A3A4B; --warm: #2B2116; --on-fill: #ffffff;
+    --good: #6FCF97; --good-bg: #173326; --bad: #F08A73; --bad-bg: #3A1F1A;
+    --c-fixed: #4F8BD6; --c-flex: #4F7FA6; --c-home: #F1A34B; --c-left: #5DB585;
+    --shadow: none; color-scheme: dark }
+
   * { box-sizing: border-box; }
   body { background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.5; }
-  .wrap { max-width: 680px; margin: 0 auto; padding-block: 24px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-  .eyebrow { color: var(--orange); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 6px; }
-  h1 { color: var(--blue); font-size: 28px; line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
-  h2 { color: var(--blue); font-size: 17px; margin: 0; }
-  .intro, .muted { color: var(--muted); }
-  .intro { margin: 0 0 18px; }
-  .month { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; }
-  .month label { font-weight: 700; }
-  input { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
-  input[type=number] { width: 100%; text-align: right; font-variant-numeric: tabular-nums; }
-  input:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
-  section.block { border: 1px solid var(--line); border-radius: 14px; margin-bottom: 14px; overflow: hidden; }
-  .head { display: grid; grid-template-columns: 1fr 84px 84px; gap: 8px; align-items: end; padding: 12px 14px; background: var(--soft); }
-  .head span { font-size: 12px; color: var(--muted); font-weight: 700; text-align: right; }
-  .row { display: grid; grid-template-columns: 1fr 84px 84px; gap: 8px; align-items: center; padding: 8px 14px; border-top: 1px solid var(--line); }
-  .row .lbl { min-width: 0; font-size: 15px; }
-  .row .lbl small { display: block; color: var(--muted); font-size: 12px; }
-  .row.total { font-weight: 700; background: var(--soft); }
-  .row.total div:not(.lbl) { text-align: right; font-variant-numeric: tabular-nums; padding-right: 10px; }
-  .summary { background: var(--fill); color: var(--on-fill); border-radius: 16px; padding: 18px; margin: 20px 0 14px; }
-  .summary .grid { display: grid; grid-template-columns: 1fr auto auto; gap: 6px 16px; font-variant-numeric: tabular-nums; }
-  .summary .grid div:nth-child(3n+2), .summary .grid div:nth-child(3n) { text-align: right; }
-  .summary .gh { font-size: 12px; opacity: .85; font-weight: 700; }
-  .summary .left { font-size: 20px; font-weight: 800; border-top: 1px solid rgba(255,255,255,.35); padding-top: 8px; }
-  .pill { display: inline-block; margin-top: 12px; background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; padding: 5px 12px; border-radius: 999px; }
-  .tip { background: var(--warm); border-radius: 12px; padding: 14px; font-size: 15px; margin-bottom: 14px; }
-  .btn { font: inherit; font-weight: 700; padding: 12px; border-radius: 12px; border: 2px solid var(--blue); background: transparent; color: var(--blue); cursor: pointer; width: 100%; }
-  footer { margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
-  @media (max-width: 420px) { .head, .row { grid-template-columns: 1fr 72px 72px; } }
+  .wrap { max-width: 640px; margin: 0 auto; padding-block: 24px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 16px; }
+  .eyebrow { color: var(--orange-ink); font-weight: 700; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 6px; }
+  h1 { color: var(--blue); font-size: 30px; line-height: 1.1; margin: 0 0 8px; text-wrap: balance; }
+  .intro { color: var(--muted); margin: 0; max-width: 60ch; }
+  .num { font-variant-numeric: tabular-nums; }
+  button { font: inherit; cursor: pointer; }
+  button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+
+  /* Month + tabs */
+  .controls { display: grid; gap: 12px; }
+  .month { display: flex; align-items: center; gap: 10px; }
+  .month label { font-weight: 700; font-size: 14px; color: var(--muted); }
+  .month input { font: inherit; font-weight: 700; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; min-width: 0; flex: 1; max-width: 220px; }
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); border-radius: 14px; padding: 4px; gap: 4px; }
+  .tabs button { border: 0; background: transparent; color: var(--muted); font-weight: 700; padding: 10px 8px; border-radius: 11px; line-height: 1.2; }
+  .tabs button small { display: block; font-weight: 400; font-size: 12px; }
+  .tabs button[aria-selected="true"] { background: var(--card); color: var(--blue); box-shadow: var(--shadow); }
+
+  /* Summary card */
+  .summary { background: var(--fill); color: var(--on-fill); border-radius: 20px; padding: 20px; display: grid; gap: 14px; }
+  .summary .top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+  .summary .label { font-size: 13px; opacity: .85; font-weight: 600; }
+  .summary .big { font-size: 40px; font-weight: 800; line-height: 1; letter-spacing: -.01em; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,.18); }
+  .pill.over { background: #ffffff; color: #C2462B; }
+  .bar { position: relative; display: flex; height: 16px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,.18); }
+  .bar span { height: 100%; transition: width .35s ease; }
+  .bar .mark { position: absolute; top: -4px; bottom: -4px; width: 3px; background: #ffffff; border-radius: 2px; }
+  .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 14px; }
+  .legend div { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .legend i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .legend b { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .empty { font-size: 15px; opacity: .9; margin: 0; }
+
+  /* School toggle */
+  .toggle { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; cursor: pointer; }
+  .toggle input { position: absolute; opacity: 0; pointer-events: none; }
+  .switch { width: 42px; height: 24px; border-radius: 999px; background: var(--line); position: relative; flex: none; transition: background .2s; }
+  .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .2s; }
+  .toggle input:checked + .switch { background: var(--blue); }
+  .toggle input:checked + .switch::after { transform: translateX(18px); }
+  .toggle input:focus-visible + .switch { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .toggle .t { font-weight: 700; }
+  .toggle .t small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
+
+  /* Section cards */
+  details.sec { background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+  details.sec > summary { list-style: none; display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; }
+  details.sec > summary::-webkit-details-marker { display: none; }
+  .dot { width: 12px; height: 12px; border-radius: 4px; flex: none; }
+  .sec h2 { font-size: 16px; margin: 0; line-height: 1.25; min-width: 0; }
+  .sec h2 small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
+  .sec .tot { margin-left: auto; font-weight: 800; font-size: 17px; font-variant-numeric: tabular-nums; }
+  .chev { width: 20px; height: 20px; flex: none; color: var(--muted); transition: transform .2s; }
+  details[open] .chev { transform: rotate(180deg); }
+  .sec.home { border-color: var(--orange); }
+  .sec.home > summary { background: var(--warm); }
+  .rows { border-top: 1px solid var(--line); }
+  .row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; }
+  .row + .row { border-top: 1px solid var(--line); }
+  .row label { flex: 1; min-width: 0; font-size: 15px; }
+  .row label small { display: block; color: var(--muted); font-size: 12px; }
+  .money { position: relative; width: 116px; flex: none; }
+  .money::before { content: "$"; position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 15px; pointer-events: none; }
+  .money input { width: 100%; font: inherit; font-size: 16px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); background: var(--soft); border: 1px solid transparent; border-radius: 10px; padding: 9px 10px 9px 22px; }
+  .money input:focus { background: var(--card); border-color: var(--blue); }
+  .money input::placeholder { color: var(--muted); opacity: .6; }
+  .row[hidden] { display: none !important; }
+
+  /* How did I do */
+  .compare { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; box-shadow: var(--shadow); }
+  .compare h2 { font-size: 16px; margin: 0 0 4px; color: var(--blue); }
+  .compare p.sub { margin: 0 0 10px; color: var(--muted); font-size: 14px; }
+  .crow { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 0; border-top: 1px solid var(--line); align-items: center; }
+  .crow .n { font-weight: 700; }
+  .crow .v { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .chip { grid-row: span 2; font-size: 13px; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .chip.good { background: var(--good-bg); color: var(--good); }
+  .chip.bad { background: var(--bad-bg); color: var(--bad); }
+  .chip.even { background: var(--soft); color: var(--muted); }
+
+  .tip { background: var(--warm); border-radius: 14px; padding: 14px 16px; font-size: 15px; }
+  .tip p { margin: 0; }
+  .tip p + p { margin-top: 8px; }
+  .actions { display: grid; gap: 10px; }
+  .ghost { border: 2px solid var(--line); background: transparent; color: var(--ink); font-weight: 700; padding: 12px; border-radius: 12px; }
+  .confirm { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--bad-bg); border-radius: 12px; padding: 12px 14px; }
+  .confirm span { flex: 1 1 200px; font-weight: 600; }
+  .confirm button { border: 0; border-radius: 10px; padding: 9px 14px; font-weight: 700; }
+  .confirm .yes { background: var(--bad); color: #ffffff; }
+  .confirm .no { background: var(--card); color: var(--ink); }
+  .examples { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+  .examples button { border: 0; background: none; color: var(--blue); font-weight: 700; text-decoration: underline; padding: 0; }
+  footer { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media (max-width: 400px) { .money { width: 100px; } .summary .big { font-size: 34px; } .legend { grid-template-columns: 1fr; } }
 </style>
 
 <div class="wrap">
-  <p class="eyebrow">Break Up With Renting · Credit Glow-Up · Week 2</p>
-  <h1>Monthly Budget Tracker</h1>
-  <p class="intro">Fill in <b>Planned</b> at the start of the month and <b>Actual</b> at the end, from your bank and card statements. The example numbers show the idea; replace them with yours. </p>
-  <p class="intro"><b>Your numbers stay on this phone or computer. Clearing your browser erases them.</b></p>
-  <div class="month"><label for="month">Month</label><input id="month" type="text" value="January 2027"></div>
+  <header>
+    <p class="eyebrow">Break Up With Renting · Credit Glow-Up</p>
+    <h1>Monthly Budget Tracker</h1>
+    <p class="intro">Plan your month at the start, then fill in what really happened at the end. The goal: find money for your home every single month.</p>
+  </header>
 
-  <div id="sections"></div>
-
-  <div class="summary" aria-live="polite">
-    <div class="grid">
-      <div class="gh">The bottom line</div><div class="gh">Planned</div><div class="gh">Actual</div>
-      <div>Money coming in</div><div id="inP"></div><div id="inA"></div>
-      <div>Spending</div><div id="spP"></div><div id="spA"></div>
-      <div>Saving for your home</div><div id="svP"></div><div id="svA"></div>
-      <div class="left">Money left over</div><div class="left" id="lfP"></div><div class="left" id="lfA"></div>
+  <div class="controls">
+    <div class="month"><label for="month">Month</label><input id="month" type="text" value="January 2027" autocomplete="off"></div>
+    <div class="tabs" role="tablist" aria-label="Plan or actual">
+      <button id="tab-plan" role="tab" aria-selected="true" type="button">My plan<small>Start of the month</small></button>
+      <button id="tab-actual" role="tab" aria-selected="false" type="button">What happened<small>End of the month</small></button>
     </div>
-    <div class="pill" id="status"></div>
+    <div class="examples" id="examples"><span>Showing example numbers so you can see how it works.</span><button type="button" id="clearExamples">Clear examples</button></div>
   </div>
 
-  <div class="tip"><b>Still in school?</b> Turn tuition, books, student loans and summer savings into a monthly share: divide the term amount by the months it covers. $4,000 tuition for a 4-month term is $1,000 a month. Not paying on student loans yet? Put $0 for now.</div>
-  <div class="tip">If "Money left over" is negative, trim flexible spending before you cut your home savings. Screenshot your bottom line and text it to Robin.</div>
-  <button class="btn" id="clear" type="button">Clear my numbers and start fresh</button>
+  <section class="summary" aria-live="polite">
+    <div class="top">
+      <div>
+        <div class="label" id="sumLabel">Money left over (planned)</div>
+        <div class="big num" id="left">$0</div>
+      </div>
+      <span class="pill" id="status"></span>
+    </div>
+    <div class="bar" id="bar" aria-hidden="true">
+      <span style="background:var(--b-fixed)" id="b-fx"></span>
+      <span style="background:var(--b-flex)" id="b-fl"></span>
+      <span style="background:var(--c-home)" id="b-sv"></span>
+      <span style="background:var(--c-left)" id="b-lf"></span>
+      <i class="mark" id="b-mark" hidden></i>
+    </div>
+    <div class="legend">
+      <div><i style="background:var(--b-fixed)"></i>Fixed costs<b id="l-fx">$0</b></div>
+      <div><i style="background:var(--b-flex)"></i>Flexible<b id="l-fl">$0</b></div>
+      <div><i style="background:var(--c-home)"></i>Your home<b id="l-sv">$0</b></div>
+      <div><i style="background:var(--c-left)"></i>Left over<b id="l-lf">$0</b></div>
+    </div>
+    <p class="empty" id="emptyActual" hidden>Fill in what you actually earned and spent at the end of the month, and your real picture shows up here.</p>
+  </section>
 
-  <footer>General information, not financial advice. Prefer a spreadsheet? Ask Robin for the Google Sheets version.</footer>
+  <label class="toggle" for="school">
+    <input type="checkbox" id="school">
+    <span class="switch"></span>
+    <span class="t">I'm still in school<small>Adds tuition, books and student funding</small></span>
+  </label>
+
+  <div id="sections" style="display:grid;gap:12px"></div>
+
+  <section class="compare" id="compare" hidden>
+    <h2>How did your month go?</h2>
+    <p class="sub">Your plan compared with what really happened.</p>
+    <div id="compareRows"></div>
+  </section>
+
+  <div class="tip">
+    <p><b>Over budget?</b> Trim flexible spending first, not your home savings. Even $25 more a month toward your home adds up to $300 a year.</p>
+    <p id="schoolTip" hidden><b>Big school costs?</b> Turn them into a monthly share: divide the term amount by the months it covers. $4,000 tuition for a 4-month term is $1,000 a month. Not paying on student loans yet? Leave that line at $0.</p>
+  </div>
+
+  <div id="s2rMount"></div>
+
+  <div class="actions">
+    <button class="ghost" type="button" id="reset">Clear everything and start fresh</button>
+    <div class="confirm" id="confirm" hidden>
+      <span>Erase all your numbers on this device?</span>
+      <button class="no" type="button" id="no">Keep them</button>
+      <button class="yes" type="button" id="yes">Erase</button>
+    </div>
+  </div>
+
+  <footer>Your numbers stay on this phone or computer. Clearing your browser erases them.<br>General information, not financial advice.</footer>
 </div>
+
+<style>
+  /* Send to Robin panel (shared by the three Break Up With Renting tools) */
+  .s2r { border: 2px solid var(--blue); border-radius: 16px; padding: 18px; margin-top: 18px; background: var(--card, var(--bg)); display: grid; gap: 12px; position: relative; }
+  .s2r h2 { margin: 0; color: var(--blue); font-size: 19px; }
+  .s2r p { margin: 0; }
+  .s2r .lead { color: var(--muted); font-size: 15px; }
+  .s2r .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .s2r .two > * { min-width: 0; }
+  .s2r label.f { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  .s2r input[type=text], .s2r input[type=email], .s2r select, .s2r textarea { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px; width: 100%; }
+  .s2r textarea { min-height: 72px; resize: vertical; }
+  .s2r .check { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--ink); cursor: pointer; }
+  .s2r .check input { width: 20px; height: 20px; margin: 1px 0 0; flex: none; accent-color: var(--blue); }
+  .s2r .preview { background: var(--soft); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+  .s2r .preview .h { display: block; margin-bottom: 8px; font-weight: 700; color: var(--ink); }
+  .s2r .preview dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 5px 14px; }
+  .s2r .preview dt { white-space: nowrap; }
+  .s2r .preview dt { color: var(--muted); }
+  .s2r .preview dd { margin: 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .s2r .note { font-size: 13px; color: var(--muted); }
+  .s2r .go { border: 0; border-radius: 12px; padding: 15px; background: var(--orange); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; width: 100%; }
+  .s2r .go[disabled] { opacity: .6; cursor: wait; }
+  .s2r .go:focus-visible, .s2r input:focus-visible, .s2r select:focus-visible, .s2r textarea:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .s2r .status { font-weight: 600; min-height: 1.2em; }
+  .s2r .status.ok { color: var(--good, #2E8B57); }
+  .s2r .status.err { color: var(--warn, var(--bad, #b3541e)); }
+  .s2r .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  @media (max-width: 440px) { .s2r .two { grid-template-columns: 1fr; } }
+</style>
+<script>
+/* Send to Robin: sends the member's results to the Jotform "Break Up With Renting: Send to Robin",
+   which emails Robin and sends the member a copy. (The site is on GitHub Pages, so there's no server function.) */
+window.SendToRobin = (function () {
+  const FORM_ID = "__SEND_TO_ROBIN_FORM_ID__";
+  const TOOLS = ["scorecard", "budget", "debt-payoff"];
+  const clip = (s, n) => String(s == null ? "" : s).slice(0, n);
+  function sendViaJotform(p) {
+    if (p.website) return Promise.resolve(); // spam trap filled in: act as if sent, send nothing
+    if (!TOOLS.includes(p.tool)) return Promise.reject(new Error("tool"));
+    const now = Date.now(), LOG = "bwr-s2r-sent", who = p.email.toLowerCase();
+    let log = [];
+    try { log = JSON.parse(localStorage.getItem(LOG) || "[]").filter(x => now - x.t < 3600000); } catch (e) {}
+    if (log.filter(x => x.e === who).length >= 5) return Promise.reject(new Error("limit")); // 5 sends per email per hour, on this device
+    const summary = (p.summary || []).slice(0, 15).map(r => clip(r.label, 300) + ": " + clip(r.value, 300)).join("\n");
+    let details = "";
+    if (p.tool !== "budget") { // budget: totals only, never line items
+      details = p.includeDetails && Array.isArray(p.details)
+        ? p.details.slice(0, 3).map(s => clip(s.section, 300) + "\n" + (s.rows || []).slice(0, 20).map(r => "• " + clip(r.label, 300) + ": " + clip(r.value, 300)).join("\n")).join("\n\n")
+        : "Details not shared";
+    }
+    let tag = p.toolName;
+    if (p.tool === "scorecard") {
+      const row = (p.summary || []).find(r => r.label === "Scorecard");
+      const kind = !row ? "" : /^Start/.test(row.value) ? "Start" : /^Graduation/.test(row.value) ? "Graduation" : "Just checking";
+      tag = "Scorecard" + (kind ? " · " + kind : "");
+    }
+    const sent = new Date(p.sentAt || now).toLocaleString("en-CA", { timeZone: "America/Edmonton", dateStyle: "medium", timeStyle: "short" });
+    const f = new FormData();
+    const add = (k, v) => f.append(k, v);
+    add("formID", FORM_ID); add("simple_spc", FORM_ID + "-" + FORM_ID); add("website", "");
+    add("submitSource", "form"); add("jsExecutionTracker", "build-date-" + now);
+    add("q2_q2_textbox0", p.toolName);
+    add("q3_q3_textbox1", clip(p.firstName, 60));
+    add("q4_q4_email2", clip(p.email, 254));
+    add("q5_q5_textbox3", `[BUWR · ${tag}] ${clip(p.firstName, 60)}${p.followUp ? " · Wants a follow-up" : ""}`);
+    add("q6_q6_textbox4", `Your ${p.toolName} results`);
+    add("q7_q7_textbox5", p.followUp ? "Yes" : "No");
+    add("q8_q8_textarea6", clip(p.question, 500));
+    add("q9_q9_textarea7", summary);
+    add("q10_q10_textarea8", details);
+    add("q11_q11_textarea9", p.followUp ? "Robin will be in touch soon." : "Want Robin's take? Just reply to this email.");
+    add("q12_q12_textbox10", sent);
+    return fetch("https://submit.jotform.com/submit/" + FORM_ID, { method: "POST", body: f, mode: "no-cors" }).then(() => {
+      log.push({ e: who, t: now });
+      try { localStorage.setItem(LOG, JSON.stringify(log)); } catch (e) {}
+    });
+  }
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  function mount(el, cfg) {
+    const id = cfg.tool;
+    el.innerHTML = `
+    <section class="s2r" aria-labelledby="${id}-s2r-h">
+      <h2 id="${id}-s2r-h">Send this to Robin</h2>
+      <p class="lead">${cfg.lead}</p>
+      <div class="two">
+        <label class="f">First name<input type="text" id="${id}-fn" autocomplete="given-name"></label>
+        <label class="f">Email (for your copy)<input type="email" id="${id}-em" autocomplete="email"></label>
+      </div>
+      ${cfg.extraHtml || ""}
+      <label class="f">A question for Robin (optional)<textarea id="${id}-q" maxlength="500" placeholder="${esc(cfg.questionHint || "")}"></textarea></label>
+      ${cfg.detailsLabel ? `<label class="check"><input type="checkbox" id="${id}-det"><span>${cfg.detailsLabel}</span></label>` : ""}
+      <label class="check"><input type="checkbox" id="${id}-fu"><span>Yes, I'd like Robin to follow up with me about this.</span></label>
+      <div class="preview"><span class="h">What Robin will see</span><dl id="${id}-pv"></dl><p class="note" id="${id}-pvnote" style="margin-top:8px"></p></div>
+      <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" id="${id}-hp" tabindex="-1" autocomplete="off"></label></div>
+      <button class="go" type="button" id="${id}-send">Send to Robin</button>
+      <p class="status" id="${id}-st" role="status" aria-live="polite"></p>
+      <p class="note">Tapping Send shares the summary above with Robin Bureyko at Bureyko Mortgage Partners and emails you a copy. Nothing is sent until you tap Send.</p>
+    </section>`;
+    const $ = s => el.querySelector("#" + id + "-" + s);
+    function refresh() {
+      const rows = cfg.getSummary() || [];
+      $("pv").innerHTML = rows.map(r => `<dt>${esc(r.label)}</dt><dd>${esc(r.value)}</dd>`).join("");
+      const det = $("det") && $("det").checked;
+      $("pvnote").textContent = det ? cfg.detailsOnNote : cfg.detailsOffNote;
+    }
+    el.addEventListener("change", refresh);
+    $("send").addEventListener("click", async () => {
+      const st = $("st"), btn = $("send");
+      st.className = "status";
+      const fn = $("fn").value.trim(), em = $("em").value.trim();
+      if (!fn) { st.textContent = "Add your first name so Robin knows who it's from."; st.className = "status err"; $("fn").focus(); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { st.textContent = "Check your email address. We'll send your copy there."; st.className = "status err"; $("em").focus(); return; }
+      const includeDetails = !!($("det") && $("det").checked);
+      const payload = {
+        tool: cfg.tool, toolName: cfg.toolName, firstName: fn, email: em,
+        question: $("q").value.trim(), followUp: $("fu").checked, includeDetails,
+        summary: cfg.getSummary(), details: includeDetails && cfg.getDetails ? cfg.getDetails() : null,
+        website: $("hp").value, sentAt: new Date().toISOString()
+      };
+      btn.disabled = true; btn.textContent = "Sending…";
+      try {
+        await sendViaJotform(payload);
+        st.textContent = "✅ Sent! Robin has it, and your copy is on its way. Check your inbox (and junk folder).";
+        st.className = "status ok";
+        btn.textContent = "Send an update";
+      } catch (e) {
+        st.textContent = "We couldn't send it right now. Screenshot your results and text Robin at 403-540-0629.";
+        st.className = "status err";
+        btn.textContent = "Try again";
+      }
+      btn.disabled = false;
+    });
+    try { const m = JSON.parse(localStorage.getItem("bwr-member") || "{}"); if (m.fn) $("fn").value = m.fn; if (m.em) $("em").value = m.em; } catch (e) {}
+    ["fn", "em"].forEach(k => $(k).addEventListener("change", () => {
+      try { localStorage.setItem("bwr-member", JSON.stringify({ fn: $("fn").value.trim(), em: $("em").value.trim() })); } catch (e) {}
+    }));
+    refresh();
+    return { refresh };
+  }
+  return { mount };
+})();
+</script>
 
 <script>
 const SECTIONS = [
-  { key: "in", title: "Money coming in (after tax)", rows: [["Main job take-home pay",3800],["Partner or second job",0],["Side income or gig work",200],["Student loans, grants or scholarships","",1],["Summer job savings or family help","",1],["Other (tax refund, gifts)",0]] },
-  { key: "fx", title: "Fixed costs (same every month)", rows: [["Rent (or what you pay at home)",1300],["Tuition","",1],["Books and school fees","",1],["Phone",70],["Internet",60],["Car payment",350],["Car insurance",180],["Gas or transit",150],["Student loan payment (0 if still in school)",250],["Credit card minimum payments",50],["Subscriptions (streaming, apps, gym)",40],["Other fixed",0]] },
-  { key: "fl", title: "Flexible spending (changes month to month)", rows: [["Groceries",400],["Eating out and delivery",200],["Fun and entertainment",100],["Shopping and clothes",100],["Personal care",50],["Gifts",30],["Other flexible",0]] },
-  { key: "sv", title: "Saving for your home", rows: [["Down payment savings",300],["FHSA contribution",200],["Emergency fund",100],["Closing cost fund",50]] }
+  { key: "in", title: "Money coming in", sub: "After tax, what lands in your account", color: "var(--blue)", rows: [
+    ["pay", "Main job take-home pay", 3800], ["pay2", "Partner or second job", 0], ["side", "Side income or gig work", 200],
+    ["stu", "Student loans, grants or scholarships", 0, "school"], ["summer", "Summer job savings or family help", 0, "school"],
+    ["oth", "Other (tax refund, gifts)", 0] ] },
+  { key: "fx", title: "Fixed costs", sub: "The same every month", color: "var(--c-fixed)", rows: [
+    ["rent", "Rent, or what you pay at home", 1300], ["tuit", "Tuition", 0, "school"], ["books", "Books and school fees", 0, "school"],
+    ["phone", "Phone", 70], ["net", "Internet", 60], ["car", "Car payment", 350], ["ins", "Car insurance", 180],
+    ["gas", "Gas or transit", 150], ["sl", "Student loan payment", 250], ["cc", "Credit card minimum payments", 50],
+    ["subs", "Subscriptions (streaming, apps, gym)", 40], ["ofx", "Other fixed", 0] ] },
+  { key: "fl", title: "Flexible spending", sub: "Changes month to month", color: "var(--c-flex)", rows: [
+    ["groc", "Groceries", 400], ["eat", "Eating out and delivery", 200], ["fun", "Fun and entertainment", 100],
+    ["shop", "Shopping and clothes", 100], ["care", "Personal care", 50], ["gift", "Gifts", 30], ["ofl", "Other flexible", 0] ] },
+  { key: "sv", title: "Saving for your home", sub: "Pay yourself first", color: "var(--c-home)", home: true, rows: [
+    ["dp", "Down payment savings", 300], ["fhsa", "FHSA contribution", 200], ["emerg", "Emergency fund", 100], ["close", "Closing cost fund", 50] ] }
 ];
-const KEY = "bwr-budget-v1";
-let saved = {};
-try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+const SCHOOL_HINT = { stu: "Monthly share", summer: "Monthly share", tuit: "Monthly share", books: "Monthly share", sl: "$0 if you're still in school" };
+const KEY = "bwr-budget-v2";
+
+function load() { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; } }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+let state = load();
+if (!state) {
+  state = { month: "January 2027", school: false, examples: true, plan: {}, actual: {} };
+  SECTIONS.forEach(s => s.rows.forEach(([id, , val]) => { if (val) state.plan[id] = val; }));
+}
+let view = "plan";
+let s2r = null;
 const money = n => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-CA");
+const $ = id => document.getElementById(id);
+const chev = '<svg class="chev" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-const wrap = document.getElementById("sections");
-SECTIONS.forEach(sec => {
-  const el = document.createElement("section");
-  el.className = "block";
-  el.innerHTML = `<div class="head"><h2>${sec.title}</h2><span>Planned</span><span>Actual</span></div>` +
-    sec.rows.map(([label, val, monthly], i) => {
-      const id = `${sec.key}${i}`;
-      const p = saved[id + "p"] ?? (saved.cleared ? "" : val);
-      const a = saved[id + "a"] ?? "";
-      return `<div class="row"><div class="lbl">${label}${monthly ? "<small>monthly share</small>" : ""}</div>
-        <input id="${id}p" data-sec="${sec.key}" data-col="p" type="number" inputmode="decimal" min="0" step="10" value="${p}" aria-label="${label}, planned">
-        <input id="${id}a" data-sec="${sec.key}" data-col="a" type="number" inputmode="decimal" min="0" step="10" value="${a}" aria-label="${label}, actual"></div>`;
-    }).join("") +
-    `<div class="row total"><div class="lbl">Total</div><div id="${sec.key}P"></div><div id="${sec.key}A"></div></div>`;
-  wrap.appendChild(el);
+const wrap = $("sections");
+SECTIONS.forEach((s, i) => {
+  const d = document.createElement("details");
+  d.className = "sec" + (s.home ? " home" : "");
+  d.open = true;
+  d.innerHTML = `<summary><i class="dot" style="background:${s.color}"></i><h2>${s.title}<small>${s.sub}</small></h2><span class="tot" id="t-${s.key}">$0</span>${chev}</summary>
+    <div class="rows">${s.rows.map(([id, label, , flag]) => `
+      <div class="row" ${flag ? 'data-school="1"' : ""}>
+        <label for="f-${id}">${label}${SCHOOL_HINT[id] ? `<small>${SCHOOL_HINT[id]}</small>` : ""}</label>
+        <div class="money"><input id="f-${id}" data-id="${id}" data-sec="${s.key}" type="number" inputmode="decimal" min="0" step="10" placeholder="0"></div>
+      </div>`).join("")}</div>`;
+  wrap.appendChild(d);
 });
-try { if (saved.month) document.getElementById("month").value = saved.month; } catch (e) {}
 
-function sum(sec, col) {
-  return [...document.querySelectorAll(`input[data-sec="${sec}"][data-col="${col}"]`)].reduce((s, i) => s + (parseFloat(i.value) || 0), 0);
+function fill() {
+  document.querySelectorAll(".money input").forEach(inp => {
+    const v = state[view][inp.dataset.id];
+    inp.value = v === undefined || v === "" ? "" : v;
+  });
+  $("month").value = state.month || "";
+  $("school").checked = !!state.school;
+  document.querySelectorAll('[data-school="1"]').forEach(r => r.hidden = !state.school);
+  $("schoolTip").hidden = !state.school;
+  $("examples").hidden = !state.examples || view !== "plan";
+  $("tab-plan").setAttribute("aria-selected", view === "plan");
+  $("tab-actual").setAttribute("aria-selected", view === "actual");
+  update();
 }
-function anyActual() { return [...document.querySelectorAll('input[data-col="a"]')].some(i => i.value !== ""); }
-function update() {
-  const t = {};
-  ["in","fx","fl","sv"].forEach(k => ["p","a"].forEach(c => {
-    t[k+c] = sum(k, c);
-    document.getElementById(k + c.toUpperCase()).textContent = money(t[k+c]);
+
+function totals(which) {
+  const t = { in: 0, fx: 0, fl: 0, sv: 0 };
+  SECTIONS.forEach(s => s.rows.forEach(([id, , , flag]) => {
+    if (flag && !state.school) return;
+    t[s.key] += parseFloat(state[which][id]) || 0;
   }));
-  const has = anyActual();
-  const set = (id, v, show = true) => document.getElementById(id).textContent = show ? money(v) : "–";
-  set("inP", t.inp); set("inA", t.ina, has);
-  set("spP", t.fxp + t.flp); set("spA", t.fxa + t.fla, has);
-  set("svP", t.svp); set("svA", t.sva, has);
-  const lp = t.inp - t.fxp - t.flp - t.svp, la = t.ina - t.fxa - t.fla - t.sva;
-  set("lfP", lp); set("lfA", la, has);
-  const left = has ? la : lp, share = (has ? t.ina : t.inp) ? Math.round((has ? t.sva : t.svp) / (has ? t.ina : t.inp) * 100) : 0;
-  document.getElementById("status").textContent = left < 0 ? `Over budget by ${money(-left)}` : `On track · ${share}% of income going to your home`;
+  t.out = t.fx + t.fl + t.sv; t.left = t.in - t.out;
+  return t;
 }
+const hasActual = () => Object.values(state.actual).some(v => v !== "" && v !== undefined && !isNaN(parseFloat(v)));
+
+function update() {
+  const t = totals(view);
+  SECTIONS.forEach(s => $("t-" + s.key).textContent = money(t[s.key]));
+  const showEmpty = view === "actual" && !hasActual();
+  $("emptyActual").hidden = !showEmpty;
+  $("sumLabel").textContent = view === "plan" ? "Money left over (planned)" : "Money left over (actual)";
+  $("left").textContent = showEmpty ? "–" : money(t.left);
+  const status = $("status");
+  if (showEmpty) { status.textContent = "Not filled in yet"; status.className = "pill"; }
+  else if (t.left < 0) { status.textContent = `Over budget by ${money(-t.left)}`; status.className = "pill over"; }
+  else {
+    const share = t.in ? Math.round(t.sv / t.in * 100) : 0;
+    status.textContent = `${share}% of your income goes to your home`; status.className = "pill";
+  }
+  const scale = Math.max(t.in, t.out, 1);
+  const w = v => (showEmpty ? 0 : Math.max(0, v) / scale * 100) + "%";
+  $("b-fx").style.width = w(t.fx); $("b-fl").style.width = w(t.fl); $("b-sv").style.width = w(t.sv);
+  $("b-lf").style.width = w(Math.max(0, t.left));
+  const mark = $("b-mark");
+  if (!showEmpty && t.out > t.in && t.in > 0) { mark.hidden = false; mark.style.left = `calc(${t.in / scale * 100}% - 1px)`; } else mark.hidden = true;
+  [["l-fx", t.fx], ["l-fl", t.fl], ["l-sv", t.sv], ["l-lf", Math.max(0, t.left)]].forEach(([id, v]) => $(id).textContent = showEmpty ? "–" : money(v));
+  compare();
+  if (s2r) s2r.refresh();
+}
+
+function compare() {
+  const box = $("compare");
+  if (!hasActual()) { box.hidden = true; return; }
+  box.hidden = false;
+  const p = totals("plan"), a = totals("actual");
+  const rows = [
+    ["Money coming in", "in", true], ["Fixed costs", "fx", false], ["Flexible spending", "fl", false],
+    ["Saving for your home", "sv", true], ["Money left over", "left", true]
+  ];
+  $("compareRows").innerHTML = rows.map(([name, k, moreIsGood]) => {
+    const diff = a[k] - p[k];
+    let cls = "even", txt = "On plan";
+    if (Math.abs(diff) >= 1) {
+      const good = moreIsGood ? diff > 0 : diff < 0;
+      cls = good ? "good" : "bad";
+      txt = moreIsGood ? (diff > 0 ? `${money(diff)} more` : `${money(-diff)} less`) : (diff < 0 ? `${money(-diff)} under` : `${money(diff)} over`);
+    }
+    return `<div class="crow"><span class="n">${name}</span><span class="chip ${cls}">${txt}</span><span class="v">Plan ${money(p[k])} · Actual ${money(a[k])}</span></div>`;
+  }).join("");
+}
+
 document.addEventListener("input", e => {
-  if (!e.target.matches("input")) return;
-  try { saved[e.target.id === "month" ? "month" : e.target.id] = e.target.value; localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
-  update();
+  const el = e.target;
+  if (el.id === "month") { state.month = el.value; save(); if (s2r) s2r.refresh(); return; }
+  if (!el.dataset.id) return;
+  state[view][el.dataset.id] = el.value;
+  save(); update();
 });
-document.getElementById("clear").addEventListener("click", () => {
-  document.querySelectorAll('input[type=number]').forEach(i => i.value = "");
-  saved = { cleared: 1 };
-  try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
-  update();
+$("school").addEventListener("change", e => { state.school = e.target.checked; save(); fill(); });
+$("tab-plan").addEventListener("click", () => { view = "plan"; fill(); });
+$("tab-actual").addEventListener("click", () => { view = "actual"; fill(); });
+$("clearExamples").addEventListener("click", () => { state.plan = {}; state.examples = false; save(); fill(); });
+$("reset").addEventListener("click", () => { $("confirm").hidden = false; $("reset").hidden = true; });
+$("no").addEventListener("click", () => { $("confirm").hidden = true; $("reset").hidden = false; });
+$("yes").addEventListener("click", () => {
+  state = { month: state.month, school: state.school, examples: false, plan: {}, actual: {} };
+  save(); $("confirm").hidden = true; $("reset").hidden = false; view = "plan"; fill();
 });
-update();
+s2r = SendToRobin.mount(document.getElementById("s2rMount"), {
+  tool: "budget", toolName: "Monthly Budget Tracker",
+  lead: "Robin will look over your totals and help you find more room for your home savings. You'll get a copy by email too.",
+  questionHint: "e.g. Am I saving enough for a down payment?",
+  detailsOffNote: "Robin sees your totals only, never your individual line items like rent or groceries.",
+  getSummary: () => {
+    const p = totals("plan"), a = totals("actual"), has = hasActual();
+    const f = k => has ? "Plan " + money(p[k]) + " · Actual " + money(a[k]) : money(p[k]);
+    const pct = t => t.in ? Math.round(t.sv / t.in * 100) + "%" : "–";
+    const rows = [
+      { label: "Month", value: state.month || "Not set" },
+      { label: "In school", value: state.school ? "Yes" : "No" },
+      { label: "Money coming in", value: f("in") },
+      { label: "Fixed costs", value: f("fx") },
+      { label: "Flexible spending", value: f("fl") },
+      { label: "Saving for home", value: f("sv") },
+      { label: "Left over", value: f("left") },
+      { label: "Share to home", value: has ? "Plan " + pct(p) + " · Actual " + pct(a) : pct(p) }
+    ];
+    if (state.examples) rows.unshift({ label: "Heads up", value: "Still the example numbers" });
+    return rows;
+  }
+});
+fill();
 </script>

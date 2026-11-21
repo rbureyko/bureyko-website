@@ -1053,8 +1053,8 @@ ${pageHero(u, { trail: [["Privacy"]], h1: "Privacy information.", lead: "How thi
 <p>The First-Time Homebuyer Guide and Mortgage Renewal Checkup use Jotform. Information submitted through those forms goes through Jotform under the form's terms and settings. Jotform may use cookies or similar technologies as part of its service. See Jotform's privacy policy for its practices.</p>
 <h2>Mortgage applications</h2>
 <p>The "Apply" links open a secure application hosted by Velocity, the application platform used by our brokerage. Information you submit there is handled under that platform's and Mortgage Architects' privacy practices.</p>
-<h2>Break Up With Renting scorecard</h2>
-<p>When a Break Up With Renting member sends their Mortgage-Ready Scorecard, their answers are emailed to them and to Robin to help them prepare for homeownership. The scorecard is sent through Jotform, so a copy is kept in our Jotform account. Answers aren't stored on this website, and they're never shared or sold.</p>
+<h2>Break Up With Renting: "Send to Robin"</h2>
+<p>The Mortgage-Ready Scorecard, Monthly Budget Tracker and Debt Payoff Planner work on your own device, and nothing leaves it unless you tap "Send to Robin". When you do, the summary shown on screen (plus any details you choose to include) is emailed to Robin Bureyko and a copy is emailed to you, to help you prepare for homeownership. The Budget Tracker only ever sends totals, never individual line items. Sending goes through Jotform, so a copy is kept in our Jotform account. Nothing is stored on this website, and your information is never shared or sold.</p>
 <h2>Share information through the right channel</h2>
 <p>General inquiries should be limited to your question and contact information. Use the secure application, or ask us for the right process, before sending identity documents, banking information, a SIN, or other sensitive financial records.</p>
 <h2>Website data</h2>

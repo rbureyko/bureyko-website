@@ -43,15 +43,6 @@
   .card li { margin-bottom: 6px; }
   .compare { background: var(--soft); }
   .actions { display: grid; gap: 10px; margin-top: 18px; }
-  .fields { display: grid; gap: 10px; }
-  .field { display: grid; gap: 4px; font-size: 14px; font-weight: 600; color: var(--muted); }
-  .field input { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-weight: 400; }
-  .field-q { font-weight: 600; margin: 14px 0 8px; }
-  .consent { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font-size: 15px; cursor: pointer; }
-  .consent input { width: 20px; height: 20px; flex: none; margin-top: 2px; accent-color: var(--blue); }
-  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-  .send-status { margin: 16px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--soft); font-weight: 600; }
-  .send-status:empty { display: none; }
   footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
 
   .btn:focus-visible, input:focus-visible, label:focus-within { outline: 2px solid var(--orange); outline-offset: 2px; }
@@ -60,7 +51,7 @@
 <div class="wrap">
   <p class="eyebrow">Break Up With Renting · Credit Glow-Up</p>
   <h1>Mortgage-Ready Scorecard</h1>
-  <p class="intro">Eight quick questions, about two minutes. Do it in week 1, then again in week 12 to see how far you've come. Be honest. Your results go only to you and Robin.</p>
+  <p class="intro">Eight quick questions, about two minutes. Do it now, then again in June before graduation to see how far you've come. Be honest. Your answers stay private unless you choose to send them to Robin.</p>
 
   <fieldset class="q" style="margin:0 0 14px;background:var(--soft)">
     <h2>First, where are you at right now?</h2>
@@ -69,27 +60,11 @@
       <label><input type="radio" name="stage" value="school-done">In school, finishing within a year</label>
       <label><input type="radio" name="stage" value="school">In school, more than a year to go</label>
       <label><input type="radio" name="stage" value="parttime">Working part-time, contract or gig work</label>
+      <label><input type="radio" name="stage" value="looking">Not working right now, looking for work</label>
     </div>
   </fieldset>
 
   <form id="sc"></form>
-
-  <fieldset class="q send" style="margin:0 0 14px;background:var(--soft)">
-    <h2>Where should we send your results?</h2>
-    <div class="fields">
-      <label class="field">First name<input id="fname" type="text" autocomplete="given-name" required></label>
-      <label class="field">Email<input id="femail" type="email" autocomplete="email" inputmode="email" required></label>
-    </div>
-    <p class="field-q">Is this your week 1 or week 12 scorecard?</p>
-    <div class="opts">
-      <label><input type="radio" name="round" value="Week 1">Week 1</label>
-      <label><input type="radio" name="round" value="Week 12">Week 12</label>
-      <label><input type="radio" name="round" value="Just checking">Just checking</label>
-    </div>
-    <label class="consent"><input id="fconsent" type="checkbox" required> Email my results to me and send a copy to Robin Bureyko at Bureyko Mortgage Partners.</label>
-    <div class="hp" aria-hidden="true"><label>Leave this empty<input id="fwebsite" type="text" tabindex="-1" autocomplete="off"></label></div>
-  </fieldset>
-
   <button class="btn" id="go" type="button">See my score</button>
   <p class="hint" id="hint" aria-live="polite"></p>
 
@@ -106,11 +81,10 @@
     <div class="card" id="schoolCard" style="display:none;border-color:var(--orange)"><h3>Still in school? You're early, and that's a good thing</h3><ul id="school"></ul></div>
     <div class="card compare" id="compareCard" style="display:none"><h3>Your progress</h3><p id="compare" style="margin:0"></p></div>
     <div class="actions">
-      <button class="btn secondary" id="saveStart" type="button">Save as my week 1 score</button>
+      <button class="btn secondary" id="saveStart" type="button">Save as my starting score</button>
       <button class="btn ghost" id="retake" type="button">Start over</button>
     </div>
-    <p class="send-status" id="sendStatus" role="status" aria-live="polite"></p>
-    <p class="intro" style="margin-top:16px">📸 Screenshot your score and text it to Robin. He'll tell you what to tackle first.</p>
+    <div id="s2rMount"></div>
   </section>
 
   <footer>
@@ -118,37 +92,180 @@
   </footer>
 </div>
 
+<style>
+  /* Send to Robin panel (shared by the three Break Up With Renting tools) */
+  .s2r { border: 2px solid var(--blue); border-radius: 16px; padding: 18px; margin-top: 18px; background: var(--card, var(--bg)); display: grid; gap: 12px; position: relative; }
+  .s2r h2 { margin: 0; color: var(--blue); font-size: 19px; }
+  .s2r p { margin: 0; }
+  .s2r .lead { color: var(--muted); font-size: 15px; }
+  .s2r .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .s2r .two > * { min-width: 0; }
+  .s2r label.f { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  .s2r input[type=text], .s2r input[type=email], .s2r select, .s2r textarea { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px; width: 100%; }
+  .s2r textarea { min-height: 72px; resize: vertical; }
+  .s2r .check { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--ink); cursor: pointer; }
+  .s2r .check input { width: 20px; height: 20px; margin: 1px 0 0; flex: none; accent-color: var(--blue); }
+  .s2r .preview { background: var(--soft); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+  .s2r .preview .h { display: block; margin-bottom: 8px; font-weight: 700; color: var(--ink); }
+  .s2r .preview dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 5px 14px; }
+  .s2r .preview dt { white-space: nowrap; }
+  .s2r .preview dt { color: var(--muted); }
+  .s2r .preview dd { margin: 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .s2r .note { font-size: 13px; color: var(--muted); }
+  .s2r .go { border: 0; border-radius: 12px; padding: 15px; background: var(--orange); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; width: 100%; }
+  .s2r .go[disabled] { opacity: .6; cursor: wait; }
+  .s2r .go:focus-visible, .s2r input:focus-visible, .s2r select:focus-visible, .s2r textarea:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .s2r .status { font-weight: 600; min-height: 1.2em; }
+  .s2r .status.ok { color: var(--good, #2E8B57); }
+  .s2r .status.err { color: var(--warn, var(--bad, #b3541e)); }
+  .s2r .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  @media (max-width: 440px) { .s2r .two { grid-template-columns: 1fr; } }
+</style>
+<script>
+/* Send to Robin: sends the member's results to the Jotform "Break Up With Renting: Send to Robin",
+   which emails Robin and sends the member a copy. (The site is on GitHub Pages, so there's no server function.) */
+window.SendToRobin = (function () {
+  const FORM_ID = "__SEND_TO_ROBIN_FORM_ID__";
+  const TOOLS = ["scorecard", "budget", "debt-payoff"];
+  const clip = (s, n) => String(s == null ? "" : s).slice(0, n);
+  function sendViaJotform(p) {
+    if (p.website) return Promise.resolve(); // spam trap filled in: act as if sent, send nothing
+    if (!TOOLS.includes(p.tool)) return Promise.reject(new Error("tool"));
+    const now = Date.now(), LOG = "bwr-s2r-sent", who = p.email.toLowerCase();
+    let log = [];
+    try { log = JSON.parse(localStorage.getItem(LOG) || "[]").filter(x => now - x.t < 3600000); } catch (e) {}
+    if (log.filter(x => x.e === who).length >= 5) return Promise.reject(new Error("limit")); // 5 sends per email per hour, on this device
+    const summary = (p.summary || []).slice(0, 15).map(r => clip(r.label, 300) + ": " + clip(r.value, 300)).join("\n");
+    let details = "";
+    if (p.tool !== "budget") { // budget: totals only, never line items
+      details = p.includeDetails && Array.isArray(p.details)
+        ? p.details.slice(0, 3).map(s => clip(s.section, 300) + "\n" + (s.rows || []).slice(0, 20).map(r => "• " + clip(r.label, 300) + ": " + clip(r.value, 300)).join("\n")).join("\n\n")
+        : "Details not shared";
+    }
+    let tag = p.toolName;
+    if (p.tool === "scorecard") {
+      const row = (p.summary || []).find(r => r.label === "Scorecard");
+      const kind = !row ? "" : /^Start/.test(row.value) ? "Start" : /^Graduation/.test(row.value) ? "Graduation" : "Just checking";
+      tag = "Scorecard" + (kind ? " · " + kind : "");
+    }
+    const sent = new Date(p.sentAt || now).toLocaleString("en-CA", { timeZone: "America/Edmonton", dateStyle: "medium", timeStyle: "short" });
+    const f = new FormData();
+    const add = (k, v) => f.append(k, v);
+    add("formID", FORM_ID); add("simple_spc", FORM_ID + "-" + FORM_ID); add("website", "");
+    add("submitSource", "form"); add("jsExecutionTracker", "build-date-" + now);
+    add("q2_q2_textbox0", p.toolName);
+    add("q3_q3_textbox1", clip(p.firstName, 60));
+    add("q4_q4_email2", clip(p.email, 254));
+    add("q5_q5_textbox3", `[BUWR · ${tag}] ${clip(p.firstName, 60)}${p.followUp ? " · Wants a follow-up" : ""}`);
+    add("q6_q6_textbox4", `Your ${p.toolName} results`);
+    add("q7_q7_textbox5", p.followUp ? "Yes" : "No");
+    add("q8_q8_textarea6", clip(p.question, 500));
+    add("q9_q9_textarea7", summary);
+    add("q10_q10_textarea8", details);
+    add("q11_q11_textarea9", p.followUp ? "Robin will be in touch soon." : "Want Robin's take? Just reply to this email.");
+    add("q12_q12_textbox10", sent);
+    return fetch("https://submit.jotform.com/submit/" + FORM_ID, { method: "POST", body: f, mode: "no-cors" }).then(() => {
+      log.push({ e: who, t: now });
+      try { localStorage.setItem(LOG, JSON.stringify(log)); } catch (e) {}
+    });
+  }
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  function mount(el, cfg) {
+    const id = cfg.tool;
+    el.innerHTML = `
+    <section class="s2r" aria-labelledby="${id}-s2r-h">
+      <h2 id="${id}-s2r-h">Send this to Robin</h2>
+      <p class="lead">${cfg.lead}</p>
+      <div class="two">
+        <label class="f">First name<input type="text" id="${id}-fn" autocomplete="given-name"></label>
+        <label class="f">Email (for your copy)<input type="email" id="${id}-em" autocomplete="email"></label>
+      </div>
+      ${cfg.extraHtml || ""}
+      <label class="f">A question for Robin (optional)<textarea id="${id}-q" maxlength="500" placeholder="${esc(cfg.questionHint || "")}"></textarea></label>
+      ${cfg.detailsLabel ? `<label class="check"><input type="checkbox" id="${id}-det"><span>${cfg.detailsLabel}</span></label>` : ""}
+      <label class="check"><input type="checkbox" id="${id}-fu"><span>Yes, I'd like Robin to follow up with me about this.</span></label>
+      <div class="preview"><span class="h">What Robin will see</span><dl id="${id}-pv"></dl><p class="note" id="${id}-pvnote" style="margin-top:8px"></p></div>
+      <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" id="${id}-hp" tabindex="-1" autocomplete="off"></label></div>
+      <button class="go" type="button" id="${id}-send">Send to Robin</button>
+      <p class="status" id="${id}-st" role="status" aria-live="polite"></p>
+      <p class="note">Tapping Send shares the summary above with Robin Bureyko at Bureyko Mortgage Partners and emails you a copy. Nothing is sent until you tap Send.</p>
+    </section>`;
+    const $ = s => el.querySelector("#" + id + "-" + s);
+    function refresh() {
+      const rows = cfg.getSummary() || [];
+      $("pv").innerHTML = rows.map(r => `<dt>${esc(r.label)}</dt><dd>${esc(r.value)}</dd>`).join("");
+      const det = $("det") && $("det").checked;
+      $("pvnote").textContent = det ? cfg.detailsOnNote : cfg.detailsOffNote;
+    }
+    el.addEventListener("change", refresh);
+    $("send").addEventListener("click", async () => {
+      const st = $("st"), btn = $("send");
+      st.className = "status";
+      const fn = $("fn").value.trim(), em = $("em").value.trim();
+      if (!fn) { st.textContent = "Add your first name so Robin knows who it's from."; st.className = "status err"; $("fn").focus(); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { st.textContent = "Check your email address. We'll send your copy there."; st.className = "status err"; $("em").focus(); return; }
+      const includeDetails = !!($("det") && $("det").checked);
+      const payload = {
+        tool: cfg.tool, toolName: cfg.toolName, firstName: fn, email: em,
+        question: $("q").value.trim(), followUp: $("fu").checked, includeDetails,
+        summary: cfg.getSummary(), details: includeDetails && cfg.getDetails ? cfg.getDetails() : null,
+        website: $("hp").value, sentAt: new Date().toISOString()
+      };
+      btn.disabled = true; btn.textContent = "Sending…";
+      try {
+        await sendViaJotform(payload);
+        st.textContent = "✅ Sent! Robin has it, and your copy is on its way. Check your inbox (and junk folder).";
+        st.className = "status ok";
+        btn.textContent = "Send an update";
+      } catch (e) {
+        st.textContent = "We couldn't send it right now. Screenshot your results and text Robin at 403-540-0629.";
+        st.className = "status err";
+        btn.textContent = "Try again";
+      }
+      btn.disabled = false;
+    });
+    try { const m = JSON.parse(localStorage.getItem("bwr-member") || "{}"); if (m.fn) $("fn").value = m.fn; if (m.em) $("em").value = m.em; } catch (e) {}
+    ["fn", "em"].forEach(k => $(k).addEventListener("change", () => {
+      try { localStorage.setItem("bwr-member", JSON.stringify({ fn: $("fn").value.trim(), em: $("em").value.trim() })); } catch (e) {}
+    }));
+    refresh();
+    return { refresh };
+  }
+  return { mount };
+})();
+</script>
+
 <script>
 const QUESTIONS = [
   { id: "score", q: "What's your credit score right now?",
     opts: [["I don't know yet", 0], ["Under 600", 0], ["600 to 679", 1], ["680 to 719", 2], ["720 or higher", 3]],
-    good: "A strong credit score", fix: "Check your free score on Borrowell or Credit Karma (week 1)" },
+    good: "A strong credit score", fix: "Check your free score on Borrowell or Credit Karma" },
   { id: "late", q: "Any late payments in the last 2 years? (cards, loans, phone bill)",
     opts: [["Yes, a few", 0], ["One or two", 1], ["None, but I pay manually", 2], ["None, and everything's on autopay", 3]],
-    good: "Paying on time", fix: "Put every bill on autopay, at least the minimum (week 2)" },
+    good: "Paying on time", fix: "Put every bill on autopay, at least the minimum" },
   { id: "util", q: "How full are your credit cards, compared to their limits?",
     opts: [["Close to maxed out (over 70%)", 0], ["About 30% to 70%", 1], ["Under 30%", 2], ["I pay them off in full every month", 3], ["I don't have a credit card", 1]],
-    good: "Keeping card balances low", fix: "Get each card under 30% of its limit (week 3)" },
+    good: "Keeping card balances low", fix: "Get each card under 30% of its limit" },
   { id: "accounts", q: "How many credit accounts have you had open for 2+ years?",
     opts: [["None", 0], ["One", 1], ["Two", 2], ["Three or more", 3]],
-    good: "Credit history lenders can see", fix: "Build a second account and keep your oldest one open (weeks 4 and 7)" },
+    good: "Credit history lenders can see", fix: "Build a second account and keep your oldest one open" },
   { id: "collections", q: "Anything in collections, a consumer proposal or a bankruptcy?",
     opts: [["Yes, and it's not dealt with yet", 0], ["Yes, but it's paid or finished", 1], ["Not that I know of", 2], ["No, and I've checked my report", 3]],
-    good: "A clean credit report", fix: "Pull your free Equifax and TransUnion reports and check for mistakes (week 6)" },
+    good: "A clean credit report", fix: "Pull your free Equifax and TransUnion reports and check for mistakes" },
   { id: "debts", q: "Total monthly debt payments, not counting rent or tuition? (car, student loans, cards, lines of credit). Student loans you don't pay on yet count as $0 for now.",
     opts: [["Over $1,000", 0], ["$500 to $1,000", 1], ["Under $500", 2], ["No debt payments", 3]],
-    good: "Low monthly debts", fix: "List your debts and pick a payoff order (week 11)" },
+    good: "Low monthly debts", fix: "List your debts and pick a payoff order" },
   { id: "saved", q: "Where's your down payment savings at?",
     opts: [["Nothing saved yet", 0], ["Started, but no plan", 1], ["I have a goal and save automatically", 2], ["I've saved 5% or more of my target price", 3]],
-    good: "Down payment savings", fix: "Pick a target price and work out your number (week 8)" },
+    good: "Down payment savings", fix: "Pick a target price and work out your number" },
   { id: "fhsa", q: "Do you have a First Home Savings Account (FHSA)?",
     opts: [["What's that?", 0], ["I've heard of it", 1], ["It's open", 2], ["It's open and I'm putting money in", 3]],
-    good: "Using your FHSA", fix: "Open an FHSA, even with $1, so your room starts counting (week 9)" }
+    good: "Using your FHSA", fix: "Open an FHSA, even with $1, so your room starts counting" }
 ];
 
 const BANDS = [
   { min: 0, name: "Just getting started", text: "Everyone starts somewhere, and you've already done the hardest part by looking. The Glow-Up is built for exactly where you are. Focus on the first two items below." },
-  { min: 9, name: "Building", text: "You've got some good habits in place. A few changes over the next 12 weeks will move you up fast. Start with the items below." },
+  { min: 9, name: "Building", text: "You've got some good habits in place. A few changes over the next few months will move you up fast. Start with the items below." },
   { min: 15, name: "Almost there", text: "You're in solid shape. Tighten up the items below and you'll look great to a lender." },
   { min: 20, name: "Mortgage-ready habits", text: "Your habits look strong. The next step is a review with Robin and Sherri to see where you really stand and what you could qualify for." }
 ];
@@ -179,15 +296,10 @@ document.getElementById("go").addEventListener("click", () => {
     if (!picked) { missing++; return; }
     const pts = Number(picked.value);
     total += pts;
-    if (pts >= 2) strong.push(item.good); else work.push({ fix: item.fix, pts });
+    if (pts >= 2) strong.push(item.good); else work.push({ fix: item.fix, pts, name: item.good });
   });
   const hint = document.getElementById("hint");
   if (missing) { hint.textContent = `Answer all 8 questions to see your score (${missing} left).`; return; }
-  const fname = document.getElementById("fname").value.trim();
-  const femail = document.getElementById("femail").value.trim();
-  if (!fname) { hint.textContent = "Add your first name so we can send your results."; return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(femail)) { hint.textContent = "Check your email address. It doesn't look quite right."; return; }
-  if (!document.getElementById("fconsent").checked) { hint.textContent = "Tick the box so we can email your results."; return; }
   hint.textContent = "";
   lastScore = total;
 
@@ -219,6 +331,12 @@ document.getElementById("go").addEventListener("click", () => {
       "Keep track of your student loans so there are no surprises when payments start.",
       "Open your FHSA now, even with $1. Your room starts counting, and you can save the tax deduction for later."
     ],
+    "looking": [
+      "Lenders need steady income you can show, so a mortgage has to wait until you're working again. That's OK. This is a great time to get your credit and savings ready.",
+      "Keep every bill paid on time, even if it's just the minimum. Missed payments stay on your report for years.",
+      "Try not to lean on credit cards to cover everyday costs. If money gets tight, text Robin early. There are options.",
+      "Employment Insurance (EI) usually doesn't count as income for a mortgage. When you land a job, text Robin and he'll tell you when your new income will count."
+    ],
     "parttime": [
       "Lenders look closely at part-time, contract and gig income. Many want a two-year history, so keep your tax returns and pay records.",
       "Text Robin about how a lender would count your income. It's often the deciding factor."
@@ -226,7 +344,7 @@ document.getElementById("go").addEventListener("click", () => {
   };
   if (tips[stage]) {
     document.getElementById("school").innerHTML = tips[stage].map(x => `<li>${x}</li>`).join("");
-    schoolCard.querySelector("h3").textContent = stage === "parttime" ? "About your income" : "Still in school? You're early, and that's a good thing";
+    schoolCard.querySelector("h3").textContent = { parttime: "About your income", looking: "Between jobs? Use this time well" }[stage] || "Still in school? You're early, and that's a good thing";
     schoolCard.style.display = "";
   } else { schoolCard.style.display = "none"; }
 
@@ -235,68 +353,62 @@ document.getElementById("go").addEventListener("click", () => {
   if (start !== null && start !== undefined && start !== "") {
     const diff = total - Number(start);
     document.getElementById("compare").textContent = diff > 0
-      ? `Your week 1 score was ${start}. You're up ${diff} point${diff === 1 ? "" : "s"}. That's real progress. 🎉`
-      : diff === 0 ? `Your week 1 score was ${start}. Same as today. Pick one item above and tackle it this week.`
-      : `Your week 1 score was ${start}. You're down ${-diff}. That happens. Text Robin and figure out what changed.`;
+      ? `Your starting score was ${start}. You're up ${diff} point${diff === 1 ? "" : "s"}. That's real progress. 🎉`
+      : diff === 0 ? `Your starting score was ${start}. Same as today. Pick one item above and tackle it this week.`
+      : `Your starting score was ${start}. You're down ${-diff}. That happens. Text Robin and figure out what changed.`;
     cmp.style.display = "";
   } else { cmp.style.display = "none"; }
+
+  lastResult = { total, band: band.name, stage, strong, work: work.slice(0, 3).map(x => x.name) };
+  s2r.refresh();
 
   const res = document.getElementById("result");
   res.style.display = "block";
   res.scrollIntoView({ behavior: "smooth", block: "start" });
-
-  sendResults({
-    name: fname, email: femail,
-    round: (document.querySelector('input[name="round"]:checked') || {}).value || "Not chosen",
-    stage: (document.querySelector('input[name="stage"]:checked') || { parentElement: { textContent: "Not chosen" } }).parentElement.textContent.trim(),
-    score: total + "/24", band: band.name, meaning: band.text,
-    strong: strong.join("\n") || "(none yet)",
-    focus: work.slice(0, 3).map(x => x.fix).join("\n") || "(nothing flagged)",
-    tips: tips[stage] ? tips[stage].join("\n") : "",
-    progress: cmp.style.display === "" ? document.getElementById("compare").textContent : "",
-    answers: QUESTIONS.map((item, i) => {
-      const picked = form.querySelector(`input[name="${item.id}"]:checked`);
-      return `${i + 1}. ${item.q}\n   ${picked ? picked.parentElement.textContent.trim() : "(no answer)"}`;
-    }).join("\n")
-  });
 });
-
-// Results go to a Jotform, which emails the member their copy and sends Robin every answer.
-// Field names come from the "Break Up With Renting: Scorecard Results" form.
-const JOTFORM_ID = "__SCORECARD_FORM_ID__";
-let sentOnce = false;
-function sendResults(r) {
-  const status = document.getElementById("sendStatus");
-  if (document.getElementById("fwebsite").value) return; // spam trap filled in: quietly do nothing
-  if (sentOnce) { status.textContent = "Your results were already sent. Start over to send a new scorecard."; return; }
-  status.textContent = "Sending your results…";
-  const f = new FormData();
-  const add = (k, v) => f.append(k, v);
-  add("formID", JOTFORM_ID); add("simple_spc", JOTFORM_ID + "-" + JOTFORM_ID); add("website", "");
-  add("submitSource", "form"); add("jsExecutionTracker", "build-date-" + Date.now());
-  add("q2_q2_fullname0[first]", r.name); add("q2_q2_fullname0[last]", "");
-  add("q3_q3_email1", r.email); add("q4_q4_textbox2", r.round); add("q5_q5_textbox3", r.stage);
-  add("q6_q6_textbox4", r.score); add("q7_q7_textbox5", r.band); add("q8_q8_textarea6", r.meaning);
-  add("q9_q9_textarea7", r.strong); add("q10_q10_textarea8", r.focus); add("q11_q11_textarea9", r.tips);
-  add("q12_q12_textarea10", r.progress); add("q13_q13_textarea11", r.answers);
-  add("q14_q14_checkbox12[]", "Email my results to me and send a copy to Robin Bureyko at Bureyko Mortgage Partners.");
-  fetch("https://submit.jotform.com/submit/" + JOTFORM_ID, { method: "POST", body: f, mode: "no-cors" })
-    .then(() => { sentOnce = true; status.textContent = "✅ Sent! Check your inbox (and junk folder)."; })
-    .catch(() => { status.textContent = "We couldn't send your email. Screenshot your score and text it to Robin at 403-540-0629."; });
-}
 
 document.getElementById("saveStart").addEventListener("click", e => {
   if (lastScore === null) return;
   store("bwr-scorecard-start", String(lastScore));
-  e.target.textContent = "Saved! Come back in week 12 to compare";
+  e.target.textContent = "Saved! Retake it in June before graduation to compare";
 });
 
 document.getElementById("retake").addEventListener("click", () => {
   form.reset();
-  sentOnce = false;
-  document.getElementById("sendStatus").textContent = "";
   document.querySelectorAll('input[name="stage"]').forEach(i => i.checked = false);
   document.getElementById("result").style.display = "none";
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
+
+const STAGES = { work: "Working full time", "school-done": "In school, finishing within a year", school: "In school, more than a year to go", parttime: "Part-time, contract or gig work", looking: "Not working, looking for work" };
+let lastResult = null;
+const s2r = SendToRobin.mount(document.getElementById("s2rMount"), {
+  tool: "scorecard", toolName: "Mortgage-Ready Scorecard",
+  lead: "Robin will look over your score and get back to you with what to tackle first. You'll get a copy by email too.",
+  questionHint: "e.g. What should I work on first?",
+  extraHtml: '<label class="f">Which scorecard is this?<select id="scorecard-kind"><option>Start of program (January)</option><option>Graduation (June)</option><option>Just checking</option></select></label>',
+  detailsLabel: "Include my answer to each question (like my credit score range)",
+  detailsOffNote: "Robin sees your score and focus areas, not your answer to each question.",
+  detailsOnNote: "Robin also sees your answer to each of the 8 questions.",
+  getSummary: () => {
+    if (!lastResult) return [{ label: "Score", value: "Not calculated yet" }];
+    const rows = [
+      { label: "Scorecard", value: document.getElementById("scorecard-kind").value },
+      { label: "Score", value: lastResult.total + " out of 24" },
+      { label: "Result", value: lastResult.band },
+      { label: "Where they're at", value: STAGES[lastResult.stage] || "Not answered" },
+      { label: "Strong on", value: lastResult.strong.join(", ") || "Nothing yet" },
+      { label: "Focus next", value: lastResult.work.join(", ") || "Nothing flagged" }
+    ];
+    const start = store("bwr-scorecard-start");
+    if (start) rows.push({ label: "Starting score", value: start + " out of 24" });
+    return rows;
+  },
+  getDetails: () => [{ section: "Answers", rows: QUESTIONS.map(item => {
+    const picked = form.querySelector('input[name="' + item.id + '"]:checked');
+    const j = picked ? Number(picked.id.slice(item.id.length)) : -1;
+    return { label: item.q, value: j >= 0 ? item.opts[j][0] : "Not answered" };
+  }) }]
+});
+try { if (store("bwr-scorecard-start")) document.getElementById("scorecard-kind").value = "Just checking"; } catch (e) {}
 </script>

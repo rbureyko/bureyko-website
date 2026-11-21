@@ -21,7 +21,7 @@ const SESSIONS = [
 ];
 
 const TOOLS = [
-  { slug: "scorecard", file: "scorecard.html", title: "Mortgage-Ready Scorecard", blurb: "Eight quick questions. Do it in week 1 and again in week 12 to see how far you've come." },
+  { slug: "scorecard", file: "scorecard.html", title: "Mortgage-Ready Scorecard", blurb: "Eight quick questions. Do it now, then again later to see how far you've come." },
   { slug: "credit-decoder", file: "credit-decoder.html", title: "Credit Report Decoder", blurb: "Read your Equifax and TransUnion reports the way a lender does." },
   { slug: "budget", file: "budget.html", title: "Monthly Budget Tracker", blurb: "Planned vs actual, with student lines and a money-left-over check." },
   { slug: "debt-payoff", file: "debt-payoff.html", title: "Debt Payoff Planner", blurb: "Your debt-free date and the order to pay things off." },
@@ -70,6 +70,7 @@ const fmtTime = (t) => {
 
 // Each tool keeps its own styles, scoped so they only apply inside the tool and can't clash with the site.
 function scopeCss(css) {
+  css = css.replace(/\/\*[\s\S]*?\*\//g, ""); // drop comments so they can't end up inside a selector
   css = css.replace(/:root\[data-theme="dark"\]\s*\{[^}]*\}/g, ""); // the claude.ai theme toggle doesn't exist here
   const scopeRules = (block) =>
     block.replace(/([^{}]+)\{([^{}]*)\}/g, (all, sel, body) => {
@@ -102,14 +103,15 @@ function scopeCss(css) {
 .tool .card { display: block; }
 .tool .eyebrow::before { content: none; }
 .tool .lead { font-size: inherit; max-width: 65ch; }
-.tool p { margin: 0 0 10px; }`;
+.tool p { margin: 0 0 10px; }
+.tool .empty { border: 0; padding: 0; text-align: left; }
+.tool [hidden] { display: none !important; }`;
 }
 function loadTool(file) {
-  let html = fs.readFileSync(path.join(DIR, "tools", file), "utf8").replace(/__SCORECARD_FORM_ID__/g, BUWR.scorecardFormId);
-  const m = html.match(/<style>([\s\S]*?)<\/style>/);
-  const css = scopeCss(m[1]);
-  html = html.replace(m[0], "");
-  return `<style>${css}</style>\n<div class="tool">${html}</div>`;
+  let html = fs.readFileSync(path.join(DIR, "tools", file), "utf8").replace(/__SEND_TO_ROBIN_FORM_ID__/g, BUWR.sendToRobinFormId);
+  let css = "";
+  html = html.replace(/<style>([\s\S]*?)<\/style>/g, (all, block) => { css += block + "\n"; return ""; });
+  return `<style>${scopeCss(css)}</style>\n<div class="tool">${html}</div>`;
 }
 
 const download = (d) =>
