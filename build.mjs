@@ -181,10 +181,12 @@ for (const page of [...pages(ctx), ...buwrPages()]) {
   const h = makeHelpers(page.route);
   const body = page.body(h);
   let html = layout({ ...page, body }, h);
+  // Login forms need the scrambled test value (or null when the members area isn't open yet)
+  html = html.replaceAll('"__BUWR_LOGIN_CHECK__"', JSON.stringify(protect ? protect.check : null));
   if (html.includes("{{")) throw new Error(`Unfilled {{TOKEN}} on ${page.route}. Add its value to src/posts/links.json.`);
   if (page.protect) {
     const payload = protect ? await protect(html) : null;
-    html = layout({ ...page, body: gateBody(payload, SITE.robin) }, h);
+    html = layout({ ...page, body: gateBody(payload, { loginUrl: h.u("/break-up-with-renting/login") }) }, h);
   }
   write(fileFor(page.route), html);
   if (!page.noindex) built.push(page.route);

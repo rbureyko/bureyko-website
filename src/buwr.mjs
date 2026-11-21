@@ -4,6 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { SITE } from "./content.mjs";
+import { loginForm, loginScript } from "./protect.mjs";
 
 const DIR = path.join(path.dirname(new URL(import.meta.url).pathname), "buwr");
 export const BUWR = JSON.parse(fs.readFileSync(path.join(DIR, "content.json"), "utf8"));
@@ -73,6 +74,19 @@ const TIP_SCRIPT = `<script>
   if (showAll) { const n = document.getElementById("tipPreviewNote"); if (n) n.hidden = false; }
 })();
 </script>`;
+
+// Member login: buttons, the panel on the public page, and the shared browser script
+const loginOpts = (joinHref) => ({ joinHref, phone: SITE.robin.phone, tel: SITE.robin.tel });
+const memberBtn = (u) => `<a class="btn btn-line" href="${u(BASE + "/login")}" data-member-login>Member login</a>`;
+const loginKit = (u) => loginScript({ check: "__BUWR_LOGIN_CHECK__", membersUrl: u(MEMBERS + "/"), publicUrl: u(BASE + "/"), phone: SITE.robin.phone });
+const loginSheet = () => `<dialog class="login-sheet" id="loginSheet" aria-labelledby="loginSheetTitle">
+  <div class="sheet-inner">
+    <button class="sheet-close" type="button" aria-label="Close">×</button>
+    <h2 id="loginSheetTitle">Welcome back</h2>
+    <p>Enter the members password from Robin's welcome email.</p>
+    ${loginForm("sheetLogin", loginOpts("#join"))}
+  </div>
+</dialog>`;
 
 const backLink = (u) => `<a class="back-link" href="${u(MEMBERS + "/")}">← Back to members hub</a>`;
 
@@ -179,7 +193,7 @@ export function buwrPages() {
       <span class="eyebrow">Free 6-month program · ${S.programDates}</span>
       <h1>Break Up<br><em>With Renting.</em></h1>
       <p class="lead">A free 6-month program for Calgarians in their 20s who want to own a home. Learn what lenders look at, then graduate in June with your real numbers. Real tips, no homework.</p>
-      <div class="actions"><a class="btn btn-orange" href="#join">Join free ${arrow}</a></div>
+      <div class="actions"><a class="btn btn-orange" href="#join">Join free ${arrow}</a>${memberBtn(u)}</div>
       <p class="hero-note">Free. Always. No credit check to join.</p>
     </div>
     <div class="stack">
@@ -242,6 +256,7 @@ export function buwrPages() {
       <div class="card">${lock}<h3>More every session</h3><p>New tools each session, plus "Questions to ask" scripts for lenders, realtors, inspectors, condo boards and lawyers.</p><span class="members-only">Members only</span></div>
       <div class="card">${lock}<h3>Live Q&amp;As and graduation</h3><p>A live Q&amp;A every session plus a June graduation. Catch the recording if you miss one.</p><span class="members-only">Members only</span></div>
     </div>
+    <div class="member-login-row"><p>Already a member?</p>${memberBtn(u)}</div>
   </div>
 </section>
 
@@ -276,11 +291,34 @@ export function buwrPages() {
       <span class="eyebrow">Join free</span>
       <h2>Ready to break up with renting?</h2>
       <p class="lead">Sign up below. Robin's welcome message, with your members link and password, arrives by email and text.</p>
+      <div class="member-login-row"><p>Already a member?</p>${memberBtn(u)}</div>
     </div>
     <div class="form-frame"><iframe src="${S.signupFormUrl}" title="Break Up With Renting sign-up form" loading="lazy" style="min-height:1250px"></iframe></div>
     <p class="fine" style="margin-top:12px">Form not showing? <a class="text-link" href="${S.signupFormUrl}" ${ext}>Open it in a new tab ↗</a></p>
   </div>
-</section>`,
+</section>
+${loginSheet()}
+${loginKit(u)}`,
+  });
+
+  // Login page: for anyone without the panel, and where members pages send visitors who aren't logged in
+  list.push({
+    route: BASE + "/login",
+    title: "Member Login: Break Up With Renting",
+    description: "Log in to the Break Up With Renting members area.",
+    noindex: true,
+    body: ({ u }) => `
+<section class="band">
+  <div class="wrap narrow">
+    <div class="card login-page">
+      <span class="eyebrow">Break Up With Renting · Members</span>
+      <h1>Welcome back</h1>
+      <p>Enter the members password from Robin's welcome email.</p>
+      ${loginForm("pageLogin", loginOpts(u(BASE + "/#join")))}
+    </div>
+  </div>
+</section>
+${loginKit(u)}`,
   });
 
   // Thank-you page
@@ -319,7 +357,7 @@ export function buwrPages() {
   <div class="wrap">
     <div class="welcome-bar">
       <div class="portrait small"><img src="${a("photos/robin.jpg")}" alt="Robin Bureyko" width="96" height="110"></div>
-      <div><span class="eyebrow">Members hub</span><h1>Welcome to the crew.</h1><p>Glad you're here. Start with the Mortgage-Ready Scorecard, then pick one tool a week. Questions any time: text me at ${SITE.robin.phone}. <em>Robin</em></p></div>
+      <div><span class="eyebrow">Members hub</span><h1>Welcome to the crew.</h1><p>Glad you're here. Start with the Mortgage-Ready Scorecard, then pick one tool a week. Questions any time: text me at ${SITE.robin.phone}. <em>Robin</em></p><button class="logout-link" type="button" data-member-logout>Log out</button></div>
     </div>
   </div>
 </section>
@@ -362,6 +400,7 @@ export function buwrPages() {
   </div>
 </section>
 ${TIP_SCRIPT}
+${loginKit(u)}
 
 <section class="band-tight">
   <div class="wrap">
