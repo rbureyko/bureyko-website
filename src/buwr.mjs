@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { SITE } from "./content.mjs";
 import { loginForm, loginScript } from "./protect.mjs";
+import { siteForm, SITE_FORM_SCRIPT } from "./siteforms.mjs";
 
 const DIR = path.join(path.dirname(new URL(import.meta.url).pathname), "buwr");
 export const BUWR = JSON.parse(fs.readFileSync(path.join(DIR, "content.json"), "utf8"));
@@ -293,12 +294,12 @@ export function buwrPages() {
       <p class="lead">Sign up below. You'll get a quick note from Robin now, and your members link and password in December.</p>
       <div class="member-login-row"><p>Already a member?</p>${memberBtn(u)}</div>
     </div>
-    <div class="form-frame"><iframe src="${S.signupFormUrl}" title="Break Up With Renting sign-up form" loading="lazy" style="min-height:1250px"></iframe></div>
-    <p class="fine" style="margin-top:12px">Form not showing? <a class="text-link" href="${S.signupFormUrl}" ${ext}>Open it in a new tab ↗</a></p>
+    ${siteForm("crew", { source: "website_buwr", success: u(BASE + "/welcome") })}
   </div>
 </section>
 ${loginSheet()}
-${loginKit(u)}`,
+${loginKit(u)}
+${SITE_FORM_SCRIPT}`,
   });
 
   // Login page: for anyone without the panel, and where members pages send visitors who aren't logged in

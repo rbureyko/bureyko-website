@@ -1,3 +1,4 @@
+import { siteForm, SITE_FORM_SCRIPT } from "./siteforms.mjs";
 import { renderPost, hubLabel, hubOrder } from "./blog.mjs";
 // All site wording and page structure lives here.
 // To change a phone number, link or sentence, edit it in this file and rebuild.
@@ -11,8 +12,6 @@ export const SITE = {
   applyUrl: "https://velocity.newton.ca/sso/public.php?sc=17dj8b6xmn74w",
   reviewsUrl: "https://maps.app.goo.gl/BTesNBKsJyALK5hQA",
   appUrl: "https://maapp.ca/app/robin-bureyko/download",
-  guideForm: "https://form.jotform.com/262367662550259",
-  renewalForm: "https://form.jotform.com/260465756960063",
   photos: {
     sherri: "https://images.squarespace-cdn.com/content/68d822c1dd071007730b2263/ca5fe2fb-0475-4ac6-91d9-af79b9a8672e/Sherri+white+background+%283%29.png?content-type=image%2Fpng",
     robin: "https://images.squarespace-cdn.com/content/68d822c1dd071007730b2263/b8e80d95-2346-49a7-ae64-d4bcedf5eaa0/Robin+-+White+Background.png?content-type=image%2Fpng",
@@ -874,7 +873,7 @@ ${contactBand({ title: "Let's find your next step.", text: "A clear conversation
   });
 
   // Form pages
-  const formPage = ({ route, title, description, eyebrow, h1, lead, steps, form, source, help, art }) => ({
+  const formPage = ({ route, title, description, eyebrow, h1, lead, steps, formKey, source, help, art }) => ({
     route, title, description,
     body: ({ u }) => `
 ${pageHero(u, { trail: [["Resources", "/resources"], [title]], eyebrow, h1, lead, art })}
@@ -890,21 +889,11 @@ ${pageHero(u, { trail: [["Resources", "/resources"], [title]], eyebrow, h1, lead
       </div>
     </div>
     <div class="stack">
-      <div class="form-frame" style="width:100%"><iframe id="lead-form" src="${form}?source=${source}" title="${title} form" loading="lazy" allow="geolocation; microphone; camera"></iframe></div>
-      <p class="fine">Form not showing? <a class="text-link" href="${form}?source=${source}" ${ext}>Open it in a new tab ↗</a>. The form is hosted by Jotform. Please share only the information requested; sensitive mortgage documents belong in your secure application.</p>
+      ${siteForm(formKey, { source, success: formKey })}
     </div>
   </div>
 </section>
-<script>
-(function () {
-  try {
-    var src = new URLSearchParams(location.search).get("source");
-    if (!src || !/^[a-z0-9_]{1,60}$/.test(src)) return;
-    var f = document.getElementById("lead-form");
-    f.src = f.src.split("?")[0] + "?source=" + src;
-  } catch (e) {}
-})();
-</script>
+${SITE_FORM_SCRIPT}
 ${contactBand({ title: "Prefer to talk first?", text: "We're happy to start with your questions." })}`,
   });
   list.push(formPage({
@@ -915,7 +904,7 @@ ${contactBand({ title: "Prefer to talk first?", text: "We're happy to start with
     h1: "Your first home.<br><em>Your starting point.</em>",
     lead: "You don't need every answer before you begin. Use the guide to get oriented, then bring your questions to us.",
     steps: ["Request the guide using the form.", "Use it to prepare for your mortgage conversation.", "Call or text us when you want to talk through your own situation."],
-    form: SITE.guideForm, source: "website_ftb_guide",
+    formKey: "guide", source: "website_ftb_guide",
     help: ["Prefer to talk first?", "We're happy to start with your questions."],
     art: ART_GUIDE,
   }));
@@ -927,7 +916,7 @@ ${contactBand({ title: "Prefer to talk first?", text: "We're happy to start with
     h1: "A renewal coming up?<br><em>Let's plan ahead.</em>",
     lead: "Tell us when your mortgage renews. We'll put your timing on our radar so we can connect when it makes sense to review your options.",
     steps: ["Share the timing and details of your renewal.", "We'll review the information you provide.", "We'll connect when it's time to explore your next term."],
-    form: SITE.renewalForm, source: "website_renewal_checkup",
+    formKey: "renewal", source: "website_renewal_checkup",
     help: ["Need help sooner?", "If you're considering a move, refinancing, renovations, or accessing equity, reach out now rather than waiting for renewal."],
     art: ART_CAL,
   }));
@@ -1067,7 +1056,7 @@ ${pageHero(u, { trail: [["Privacy"]], h1: "Privacy information.", lead: "How thi
 <h2>Contacting us</h2>
 <p>This website provides phone, text, and email links. Information you choose to share through those channels is handled by the relevant service and by our team to respond to your inquiry. Opening an email link prepares a message in your email app; it does not send anything automatically.</p>
 <h2>Guide and renewal forms</h2>
-<p>The First-Time Homebuyer Guide and Mortgage Renewal Checkup use Jotform. Information submitted through those forms goes through Jotform under the form's terms and settings. Jotform may use cookies or similar technologies as part of its service. See Jotform's privacy policy for its practices.</p>
+<p>The First-Time Home Buyer Guide, Mortgage Renewal Check-Up and Break Up With Renting sign-up forms are part of this website. When you send one, your answers are emailed to Robin Bureyko and a reply is emailed to you. Sending goes through Cloudflare, which runs the small sending function, and Resend, which delivers the emails; Resend keeps a delivery record of each email for a limited time. Nothing is stored on this website or in a database, and your information is never shared or sold.</p>
 <h2>Mortgage applications</h2>
 <p>The "Apply" links open a secure application hosted by Velocity, the application platform used by our brokerage. Information you submit there is handled under that platform's and Mortgage Architects' privacy practices.</p>
 <h2>Break Up With Renting: "Send to Robin"</h2>
@@ -1075,7 +1064,7 @@ ${pageHero(u, { trail: [["Privacy"]], h1: "Privacy information.", lead: "How thi
 <h2>Share information through the right channel</h2>
 <p>General inquiries should be limited to your question and contact information. Use the secure application, or ask us for the right process, before sending identity documents, banking information, a SIN, or other sensitive financial records.</p>
 <h2>Website data</h2>
-<p>This website is hosted on GitHub Pages, a service of GitHub. Like any web host, GitHub receives basic technical information, such as your IP address, when a page loads, so it can deliver and secure the site; see <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's privacy statement</a>. Our domain name is managed through Squarespace. Our fonts are stored on this website, so loading a page doesn't contact Google Fonts. We don't use analytics or advertising cookies. Some pages save information only in your own browser, on your device: the Break Up With Renting member login (for up to 90 days, or until you log out), what you enter in the members tools (your budget, your debts and your starting scorecard score), and the name and email you type in the "Send to Robin" box, so you don't have to type them again. We can't see this information, and clearing your browser data removes it. Pages with a Jotform form or a video load that content from Jotform or YouTube (in its privacy-enhanced mode), which have their own privacy practices. If we add other tools, we'll update this page.</p>
+<p>This website is hosted on GitHub Pages, a service of GitHub. Like any web host, GitHub receives basic technical information, such as your IP address, when a page loads, so it can deliver and secure the site; see <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's privacy statement</a>. Our domain name is managed through Squarespace. Our fonts are stored on this website, so loading a page doesn't contact Google Fonts. We don't use analytics or advertising cookies. Some pages save information only in your own browser, on your device: the Break Up With Renting member login (for up to 90 days, or until you log out), what you enter in the members tools (your budget, your debts and your starting scorecard score), and the name and email you type in the "Send to Robin" box, so you don't have to type them again. We can't see this information, and clearing your browser data removes it. Pages with a video load it from YouTube (in its privacy-enhanced mode), which has its own privacy practices. If we add other tools, we'll update this page.</p>
 <h2>External links</h2>
 <p>Google reviews and other linked sites have their own privacy practices. Their operators control the information collected when you visit them.</p>
 <h2>Questions or requests</h2>
@@ -1098,7 +1087,7 @@ ${pageHero(u, { trail: [["Website disclaimer"]], h1: "Website disclaimer.", lead
 <h2>Professional advice</h2>
 <p>Our role is mortgage guidance. Legal, tax, and investment decisions should be discussed with the appropriate professional. In a separation or divorce, get independent legal advice about agreements, ownership, and property division.</p>
 <h2>External services</h2>
-<p>Our forms are hosted by Jotform and our secure application by Velocity. Google reviews are run by Google, who control their availability, content, and terms.</p>
+<p>Our secure application is hosted by Velocity. Google reviews are run by Google, who control their availability, content, and terms.</p>
 <h2>Brokerage relationship</h2>
 <p>${SITE.brokerageStatement}</p>
 <h2>Ask a question</h2>

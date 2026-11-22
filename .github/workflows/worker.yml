@@ -19,7 +19,5 @@ jobs:
           wranglerVersion: "4.166.0"
           secrets: |
             RESEND_API_KEY
-            JOTFORM_HOOK_KEY
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          JOTFORM_HOOK_KEY: ${{ secrets.JOTFORM_HOOK_KEY }}
