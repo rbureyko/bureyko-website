@@ -7,6 +7,10 @@ compatibility_date = "2025-06-01"
 workers_dev = true
 preview_urls = false
 
+# Keep a log of each call (tool or form, time, sent or not, and why not), viewable in Cloudflare
+[observability]
+enabled = true
+
 [vars]
 ROBIN_EMAIL = "robin@bureykomortgages.ca"
 ALLOWED_ORIGINS = "https://www.bureykomortgages.ca,https://bureykomortgages.ca"

@@ -147,7 +147,11 @@ export function readJotform(form, raw) {
   return { key: cfg.key, firstName, email };
 }
 async function handleJotform(request, env, key) {
-  if (request.method !== "POST" || !sameKey(key, env.JOTFORM_HOOK_KEY || "")) return new Response("Not found", { status: 404 });
+  if (request.method !== "POST") return new Response("Not found", { status: 404 });
+  if (!sameKey(key, env.JOTFORM_HOOK_KEY || "")) {
+    console.log(JSON.stringify({ jotform: "wrong key", at: new Date().toISOString() }));
+    return new Response("Not found", { status: 404 });
+  }
   let form = "", raw = null;
   try {
     const type = request.headers.get("Content-Type") || "";
@@ -158,7 +162,10 @@ async function handleJotform(request, env, key) {
       const fd = await request.formData();
       form = String(fd.get("formID") || ""); raw = JSON.parse(String(fd.get("rawRequest") || "null"));
     }
-  } catch (e) { return new Response("Bad request", { status: 400 }); }
+  } catch (e) {
+    console.log(JSON.stringify({ jotform: "couldn't read the submission", at: new Date().toISOString() }));
+    return new Response("Bad request", { status: 400 });
+  }
   const who = readJotform(form, raw);
   if (!who) {
     console.log(JSON.stringify({ form, at: new Date().toISOString(), sent: false, reason: "no form or email" }));
