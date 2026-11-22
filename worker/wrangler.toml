@@ -1,0 +1,20 @@
+# Break Up With Renting: "Send to Robin" email function (Cloudflare Worker).
+# Published automatically by .github/workflows/worker.yml when anything in worker/ changes on main.
+# The Resend key is a Cloudflare secret (RESEND_API_KEY), copied from the GitHub secret of the same name.
+name = "buwr-send-to-robin"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+workers_dev = true
+
+[vars]
+ROBIN_EMAIL = "robin@bureykomortgages.ca"
+ALLOWED_ORIGINS = "https://www.bureykomortgages.ca,https://bureykomortgages.ca"
+
+# At most 5 sends a minute from one connection, on top of the tools' own 5-per-hour limit
+[[ratelimits]]
+name = "LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 5
+  period = 60
