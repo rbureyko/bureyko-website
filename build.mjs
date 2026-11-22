@@ -50,7 +50,6 @@ const NAV = [
   ["Home", "/"],
   ["Our team", "/about"],
   ["Mortgage services", "/mortgage-services"],
-  ["Break Up With Renting", "/break-up-with-renting/"],
   ["For realtors", "/partnerships"],
   ["Resources", "/resources"],
   ["Blog", "/blog/"],
@@ -92,6 +91,7 @@ ${jsonld}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+${route.startsWith("/break-up-with-renting") ? "" : `<a class="promo-strip" href="${u("/break-up-with-renting/")}"><span>Free 6-month program for Calgarians in their 20s: <strong>Break Up With Renting</strong> <span aria-hidden="true">→</span></span></a>`}
 <header class="header">
   <div class="wrap">
     <a class="lockup" href="${u("/")}" aria-label="${esc(SITE.name)}, powered by Mortgage Architects. Home">
@@ -108,6 +108,7 @@ ${jsonld}
       <summary>Menu</summary>
       <div class="menu-panel">
         ${NAV.map(([l, href]) => `<a href="${u(href)}">${l}</a>`).join("\n        ")}
+        <a href="${u("/break-up-with-renting/")}">Break Up With Renting</a>
         <a href="${u("/contact")}">Contact</a>
         <a class="btn btn-orange" href="${SITE.applyUrl}" target="_blank" rel="noopener">Apply online</a>
       </div>

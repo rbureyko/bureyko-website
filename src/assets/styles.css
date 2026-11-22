@@ -452,3 +452,9 @@ a.card:hover{background:var(--mist)}
 .buwr-home-four span{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--orange);color:var(--ink);font-size:.85rem;font-weight:700}
 .btn-white-line{background:transparent;border-color:#fff;color:#fff}
 .btn-white-line:hover{background:#fff;color:var(--ink)}
+
+/* Slim strip above the header on every page except the program's own pages */
+.promo-strip{display:block;background:var(--blue);color:#fff;text-align:center;text-decoration:none;font-size:.9rem;line-height:1.35;padding:9px max(16px,env(safe-area-inset-left,0px));padding-top:calc(9px + env(safe-area-inset-top,0px))}
+.promo-strip strong{font-weight:700;text-decoration:underline;text-decoration-color:var(--orange);text-decoration-thickness:2px;text-underline-offset:3px}
+.promo-strip:hover{background:var(--ink)}
+.promo-strip:focus-visible{outline:3px solid var(--orange);outline-offset:-3px}
