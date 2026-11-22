@@ -461,7 +461,7 @@ s2r = SendToRobin.mount(document.getElementById("s2rMount"), {
     const f = k => has ? money(p[k]) + " / " + money(a[k]) : money(p[k]);
     const pct = t => t.in ? Math.round(t.sv / t.in * 100) + "%" : "–";
     // Plan / actual (actual only once it's filled in). Totals only, never line items.
-    return [
+    const rows = [
       { label: "Money in", value: f("in") },
       { label: "Fixed costs", value: f("fx") },
       { label: "Flexible spending", value: f("fl") },
@@ -469,6 +469,9 @@ s2r = SendToRobin.mount(document.getElementById("s2rMount"), {
       { label: "Left over", value: f("left") },
       { label: "% going to your home", value: has ? pct(p) + " / " + pct(a) : pct(p) }
     ];
+    // Warn Robin when the member hasn't replaced the example numbers yet
+    if (state.examples) rows.unshift({ label: "Heads up", value: "Still the example numbers" });
+    return rows;
   }
 });
 fill();
