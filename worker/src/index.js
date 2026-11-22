@@ -2,6 +2,10 @@
 // The scorecard, budget and debt tools post a member's results here. This sends two emails through
 // Resend: one to Robin (reply goes straight to the member) and a copy to the member (reply goes to Robin).
 // Nothing is stored, and the member's answers are never logged.
+//
+// It also sends the automatic replies for some Jotform forms: Jotform calls /jotform/<secret key> (a
+// "webhook") after each submission, and this sends the reply in replies.js through Resend.
+import { FORMS, replyEmail } from "./replies.js";
 
 const TOOLS = {
   scorecard: { name: "Mortgage-Ready Scorecard", subject: "Scorecard", tip: "Retake the scorecard in June, before graduation, to see how far you've come." },
@@ -118,8 +122,62 @@ export function buildEmails(p, env, now = new Date()) {
   ];
 }
 
+// Same-length comparison that doesn't stop at the first different character
+function sameKey(a, b) {
+  if (!a || !b || a.length !== b.length) return false;
+  let d = 0;
+  for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return d === 0;
+}
+// Find the answer to question n in Jotform's submission data (keys look like "q3_q3_email1")
+function answer(raw, n) {
+  const k = Object.keys(raw).find((key) => key.startsWith(`q${n}_`) && !key.endsWith("]"));
+  return k ? raw[k] : undefined;
+}
+export function readJotform(form, raw) {
+  const cfg = FORMS[form];
+  if (!cfg || !raw || typeof raw !== "object") return null;
+  const n = answer(raw, cfg.name);
+  const first = n && typeof n === "object" ? n.first : typeof n === "string" ? n.split(/\s+/)[0] : "";
+  const email = clip(answer(raw, cfg.email), 254);
+  if (!EMAIL_RE.test(email)) return null;
+  // Tidy the capitalisation of names typed in all capitals or all lower case
+  let firstName = oneLine(first, 60);
+  if (firstName && (firstName === firstName.toUpperCase() || firstName === firstName.toLowerCase())) firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+  return { key: cfg.key, firstName, email };
+}
+async function handleJotform(request, env, key) {
+  if (request.method !== "POST" || !sameKey(key, env.JOTFORM_HOOK_KEY || "")) return new Response("Not found", { status: 404 });
+  let form = "", raw = null;
+  try {
+    const type = request.headers.get("Content-Type") || "";
+    if (type.includes("application/json")) {
+      const j = await request.json();
+      form = String(j.formID || ""); raw = typeof j.rawRequest === "string" ? JSON.parse(j.rawRequest) : j.rawRequest;
+    } else {
+      const fd = await request.formData();
+      form = String(fd.get("formID") || ""); raw = JSON.parse(String(fd.get("rawRequest") || "null"));
+    }
+  } catch (e) { return new Response("Bad request", { status: 400 }); }
+  const who = readJotform(form, raw);
+  if (!who) {
+    console.log(JSON.stringify({ form, at: new Date().toISOString(), sent: false, reason: "no form or email" }));
+    return new Response("OK", { status: 200 }); // nothing to send; don't make Jotform retry
+  }
+  const mail = replyEmail(who.key, who.firstName);
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ from: `Robin Bureyko <${env.ROBIN_EMAIL}>`, to: [who.email], reply_to: env.ROBIN_EMAIL, ...mail }),
+  });
+  console.log(JSON.stringify({ form: who.key, at: new Date().toISOString(), sent: res.ok, status: res.status })); // never the person's details
+  return new Response(res.ok ? "OK" : "Send failed", { status: res.ok ? 200 : 502 });
+}
+
 export default {
   async fetch(request, env) {
+    const path = new URL(request.url).pathname;
+    if (path.startsWith("/jotform/")) return handleJotform(request, env, decodeURIComponent(path.slice("/jotform/".length)));
     const origin = request.headers.get("Origin") || "";
     const headers = cors(origin, env);
     if (!headers) return json(403, { ok: false, error: "origin" });
