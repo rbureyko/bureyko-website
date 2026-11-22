@@ -1,7 +1,7 @@
 {
   "_about": "Break Up With Renting: everything that changes during the program lives here. Leave a value as null until it exists; the site shows 'Coming soon' instead. After editing, the site rebuilds when the change is pushed.",
   "signupFormUrl": "https://form.jotform.com/263036354620047",
-  "sendToRobinFormId": "263244384274056",
+  "sendToRobinUrl": "https://buwr-send-to-robin.robin-451.workers.dev",
   "instagramUrl": "https://instagram.com/bureyko_mortgages",
   "instagramHandle": "@bureyko_mortgages",
   "youtubeChannelUrl": null,

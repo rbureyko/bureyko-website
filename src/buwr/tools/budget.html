@@ -227,52 +227,26 @@
   @media (max-width: 440px) { .s2r .two { grid-template-columns: 1fr; } }
 </style>
 <script>
-/* Send to Robin: sends the member's results to the Jotform "Break Up With Renting: Send to Robin",
-   which emails Robin and sends the member a copy. (The site is on GitHub Pages, so there's no server function.) */
+/* Send to Robin: posts the member's results to the "Send to Robin" function (a Cloudflare Worker,
+   worker/ in the website repo), which emails Robin and sends the member a copy through Resend. */
 window.SendToRobin = (function () {
-  const FORM_ID = "__SEND_TO_ROBIN_FORM_ID__";
+  const SEND_URL = "__SEND_TO_ROBIN_URL__";
   const TOOLS = ["scorecard", "budget", "debt-payoff"];
   const clip = (s, n) => String(s == null ? "" : s).slice(0, n);
-  function sendViaJotform(p) {
+  function sendToRobin(p) {
     if (p.website) return Promise.resolve(); // spam trap filled in: act as if sent, send nothing
     if (!TOOLS.includes(p.tool)) return Promise.reject(new Error("tool"));
     const now = Date.now(), LOG = "bwr-s2r-sent", who = p.email.toLowerCase();
     let log = [];
     try { log = JSON.parse(localStorage.getItem(LOG) || "[]").filter(x => now - x.t < 3600000); } catch (e) {}
     if (log.filter(x => x.e === who).length >= 5) return Promise.reject(new Error("limit")); // 5 sends per email per hour, on this device
-    const summary = (p.summary || []).slice(0, 15).map(r => clip(r.label, 300) + ": " + clip(r.value, 300)).join("\n");
-    let details = "";
-    if (p.tool !== "budget") { // budget: totals only, never line items
-      details = p.includeDetails && Array.isArray(p.details)
-        ? p.details.slice(0, 3).map(s => clip(s.section, 300) + "\n" + (s.rows || []).slice(0, 20).map(r => "• " + clip(r.label, 300) + ": " + clip(r.value, 300)).join("\n")).join("\n\n")
-        : "Details not shared";
-    }
-    let tag = p.toolName;
-    if (p.tool === "scorecard") {
-      const row = (p.summary || []).find(r => r.label === "Scorecard");
-      const kind = !row ? "" : /^Start/.test(row.value) ? "Start" : /^Graduation/.test(row.value) ? "Graduation" : "Just checking";
-      tag = "Scorecard" + (kind ? " · " + kind : "");
-    }
-    const sent = new Date(p.sentAt || now).toLocaleString("en-CA", { timeZone: "America/Edmonton", dateStyle: "medium", timeStyle: "short" });
-    const f = new FormData();
-    const add = (k, v) => f.append(k, v);
-    add("formID", FORM_ID); add("simple_spc", FORM_ID + "-" + FORM_ID); add("website", "");
-    add("submitSource", "form"); add("jsExecutionTracker", "build-date-" + now);
-    add("q2_q2_textbox0", p.toolName);
-    add("q3_q3_textbox1", clip(p.firstName, 60));
-    add("q4_q4_email2", clip(p.email, 254));
-    add("q5_q5_textbox3", `[BUWR · ${tag}] ${clip(p.firstName, 60)}${p.followUp ? " · Wants a follow-up" : ""}`);
-    add("q6_q6_textbox4", `Your ${p.toolName} results`);
-    add("q7_q7_textbox5", p.followUp ? "Yes" : "No");
-    add("q8_q8_textarea6", clip(p.question, 500));
-    add("q9_q9_textarea7", summary);
-    add("q10_q10_textarea8", details);
-    add("q11_q11_textarea9", p.followUp ? "Robin will be in touch soon." : "Want Robin's take? Just reply to this email.");
-    add("q12_q12_textbox10", sent);
-    return fetch("https://submit.jotform.com/submit/" + FORM_ID, { method: "POST", body: f, mode: "no-cors" }).then(() => {
-      log.push({ e: who, t: now });
-      try { localStorage.setItem(LOG, JSON.stringify(log)); } catch (e) {}
-    });
+    return fetch(SEND_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error("send " + r.status)))
+      .then(res => {
+        if (!res || !res.ok) throw new Error("send");
+        log.push({ e: who, t: now });
+        try { localStorage.setItem(LOG, JSON.stringify(log)); } catch (e) {}
+      });
   }
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   function mount(el, cfg) {
@@ -318,7 +292,7 @@ window.SendToRobin = (function () {
       };
       btn.disabled = true; btn.textContent = "Sending…";
       try {
-        await sendViaJotform(payload);
+        await sendToRobin(payload);
         st.textContent = "✅ Sent! Robin has it, and your copy is on its way. Check your inbox (and junk folder).";
         st.className = "status ok";
         btn.textContent = "Send an update";
@@ -484,20 +458,17 @@ s2r = SendToRobin.mount(document.getElementById("s2rMount"), {
   detailsOffNote: "Robin sees your totals only, never your individual line items like rent or groceries.",
   getSummary: () => {
     const p = totals("plan"), a = totals("actual"), has = hasActual();
-    const f = k => has ? "Plan " + money(p[k]) + " · Actual " + money(a[k]) : money(p[k]);
+    const f = k => has ? money(p[k]) + " / " + money(a[k]) : money(p[k]);
     const pct = t => t.in ? Math.round(t.sv / t.in * 100) + "%" : "–";
-    const rows = [
-      { label: "Month", value: state.month || "Not set" },
-      { label: "In school", value: state.school ? "Yes" : "No" },
-      { label: "Money coming in", value: f("in") },
+    // Plan / actual (actual only once it's filled in). Totals only, never line items.
+    return [
+      { label: "Money in", value: f("in") },
       { label: "Fixed costs", value: f("fx") },
       { label: "Flexible spending", value: f("fl") },
-      { label: "Saving for home", value: f("sv") },
+      { label: "Home savings", value: f("sv") },
       { label: "Left over", value: f("left") },
-      { label: "Share to home", value: has ? "Plan " + pct(p) + " · Actual " + pct(a) : pct(p) }
+      { label: "% going to your home", value: has ? pct(p) + " / " + pct(a) : pct(p) }
     ];
-    if (state.examples) rows.unshift({ label: "Heads up", value: "Still the example numbers" });
-    return rows;
   }
 });
 fill();

@@ -164,7 +164,7 @@ function scopeCss(css) {
 .tool [hidden] { display: none !important; }`;
 }
 function loadTool(file) {
-  let html = fs.readFileSync(path.join(DIR, "tools", file), "utf8").replace(/__SEND_TO_ROBIN_FORM_ID__/g, BUWR.sendToRobinFormId);
+  let html = fs.readFileSync(path.join(DIR, "tools", file), "utf8").replace(/__SEND_TO_ROBIN_URL__/g, BUWR.sendToRobinUrl);
   let css = "";
   html = html.replace(/<style>([\s\S]*?)<\/style>/g, (all, block) => { css += block + "\n"; return ""; });
   return `<style>${scopeCss(css)}</style>\n<div class="tool">${html}</div>`;

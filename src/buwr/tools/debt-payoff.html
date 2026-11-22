@@ -127,52 +127,26 @@
   @media (max-width: 440px) { .s2r .two { grid-template-columns: 1fr; } }
 </style>
 <script>
-/* Send to Robin: sends the member's results to the Jotform "Break Up With Renting: Send to Robin",
-   which emails Robin and sends the member a copy. (The site is on GitHub Pages, so there's no server function.) */
+/* Send to Robin: posts the member's results to the "Send to Robin" function (a Cloudflare Worker,
+   worker/ in the website repo), which emails Robin and sends the member a copy through Resend. */
 window.SendToRobin = (function () {
-  const FORM_ID = "__SEND_TO_ROBIN_FORM_ID__";
+  const SEND_URL = "__SEND_TO_ROBIN_URL__";
   const TOOLS = ["scorecard", "budget", "debt-payoff"];
   const clip = (s, n) => String(s == null ? "" : s).slice(0, n);
-  function sendViaJotform(p) {
+  function sendToRobin(p) {
     if (p.website) return Promise.resolve(); // spam trap filled in: act as if sent, send nothing
     if (!TOOLS.includes(p.tool)) return Promise.reject(new Error("tool"));
     const now = Date.now(), LOG = "bwr-s2r-sent", who = p.email.toLowerCase();
     let log = [];
     try { log = JSON.parse(localStorage.getItem(LOG) || "[]").filter(x => now - x.t < 3600000); } catch (e) {}
     if (log.filter(x => x.e === who).length >= 5) return Promise.reject(new Error("limit")); // 5 sends per email per hour, on this device
-    const summary = (p.summary || []).slice(0, 15).map(r => clip(r.label, 300) + ": " + clip(r.value, 300)).join("\n");
-    let details = "";
-    if (p.tool !== "budget") { // budget: totals only, never line items
-      details = p.includeDetails && Array.isArray(p.details)
-        ? p.details.slice(0, 3).map(s => clip(s.section, 300) + "\n" + (s.rows || []).slice(0, 20).map(r => "• " + clip(r.label, 300) + ": " + clip(r.value, 300)).join("\n")).join("\n\n")
-        : "Details not shared";
-    }
-    let tag = p.toolName;
-    if (p.tool === "scorecard") {
-      const row = (p.summary || []).find(r => r.label === "Scorecard");
-      const kind = !row ? "" : /^Start/.test(row.value) ? "Start" : /^Graduation/.test(row.value) ? "Graduation" : "Just checking";
-      tag = "Scorecard" + (kind ? " · " + kind : "");
-    }
-    const sent = new Date(p.sentAt || now).toLocaleString("en-CA", { timeZone: "America/Edmonton", dateStyle: "medium", timeStyle: "short" });
-    const f = new FormData();
-    const add = (k, v) => f.append(k, v);
-    add("formID", FORM_ID); add("simple_spc", FORM_ID + "-" + FORM_ID); add("website", "");
-    add("submitSource", "form"); add("jsExecutionTracker", "build-date-" + now);
-    add("q2_q2_textbox0", p.toolName);
-    add("q3_q3_textbox1", clip(p.firstName, 60));
-    add("q4_q4_email2", clip(p.email, 254));
-    add("q5_q5_textbox3", `[BUWR · ${tag}] ${clip(p.firstName, 60)}${p.followUp ? " · Wants a follow-up" : ""}`);
-    add("q6_q6_textbox4", `Your ${p.toolName} results`);
-    add("q7_q7_textbox5", p.followUp ? "Yes" : "No");
-    add("q8_q8_textarea6", clip(p.question, 500));
-    add("q9_q9_textarea7", summary);
-    add("q10_q10_textarea8", details);
-    add("q11_q11_textarea9", p.followUp ? "Robin will be in touch soon." : "Want Robin's take? Just reply to this email.");
-    add("q12_q12_textbox10", sent);
-    return fetch("https://submit.jotform.com/submit/" + FORM_ID, { method: "POST", body: f, mode: "no-cors" }).then(() => {
-      log.push({ e: who, t: now });
-      try { localStorage.setItem(LOG, JSON.stringify(log)); } catch (e) {}
-    });
+    return fetch(SEND_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error("send " + r.status)))
+      .then(res => {
+        if (!res || !res.ok) throw new Error("send");
+        log.push({ e: who, t: now });
+        try { localStorage.setItem(LOG, JSON.stringify(log)); } catch (e) {}
+      });
   }
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   function mount(el, cfg) {
@@ -218,7 +192,7 @@ window.SendToRobin = (function () {
       };
       btn.disabled = true; btn.textContent = "Sending…";
       try {
-        await sendViaJotform(payload);
+        await sendToRobin(payload);
         st.textContent = "✅ Sent! Robin has it, and your copy is on its way. Check your inbox (and junk folder).";
         st.className = "status ok";
         btn.textContent = "Send an update";
@@ -405,18 +379,18 @@ const s2r = SendToRobin.mount(document.getElementById("s2rMount"), {
     const method = document.querySelector('input[name="method"]:checked').value;
     const types = [...new Set(all.map(d => d.name.replace(/ \d+$/, "")))].join(", ");
     const rows = [
-      { label: "Debts", value: all.length + " (" + types + ")" },
+      { label: "Number of debts", value: all.length + " (" + types + ")" },
       { label: "Total owing", value: money(all.reduce((s, d) => s + d.bal, 0)) },
       { label: "Monthly minimums", value: money(active.reduce((s, d) => s + d.min, 0)) },
-      { label: "Extra each month", value: money(extra) },
+      { label: "Extra per month", value: money(extra) },
       { label: "Method", value: method === "snowball" ? "Smallest first" : "Highest rate first" }
     ];
     if (active.length && active.every(d => d.min)) {
       const r = simulate(active, extra, method);
-      if (r.stuck) rows.push({ label: "Debt-free by", value: "Not at these payments" });
-      else { rows.push({ label: "Debt-free by", value: monthLabel(r.months) }); rows.push({ label: "Total interest", value: money(r.interest) }); }
+      if (r.stuck) rows.push({ label: "Debt-free date", value: "Not at these payments" });
+      else { rows.push({ label: "Debt-free date", value: monthLabel(r.months) }); rows.push({ label: "Total interest", value: money(r.interest) }); }
     }
-    if (waiting.length) rows.push({ label: "Not paying yet (in school)", value: money(waiting.reduce((s, d) => s + d.bal, 0)) });
+    if (waiting.length) rows.push({ label: "Not being paid yet", value: money(waiting.reduce((s, d) => s + d.bal, 0)) });
     return rows;
   },
   getDetails: () => [{ section: "Each debt", rows: readDebts().map(d => ({
