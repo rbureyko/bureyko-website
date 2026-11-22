@@ -3,6 +3,7 @@
 //   node build.mjs --preview  preview build (relative .html links, drafts shown)
 import fs from "node:fs";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { SITE, SERVICES, pages } from "./src/content.mjs";
 import { loadPosts } from "./src/blog.mjs";
 import { buwrPages } from "./src/buwr.mjs";
@@ -46,6 +47,10 @@ export const fmtDate = (iso) =>
   new Date(iso + "T12:00:00").toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" });
 
 // ---------- layout ----------
+// A fingerprint of the stylesheet, so browsers fetch the new one after every change instead of
+// mixing a fresh page with an old saved copy of the styles
+const CSS_VERSION = createHash("sha256").update(fs.readFileSync(new URL("./src/assets/styles.css", import.meta.url))).digest("hex").slice(0, 10);
+
 const NAV = [
   ["Home", "/"],
   ["Our team", "/about"],
@@ -86,7 +91,7 @@ ${keywords && keywords.length ? `<meta name="keywords" content="${esc(keywords.j
 <meta name="theme-color" content="#306AB4">
 <link rel="icon" href="${a("bureyko-square.svg")}" type="image/svg+xml">
 <link rel="preload" href="${a("fonts/fira-sans-latin-400-normal.woff2")}" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="${a("styles.css")}">
+<link rel="stylesheet" href="${a("styles.css")}?v=${CSS_VERSION}">
 ${jsonld}
 </head>
 <body>
