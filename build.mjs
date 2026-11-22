@@ -50,6 +50,7 @@ const NAV = [
   ["Home", "/"],
   ["Our team", "/about"],
   ["Mortgage services", "/mortgage-services"],
+  ["Break Up With Renting", "/break-up-with-renting/"],
   ["For realtors", "/partnerships"],
   ["Resources", "/resources"],
   ["Blog", "/blog/"],

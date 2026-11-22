@@ -539,6 +539,23 @@ export function pages({ posts }) {
   </div>
 </section>
 
+<section class="band buwr-home">
+  <div class="wrap">
+    <div class="buwr-home-copy">
+      <span class="eyebrow">Free 6-month program · January to June 2027</span>
+      <h2>Break Up With Renting</h2>
+      <p class="lead">For Calgarians in their 20s who rent, live with their parents or are still in school. Learn the four things every lender looks at, join live Q&amp;As, and graduate in June with your real numbers. Free, always.</p>
+      <ul class="buwr-home-four" aria-label="The four sessions">
+        <li><span>1</span>Credit</li><li><span>2</span>Down payment</li><li><span>3</span>Income</li><li><span>4</span>Your number</li>
+      </ul>
+      <div class="actions">
+        <a class="btn btn-orange" href="${u("/break-up-with-renting/")}">See the program ${arrow}</a>
+        <a class="btn btn-white-line" href="${u("/break-up-with-renting/login")}">Member login</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="band">
   <div class="wrap approach">
     <div class="stack">

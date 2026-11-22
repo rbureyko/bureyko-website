@@ -440,3 +440,15 @@ a.card:hover{background:var(--mist)}
   .sheet-inner{padding:28px 20px calc(24px + env(safe-area-inset-bottom,0px))}
 }
 .logout-link{margin-top:6px;padding:0;border:0;background:none;color:var(--blue);font:inherit;font-weight:600;text-decoration:underline;cursor:pointer;min-height:44px}
+
+/* Homepage: Break Up With Renting band */
+.buwr-home{background:var(--blue);color:#fff}
+.buwr-home-copy{display:grid;gap:18px;max-width:760px}
+.buwr-home .eyebrow{color:#fff}
+.buwr-home h2{color:#fff;margin:0}
+.buwr-home .lead{color:#fff;margin:0}
+.buwr-home-four{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.buwr-home-four li{display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border:1px solid var(--sky);border-radius:999px;font-weight:600}
+.buwr-home-four span{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--orange);color:var(--ink);font-size:.85rem;font-weight:700}
+.btn-white-line{background:transparent;border-color:#fff;color:#fff}
+.btn-white-line:hover{background:#fff;color:var(--ink)}
