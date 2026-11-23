@@ -500,3 +500,6 @@ a.card:hover{background:var(--mist)}
 .tool-sample{margin:0 auto 28px;max-width:340px;display:grid;gap:10px}
 .tool-sample img{width:100%;height:auto;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 30px rgba(25,60,102,.12);background:#fff}
 .tool-sample figcaption{font-size:.9rem;color:var(--ink);text-align:center}
+.g-rating{display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px 10px;color:var(--ink);text-decoration:none;font-weight:500;min-height:44px}
+.g-rating .stars{color:var(--orange);font-size:1.25rem;letter-spacing:2px}
+.g-rating:hover span:last-child{text-decoration:underline;text-decoration-color:var(--orange)}

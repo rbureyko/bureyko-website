@@ -272,6 +272,7 @@ export function buwrPages() {
       <span class="eyebrow">Meet Robin and Sherri</span>
       <h2>We don't just understand mortgages. We understand credit.</h2>
       <p class="lead">We're Robin and Sherri Bureyko, a small, family-run team in Calgary. Robin spent 20+ years in credit adjudication and risk. Sherri spent 5 years in high-volume mortgage underwriting.</p>
+      ${S.googleRating ? `<a class="g-rating" href="${SITE.reviewsUrl}" ${ext}><span class="stars" aria-hidden="true">★★★★★</span><span><strong>${S.googleRating.rating}</strong> from ${S.googleRating.count} Google reviews · Read them ↗</span></a>` : ""}
     </div>
     ${people(a)}
   </div>
