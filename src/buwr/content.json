@@ -209,8 +209,7 @@
           "title": "Savings bucket tracker (FHSA, RRSP, TFSA, gifts)",
           "url": null
         }
-      ],
-      "scripts": []
+      ]
     },
     "session3": {
       "neededBy": "May 1",
@@ -225,12 +224,6 @@
         },
         {
           "title": "“Before you finance that car” reality check",
-          "url": null
-        }
-      ],
-      "scripts": [
-        {
-          "title": "Questions to ask a mortgage professional or lender",
           "url": null
         }
       ]
@@ -254,22 +247,31 @@
           "title": "Needs vs wants checklist",
           "url": null
         }
-      ],
+      ]
+    },
+    "questionsToAsk": {
+      "_note": "One members-hub item. Add a url to a script (a members page or a PDF link) when it's ready; until then it shows as coming soon.",
+      "title": "Questions to ask",
+      "intro": "Scripts to bring when you talk to:",
       "scripts": [
         {
-          "title": "Questions to ask a realtor",
+          "who": "Your mortgage professional or lender",
           "url": null
         },
         {
-          "title": "Questions to ask a home inspector",
+          "who": "A realtor",
           "url": null
         },
         {
-          "title": "Questions to ask a condo board",
+          "who": "A home inspector",
           "url": null
         },
         {
-          "title": "Questions to ask a lawyer",
+          "who": "A condo board",
+          "url": null
+        },
+        {
+          "who": "A real estate lawyer",
           "url": null
         }
       ]

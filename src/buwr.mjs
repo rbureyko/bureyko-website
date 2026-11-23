@@ -406,7 +406,8 @@ ${loginKit(u)}
   <div class="wrap">
     <h2 class="hub-title">Coming up</h2>
     <div class="cards">
-      ${S.sessions.slice(1).map((s) => { const d = S.downloads["session" + s.number]; return `<div class="card"><span class="eyebrow">Session ${s.number} · ${s.months}</span><h3>${s.name}</h3><p class="session-q">“${s.question}”</p><ul class="downloads">${d.tools.map(download).join("")}</ul>${d.scripts.length ? `<h4 class="downloads-sub">“Questions to ask” scripts</h4><ul class="downloads">${d.scripts.map(download).join("")}</ul>` : ""}</div>`; }).join("")}
+      ${S.sessions.slice(1).map((s) => { const d = S.downloads["session" + s.number]; return `<div class="card"><span class="eyebrow">Session ${s.number} · ${s.months}</span><h3>${s.name}</h3><p class="session-q">“${s.question}”</p><ul class="downloads">${d.tools.map(download).join("")}</ul></div>`; }).join("")}
+      ${(() => { const q = S.downloads.questionsToAsk; const ready = q.scripts.some((x) => x.url); return `<div class="card"><span class="eyebrow">Sessions 3 and 4</span><h3>${q.title}</h3><p>${q.intro}</p><ul class="who-list">${q.scripts.map((x) => `<li>${x.url ? `<a href="${x.url}" ${ext}>${x.who} ↗</a>` : x.who}</li>`).join("")}</ul>${ready ? "" : `<span class="soon">Coming soon</span>`}</div>`; })()}
     </div>
   </div>
 </section>

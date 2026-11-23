@@ -492,3 +492,6 @@ a.card:hover{background:var(--mist)}
 .site-form,.site-form .sf-field,.site-form fieldset{justify-items:stretch;width:100%;box-sizing:border-box}
 .site-form input,.site-form select{box-sizing:border-box}
 .site-form [hidden],.site-form-done[hidden]{display:none !important}
+.who-list{margin:0;padding-left:1.1em;display:grid;gap:4px}
+.who-list a{color:var(--blue);font-weight:600}
+.card > .soon{justify-self:start;align-self:start;margin-top:4px}
