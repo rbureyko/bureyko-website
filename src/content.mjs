@@ -220,6 +220,9 @@ export const SERVICES = [
   },
 ];
 
+// What a blog cover shows, for people using screen readers and for image search
+const coverAlt = (p) => `Article cover: “${p.title.replace(/"/g, "&quot;")}”, a ${hubLabel(p.hub).toLowerCase()} article from Bureyko Mortgage Partners`;
+
 // ---------- shared sections ----------
 const buwrCallout = (u) => `<section class="band-tight">
   <div class="wrap">
@@ -441,7 +444,7 @@ const postCards = (u, a, posts, fmtDate) =>
     ? `<div class="post-grid">${posts
         .map(
           (p) => `<a class="post-card" href="${u(p.route)}">
-  <img class="post-card-img" src="${a("blog/" + p.slug + ".png")}" alt="" width="1200" height="630" loading="lazy">
+  <img class="post-card-img" src="${a("blog/" + p.slug + ".png")}" alt="${coverAlt(p)}" width="1200" height="630" loading="lazy">
   <div class="post-card-body">
     <div class="meta"><span class="tag">${hubLabel(p.hub)}</span>${p.draft ? '<span class="tag tag-draft">Draft</span>' : ""}<span>${fmtDate(p.date)}</span></div>
     <h3>${p.title}</h3>
@@ -474,7 +477,7 @@ const readingSection = (key, posts, u, a, fmtDate, mist = false) => {
     <div class="mini-posts">${picks
       .map(
         (p) => `<a class="mini-post" href="${u(p.route)}">
-      <img src="${a("blog/" + p.slug + ".png")}" alt="" width="1200" height="630" loading="lazy">
+      <img src="${a("blog/" + p.slug + ".png")}" alt="${coverAlt(p)}" width="1200" height="630" loading="lazy">
       <span class="mini-post-text"><strong>${p.title}</strong><span>${p.description}</span></span>
     </a>`
       )
@@ -1031,7 +1034,7 @@ ${contactBand({ title: "Have a question we haven't covered?", text: "Ask us dire
       ${crumbs(u, [["Blog", "/blog/"], [hubLabel(p.hub), "/blog/#" + p.hub]])}
       <h1>${p.title}</h1>
       <p class="byline">${byline}<span aria-hidden="true"> · </span><time datetime="${p.date}">${fmtDate(p.date)}</time></p>
-      <img class="post-cover" src="${a("blog/" + p.slug + ".png")}" alt="" width="1200" height="630">
+      <img class="post-cover" src="${a("blog/" + p.slug + ".png")}" alt="${coverAlt(p)}" width="1200" height="630">
     </div>
   </div>
 </section>

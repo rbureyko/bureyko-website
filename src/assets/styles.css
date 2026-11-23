@@ -495,3 +495,8 @@ a.card:hover{background:var(--mist)}
 .who-list{margin:0;padding-left:1.1em;display:grid;gap:4px}
 .who-list a{color:var(--blue);font-weight:600}
 .card > .soon{justify-self:start;align-self:start;margin-top:4px}
+/* Program page: who it's for line, and the sample scorecard */
+.buwr-fit{margin:24px 0 0;font-weight:600;color:var(--ink);max-width:70ch}
+.tool-sample{margin:0 auto 28px;max-width:340px;display:grid;gap:10px}
+.tool-sample img{width:100%;height:auto;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 30px rgba(25,60,102,.12);background:#fff}
+.tool-sample figcaption{font-size:.9rem;color:var(--ink);text-align:center}

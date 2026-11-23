@@ -212,6 +212,7 @@ export function buwrPages() {
       <div class="card"><h3>Living with your parents</h3><p>You've got a chance to save, and you want a real plan for getting out on your own.</p></div>
       <div class="card"><h3>Still in school</h3><p>Buying is a few years away, and you want to start smart with your credit and money.</p></div>
     </div>
+    <p class="buwr-fit">If your friends are buying and you're still renting, this is for you. If you already own, <a class="text-link" href="${u("/")}">our main site</a> is the place for you.</p>
   </div>
 </section>
 
@@ -252,6 +253,10 @@ export function buwrPages() {
 <section class="band band-mist">
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow">What members get</span><h2>Tools that make it simple.</h2><p>Members only. You'll get the link and password in Robin's welcome message.</p></div>
+    <figure class="tool-sample">
+      <img src="${a("buwr/scorecard-sample.png")}" width="372" height="784" loading="lazy" alt="Sample Mortgage-Ready Scorecard results: 11 out of 24, rated Building. Strong on credit history lenders can see, a clean credit report and low monthly debts. Focus next: check your free credit score, put every bill on autopay, and get each card under 30% of its limit.">
+      <figcaption><strong>Sample results</strong> from the Mortgage-Ready Scorecard, using made-up answers. Your own results stay private unless you choose to send them to Robin.</figcaption>
+    </figure>
     <div class="buwr-locked">
       ${TOOLS.map((t) => `<div class="card">${lock}<h3>${t.title}</h3><p>${t.blurb}</p><span class="members-only">Members only</span></div>`).join("")}
       <div class="card">${lock}<h3>More every session</h3><p>New tools each session, plus "Questions to ask" scripts for lenders, realtors, inspectors, condo boards and lawyers.</p><span class="members-only">Members only</span></div>
@@ -281,6 +286,7 @@ export function buwrPages() {
       <details><summary>How much time does it take?</summary><p>A few minutes every two weeks, then weekly in May and June. It's tips and information, not homework.</p></details>
       <details><summary>Can I join partway?</summary><p>Yes. You'll start with the current session, and all earlier tools stay open to you.</p></details>
       <details><summary>I'm not planning to buy for years. Is this for me?</summary><p>Perfect. You'll graduate knowing exactly where you stand, then we'll keep helping you save until you're ready.</p></details>
+      <details><summary>Who sees my information?</summary><p>Only Robin and Sherri. When you sign up, or send your results to Robin from a tool, your answers are emailed to us. They aren't stored on this website, and they're never shared or sold. Your budget and debt numbers stay on your own phone or computer unless you choose to send them. <a class="text-link" href="${u("/privacy")}">Our privacy policy</a> has the details.</p></details>
       <details><summary>Do I have to come in person?</summary><p>No. Everything works from your phone. Live Q&amp;As are on Zoom, with an in-person option if you'd like to meet.</p></details>
     </div>
   </div>
