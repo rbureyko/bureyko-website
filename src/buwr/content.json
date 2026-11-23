@@ -277,9 +277,8 @@
       ]
     }
   },
-  "_googleRating_note": "Update these whenever the Google review count changes. Shown on the program page next to Robin and Sherri.",
+  "_googleRating_note": "Shown on the program page beside Robin and Sherri as five stars and 'Google reviews · Read them here'. Remove googleRating to hide it if the average ever drops below 5.",
   "googleRating": {
-    "rating": "5.0",
-    "count": 7
+    "rating": "5.0"
   }
 }
