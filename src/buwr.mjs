@@ -395,7 +395,7 @@ ${loginKit(u)}`,
     <h3 class="session-sub">Extras</h3>
     <div class="cards">
       <div class="card"><h3>Your free credit reports</h3><ul class="downloads">${S.session1Extras.creditReports.map((l) => `<li><a href="${l.url}" ${ext}>${l.label} ↗</a></li>`).join("")}</ul></div>
-      <a class="card" href="${S.session1Extras.homebuyerGuide.url}" ${ext}><h3>${S.session1Extras.homebuyerGuide.label} ↗</h3><p>Our free guide, a good companion to the whole program.</p></a>
+      <a class="card" href="${S.session1Extras.homebuyerGuide.url}" ${ext}><h3>${S.session1Extras.homebuyerGuide.label} ↗</h3><p>Our free guide, a good companion to the whole program. Read or download it any time.</p></a>
     </div>
   </div>
 </section>
