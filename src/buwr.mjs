@@ -428,6 +428,7 @@ ${loginKit(u)}
     <h2 class="hub-title">More tools</h2>
     <div class="cards">
       <a class="card" href="${SITE.appUrl}" ${ext}><h3>Current rates and calculators ↗</h3><p>Robin's mortgage app. Download it and create an account.</p></a>
+      <a class="card" href="${S.instagramUrl}" ${ext}><h3>Members-only Instagram ↗</h3><p>Follow ${S.instagramHandle} and watch for stories with a green ring. Only members can see them: quick tips, polls and reminders.</p></a>
     </div>
   </div>
 </section>

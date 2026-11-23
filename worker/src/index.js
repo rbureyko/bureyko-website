@@ -9,7 +9,7 @@ import { SITE_FORMS, checkSubmission } from "./forms.js";
 import { notifyEmail, replyEmail } from "./replies.js";
 
 const TOOLS = {
-  scorecard: { name: "Mortgage-Ready Scorecard", subject: "Scorecard", tip: "Retake the scorecard in June, before graduation, to see how far you've come." },
+  scorecard: { name: "Mortgage-Ready Scorecard", subject: "Scorecard", tip: "Retake the scorecard in June, before graduation, to see how far you've come.", members: true },
   budget: { name: "Monthly Budget Tracker", subject: "Budget Tracker", tip: "Found a spending leak? Move that amount to your home savings every payday." },
   "debt-payoff": { name: "Debt Payoff Planner", subject: "Debt Payoff Planner", tip: "Stop adding new debt while you pay these down, and keep making every minimum on time." },
 };
@@ -100,6 +100,7 @@ export function buildEmails(p, env, now = new Date()) {
     "", textRows(summary),
     ...(Array.isArray(details) && details.length ? ["", textRows(details)] : []),
     "", tool.tip,
+    ...(tool.members ? ["", "Everything for the program is at breakupwithrenting.ca/members"] : []),
     "", "Questions anytime: reply here, or call or text Robin at 403-540-0629.",
     "", "---", BROKERAGE, "General information, not financial advice.",
   ].join("\n");
@@ -109,6 +110,7 @@ export function buildEmails(p, env, now = new Date()) {
     table(summary) +
     (Array.isArray(details) && details.length ? `<div style="height:12px"></div>` + table(details) : "") +
     `<p style="margin:18px 0 12px">${esc(tool.tip)}</p>` +
+    (tool.members ? `<p style="margin:0 0 12px">Everything for the program is at <a href="https://breakupwithrenting.ca/members" style="color:${BLUE};font-weight:bold">breakupwithrenting.ca/members</a></p>` : "") +
     `<p style="margin:0">Questions anytime: reply here, or call or text Robin at <a href="tel:+14035400629" style="color:${BLUE}">403-540-0629</a>.</p>` +
     divider +
     `<p style="margin:0 0 6px;font-size:12px;font-style:italic;color:${INK}">${esc(BROKERAGE)}</p>` +
@@ -139,7 +141,8 @@ async function handleForm(p, env, headers) {
     method: "POST",
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify([
-      { from: `Bureyko Mortgage Partners <${env.ROBIN_EMAIL}>`, to: [env.ROBIN_EMAIL], reply_to: c.email, subject: `${form.title} - ${c.fullName}`, ...note },
+      // FORM_COPY_EMAIL (a secret, so the address isn't in the public code): Sherri gets a blind copy
+      { from: `Bureyko Mortgage Partners <${env.ROBIN_EMAIL}>`, to: [env.ROBIN_EMAIL], ...(env.FORM_COPY_EMAIL ? { bcc: [env.FORM_COPY_EMAIL] } : {}), reply_to: c.email, subject: `${form.title} - ${c.fullName}`, ...note },
       { from: `Robin Bureyko <${env.ROBIN_EMAIL}>`, to: [c.email], reply_to: env.ROBIN_EMAIL, ...reply },
     ]),
   });
